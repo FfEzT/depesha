@@ -1,0 +1,9 @@
+{
+    "friends": {
+        "online":[],
+        "offline":[],
+        "idle":[]
+    },
+    "not_friends": [],
+    "favorite": []
+}

@@ -1,0 +1,11 @@
+{
+  "name": "server",
+  "main": "index.js",
+  "dependencies": {
+    "ws": "^7.5.2"
+  },
+  "scripts": {
+    "test": "node index"
+  },
+  "license": "ISC"
+}
