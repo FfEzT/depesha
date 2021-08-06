@@ -13,7 +13,7 @@
 	--color_important: #2B0000;
 	--placeholder_text: #2C2847;
 	--border_round_1: min(10vw, 19vh); /*180px*/
-	--border_round_2: min(1.3vw, 3vh) /*25px*/
+	--border_round_2: min(1.3vw, 2.3vh) /*25px*/
 }
 @font-face {
     font-family: text;
@@ -300,11 +300,7 @@ body .background{
 	transform: rotate(-90deg);
 	background-image: url(materials/picture/settings.svg);
 }
-.up_panel .btn:hover .btn_piq{
-	/* todo think about this line background-color: #2a274599; */
-}
 .up_panel .btn:active .btn_piq{
-	/* todo think about this line background-color: var(--color_3_active); */
 	transform: scale(.75);
 	transition: transform .1s cubic-bezier(0.34, 1.56, 0.64, 1);
 }

@@ -20,6 +20,7 @@ setTimeout(
         bg.remove()
 
         user.status == 'online'?
+            // online
             !function(){
                     let grid = document.createElement('div'),
                         name = document.createElement('input'),
@@ -41,7 +42,7 @@ setTimeout(
                                         width: min(30vw, 40vh);\
                                         height: min(23vw, 30vh);\
                                         transform: translate(-50%,300%);\
-                                        transition: transform .75s cubic-bezier(0.68, -0.5, .32, 1.5);\
+                                        transition: transform 1s cubic-bezier(0.68, -0.5, .25, 1.25);\
                                         grid-template-columns: 1fr 1.5fr;\
                                         grid-template-rows: repeat(3, 1fr);\
                                         grid-template-areas:'name name'\
@@ -89,8 +90,15 @@ setTimeout(
                     sign_up.style  = sign_in_.style  = style.btn
                     
                     name.placeholder = 'nickname'
+                    id.placeholder = 'id'
+                    password.placeholder = password_.placeholder ='password'
+
                     name.maxLength = '15'
+                    id.maxLength = '7'
+                    password.maxLength = password_.maxLength = '20'
+
                     name.spellcheck = id.spellcheck = false
+
                     name.onblur = ()=>{
                         let a = /^[a-zA-Z0-9]{3,15}$/
                         let b = /^\d{3,15}$/
@@ -105,10 +113,6 @@ setTimeout(
                                 notice('sign_in_name')
                             )
                     }
-                    
-                    password.type = password_.type = 'password'
-                    password.placeholder = password_.placeholder ='password'
-                    password.maxLength = password_.maxLength = '20'
                     password.onblur = () => {
                         let a = /^\S{9,20}$/
                         let text = password.value
@@ -122,23 +126,14 @@ setTimeout(
                             )
                     }
 
-                    sign_in.innerText = 'Есть аккаунт?'
                     sign_in.onclick = ()=>{
                         grid.style.transform = 'translate(-325%, -50%)'
                         
                         grid_.style.transform = 'translate(-50%, -50%)'
                     }
-
-                    sign_up.innerHTML = '<div\
-                                        style="margin: auto;\
-                                            color: var(--color_text);\
-                                            font-size: min(1.3vw, 2.2vh);\
-                                            font-family: text;\
-                                            user-select: none">\
-                                        Создать аккаунт</div>'
                     sign_up.onclick = ()=>{
                         user.status == 'online'?
-                            (can_creat.name && can_creat.password)? 
+                            can_creat.name && can_creat.password ? 
                                 !function(){
                                     let data_for_sending = {
                                         type: 'sign_up',
@@ -156,19 +151,52 @@ setTimeout(
                         :
                             notice('off_server')
                     }
-
-                    grid_.style.transform = 'translate(275%, -50%)'
-
-                    id.maxLength = '5'
-                    id.placeholder = 'id (AA000)'
-
-                    back.innerText = 'Назад'
                     back.onclick = ()=>{
                         grid.style.transform = 'translate(-50%, -50%)'
                         
                         grid_.style.transform = 'translate(275%, -50%)'
                     }
+                    sign_in_.onclick = ()=>{
+                        // checking password
+                        let a = /^\S{9,20}$/
+                        a.test(password_.value)?
+                            (
+                                auth(id.value, password_.value),
+                                ws.onmessage = e => {
+                                    let b = JSON.parse(e.data)
+                                    if(b.result == '1'){
+                                        // id, nick, password = null, reload
+                                        user.data.id = id.value
+                                        user.data.nick = b.nick
+                                        user.data.password = password_.value
+                            
+                                        fs.writeFileSync(
+                                            './src/data/user.json',
+                                            JSON.stringify(user.data)
+                                        )
+                            
+                                        window.location.reload()
+                                    }
+                                    else if(b.result == '0'){
+                                        notice('auth_err')
+                                    }
+                                }
+                            )
+                        : notice('sign_up_err')
+                    }
+                    
+                    password.type = password_.type = 'password'
+            
+                    sign_in.innerText = 'Есть аккаунт'
+                    back.innerText = 'Назад'
 
+                    sign_up.innerHTML = '<div\
+                                        style="margin: auto;\
+                                            color: var(--color_text);\
+                                            font-size: min(1.3vw, 2.2vh);\
+                                            font-family: text;\
+                                            user-select: none">\
+                                        Создать аккаунт</div>'
                     sign_in_.innerHTML = '<div\
                                         style="margin: auto;\
                                             color: var(--color_text);\
@@ -176,7 +204,8 @@ setTimeout(
                                             font-family: text;\
                                             user-select: none">\
                                         Войти</div>'
-                    sign_in_.onclick = ()=>{notice('off_work')}
+                    
+                    grid_.style.transform = 'translate(275%, -50%)'
 
                     main.append(grid, grid_)
                     grid.append(name, password, sign_in, sign_up)
@@ -190,6 +219,7 @@ setTimeout(
                     );
             }()
         :
+            // offline
             !function(){
                     let offline = document.createElement('div')
                     offline.style = 
