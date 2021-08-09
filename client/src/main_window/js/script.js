@@ -1,7 +1,8 @@
-// todo: remove line under before package
-// !@ts-check
-console.time('starting') // todo delete
-// load program
+// import modules
+const fs = require('fs')
+let ws // WebSocket
+
+// after load program
 let load = () => {
     notice('welcome')
 
@@ -34,9 +35,9 @@ let load = () => {
                             let a = JSON.parse(e.data)
 
                             a.result == '0' && !function(){
-                                // id, nick, password = null, reload
+                                // id, nickname, password = null, reload
                                 user.data.id = ''
-                                user.data.nick = ''
+                                user.data.nickname = ''
                                 user.data.password = ''
                     
                                 fs.writeFileSync(
@@ -69,13 +70,7 @@ let load = () => {
 
     // final
     console.log('ready')
-    console.timeEnd('starting') // todo delete
 }
-
-// import modules
-const fs = require('fs')
-const { join } = require('path')
-let ws // WebSocket
 
 // send id and password for auth
 function auth(id, password){
@@ -92,8 +87,6 @@ function auth(id, password){
 // info about user and his 'people'
 let user = {
     status: 'offline',
-    microphone: true, // todo delete
-    headphone: true, // todo delete
     isNewUser: false,
     isConnection_closed: false,
     data: JSON.parse(
@@ -103,7 +96,7 @@ let user = {
 let people
 
 // checking authorization of user
-user.data.id == "" || user.data.nick == "" || user.data.password == "" ?
+user.data.id == "" || user.data.nickname == "" || user.data.password == "" ?
     user.isNewUser = true
 :
     people = JSON.parse(

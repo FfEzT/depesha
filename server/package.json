@@ -2,10 +2,11 @@
   "name": "server",
   "main": "index.js",
   "dependencies": {
+    "sqlite3": "^5.0.2",
     "ws": "^7.5.2"
   },
   "scripts": {
-    "test": "node index"
+    "start": "node index"
   },
   "license": "ISC"
 }

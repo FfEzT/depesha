@@ -5,14 +5,16 @@
     <div class="window"></div>
     <div class="bar_for_btn"></div>
     <div class="btns">
-        <div class="container" onclick="notice('off_work')">
-            <div class="btn mic"></div>
-        </div>
-        <div class="container" onclick="notice('off_work')">
-            <div class="btn bye"></div>
-        </div>
-        <div class="container" onclick="notice('off_work')">
-            <div class="btn headphone"></div>
-        </div>
+        <input hidden type="checkbox"  id="microphone">
+        <input hidden type="checkbox"  id="earphone">
+        <label for="microphone" class="container">
+            <div class="btn mic" onclick="notice('off_work')"></div>
+        </label>
+        <label class="container">
+            <div class="btn bye" onclick="notice('off_work')"></div>
+        </label>
+        <label for="earphone" class="container">
+            <div class="btn headphone" onclick="notice('off_work')"></div>
+        </label>
     </div>
 </div>

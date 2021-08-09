@@ -416,7 +416,7 @@ body .background{
 }
 .left_panel .btns{
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: repeat(3, 1fr);
 	position: absolute;
 	left: 2vw;
 	top: 62.5vh;
@@ -461,6 +461,12 @@ body .background{
 	background-image: url(materials/picture/sound.svg);
 	background-position: center;
 	background-repeat: no-repeat;
+}
+.left_panel .btns #microphone:checked ~ .container .btn.mic{
+	background-image: url(materials/picture/off_microphone.svg);
+}
+.left_panel .btns #earphone:checked ~ .container .btn.headphone{
+	background-image: url(materials/picture/off_sound.svg);
 }
 .right_panel{
 	position: absolute;

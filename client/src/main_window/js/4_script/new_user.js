@@ -1,9 +1,9 @@
 const main = document.getElementsByClassName('background')[0]
+
 let bg = document.createElement('div')
 bg.style = 'position: absolute; width: 100vw; height: 100vh;\
             background-color: var(--color_1); opacity: 0;\
             transition: opacity .5s cubic-bezier(0.16, 1, 0.3, 1);'
-
 main.append(bg)
 setTimeout(
     ()=>{
@@ -11,6 +11,7 @@ setTimeout(
     },
     10
 )
+
 setTimeout(
     ()=>{
         document.getElementsByClassName('close')[0].remove()
@@ -99,6 +100,11 @@ setTimeout(
 
                     name.spellcheck = id.spellcheck = false
 
+                    name.tabIndex = '1'
+                    password.tabIndex = '2'
+                    id.tabIndex = '-1'
+                    password_.tabIndex = '-1'
+
                     name.onblur = ()=>{
                         let a = /^[a-zA-Z0-9]{3,15}$/
                         let b = /^\d{3,15}$/
@@ -126,10 +132,21 @@ setTimeout(
                             )
                     }
 
-                    sign_in.onclick = ()=>{
-                        grid.style.transform = 'translate(-325%, -50%)'
-                        
+                    sign_in.onclick = () => {
+                        grid.style.transform = 'translate(-325%, -50%)' 
                         grid_.style.transform = 'translate(-50%, -50%)'
+                        name.tabIndex = '-1'
+                        password.tabIndex = '-1'
+                        id.tabIndex = '1'
+                        password_.tabIndex = '2'
+                    }
+                    back.onclick = () => {
+                        grid.style.transform = 'translate(-50%, -50%)'
+                        grid_.style.transform = 'translate(275%, -50%)'
+                        name.tabIndex = '1'
+                        password.tabIndex = '2'
+                        id.tabIndex = '-1'
+                        password_.tabIndex = '-1'
                     }
                     sign_up.onclick = ()=>{
                         user.status == 'online'?
@@ -138,23 +155,114 @@ setTimeout(
                                     let data_for_sending = {
                                         type: 'sign_up',
                                         content: {
-                                            name    : name.value,
+                                            nickname    : name.value,
                                             password: password.value
                                         }
                                     }
                                     data_for_sending = JSON.stringify(data_for_sending)
 
                                     ws.send(data_for_sending)
+                                    ws.onmessage = e => {
+                                        let a = JSON.parse(e.data)
+                                        
+                                        a.result == 1 && !function(){
+                                            // write data about user (user.json)
+                                            user.data.id = a.id
+                                            user.data.nickname = name.value
+                                            user.data.password = password.value
+                                
+                                            fs.writeFileSync(
+                                                './src/data/user.json',
+                                                JSON.stringify(user.data)
+                                            )
+
+                                            let bg = document.createElement('div')
+                                            bg.style = 'position: absolute; width: 100vw; height: 100vh;\
+                                            background-color: var(--color_1); opacity: 0;\
+                                            transition: opacity .5s cubic-bezier(0.16, 1, 0.3, 1);'
+                                            main.append(bg)
+                                            setTimeout(
+                                                () => {
+                                                    bg.style.opacity = '100'
+                                                },
+                                                10
+                                            )
+
+                                            let grid_info_id = document.createElement('div')
+                                            grid_info_id.style = "position: absolute;\
+                                                                display: grid;\
+                                                                top: 50vh;\
+                                                                left: 50vw;\
+                                                                width: min(30vw, 40vh);\
+                                                                height: min(23vw, 30vh);\
+                                                                opacity: 0;\
+                                                                transform: translate(-50%, -50%);\
+                                                                transition: opacity 1s cubic-bezier(0.42,0,0.58,1);\
+                                                                grid-template-rows: repeat(3, 1fr);"
+                                            main.append(grid_info_id)
+
+                                            setTimeout(
+                                                () => {
+                                                    bg.remove()
+                                                    grid.remove()
+                                                    grid_.remove()
+                                                    grid_info_id.style.opacity = '100'
+                                                },
+                                                500
+                                            )
+
+                                            let info_text = document.createElement('div')
+                                            info_text.style = 'width: 100%;\
+                                                            height: 55%;\
+                                                            margin: auto;\
+                                                            color: var(--color_text);\
+                                                            font-family: text;\
+                                                            font-size: min(2.5vw, 4vh);\
+                                                            padding: 0 5%;\
+                                                            user-select: none;\
+                                                            border-bottom: 1px solid rgb(74, 71, 163);'
+                                            info_text.innerText = 'Ваш id:'
+
+                                            let info_id = document.createElement('div')
+                                            info_id.style = 'width: 100%;\
+                                                            height: 55%;\
+                                                            margin: auto;\
+                                                            color: var(--color_text);\
+                                                            font-family: text;\
+                                                            font-size: min(2.5vw, 4vh);\
+                                                            padding: 0 5%;\
+                                                            border-bottom: 1px solid rgb(74, 71, 163);'
+                                            info_id.innerText = a.id
+
+                                            let info_btn = document.createElement('div')
+                                            info_btn.style = 'width: 40%;\
+                                                            display: grid;\
+                                                            height:56%;\
+                                                            margin: auto;\
+                                                            background-color: var(--color_btn);\
+                                                            border-radius: var(--border_round_2);\
+                                                            cursor: pointer;'
+                                            info_btn.innerHTML = '<div style="margin:auto;\
+                                                                font-family: text;\
+                                                                font-size: min(2.5vw, 4vh);\
+                                                                color: var(--color_text);\
+                                                                user-select: none">ok</div>'
+
+
+                                            grid_info_id.append(info_text)
+                                            grid_info_id.append(info_id)
+                                            grid_info_id.append(info_btn)
+
+                                            info_btn.onclick = () => {
+                                                window.location.reload()
+                                            }
+                                        }()
+                                    }
                                 }()
                             : 
                                 notice('sign_up_err') 
                         :
                             notice('off_server')
-                    }
-                    back.onclick = ()=>{
-                        grid.style.transform = 'translate(-50%, -50%)'
-                        
-                        grid_.style.transform = 'translate(275%, -50%)'
                     }
                     sign_in_.onclick = ()=>{
                         // checking password
@@ -165,9 +273,9 @@ setTimeout(
                                 ws.onmessage = e => {
                                     let b = JSON.parse(e.data)
                                     if(b.result == '1'){
-                                        // id, nick, password = null, reload
+                                        // write data about user (user.json)
                                         user.data.id = id.value
-                                        user.data.nick = b.nick
+                                        user.data.nickname = b.nick
                                         user.data.password = password_.value
                             
                                         fs.writeFileSync(

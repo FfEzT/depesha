@@ -6,6 +6,7 @@ const close_window = () => wnd.close()
 const full_window = () => wnd.isMaximized()?
     wnd.unmaximize() : wnd.maximize()
 const minimize_window = () => wnd.minimize()
+
 // 'leftBar' OR 'rightBar'
 let set_pos_for_bars = lr => {
     const el = document.getElementById(lr) 
