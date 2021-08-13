@@ -7,13 +7,41 @@ const server = new ws.Server(
     {port: 5480}
 )
 
+// list of connected clients
+let clients = {}
+
+// this f is called after the client connects to the server
+let connection_to_server = e => {
+    e.on(
+        'message',
+        data => {
+            data = JSON.parse(data)
+
+            let cases = {
+                'sign_up': () => {
+                    sign_up(e, data.content)
+                },
+                'auth': () => {
+                    auth(e, data.content)
+                },
+                'update_status': () => {
+                    update_status(data.content)
+                }
+            }
+            cases[data.type] && cases[data.type]()
+        }
+    )
+}
+
 // for f:connection_to_server
 let sign_up = async (e, content) => {
     let id = generate_id()
     let check
+
     await db.people().get_user(id).then(
-        d => {check = d}
+        d => check = d
     )
+
     check?
         sign_up(e, content)
     :
@@ -39,17 +67,45 @@ let auth = async (e, content) => {
     people?
         (
             people.password == content.password ?
-                e.send(
-                    JSON.stringify(
-                        {
-                            result: 1,
-                            nick: people.nickname
+                (
+                    e.send(
+                        JSON.stringify(
+                            {
+                                result: 1,
+                                nick: people.nickname
+                            }
+                        )
+                    ),
+                    content.connect && !function(){
+                        clients[people.id] = {
+                            status: 'online',
+                            ws
                         }
-                    )
+                        e.on(
+                            'close',
+                            () => {
+                                delete clients[people.id]
+                            }
+                        )
+                    }()
                 )
             : notice_incorrect_data(e)
         )
     : notice_incorrect_data(e)
+}
+let update_status = content => {
+    clients[content.id].status = content.status
+}
+
+// send notice incorrect data
+let notice_incorrect_data = e => {
+    e.send(
+        JSON.stringify(
+            {
+                result: 0
+            }
+        )
+    )
 }
 
 let generate_id = () => {
@@ -110,37 +166,6 @@ let generate_id = () => {
     }
     
     return result
-}
-
-// send notice incorrect data
-let notice_incorrect_data = e => {
-    e.send(
-        JSON.stringify(
-            {
-                result: 0
-            }
-        )
-    )
-}
-
-// this f is called after the client connects to the server
-let connection_to_server = e => {
-    e.on(
-        'message',
-        data => {
-            data = JSON.parse(data)
-
-            let cases = {
-                'sign_up': () => {
-                    sign_up(e, data.content)
-                },
-                'auth': () =>{
-                    auth(e, data.content)
-                }
-            }
-            cases[data.type] && cases[data.type]()
-        }
-    )
 }
 
 // add events for server

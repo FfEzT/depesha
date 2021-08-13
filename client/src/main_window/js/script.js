@@ -30,7 +30,7 @@ let load = () => {
 
                     // sign in
                     !user.isNewUser && (
-                        auth(user.data.id, user.data.password),
+                        auth(user.data.id, user.data.password, true),
                         ws.onmessage = e => {
                             let a = JSON.parse(e.data)
 
@@ -73,12 +73,16 @@ let load = () => {
 }
 
 // send id and password for auth
-function auth(id, password){
+function auth(id, password, a=false){
     ws.send(
         JSON.stringify(
             {
                 type: 'auth',
-                content: {id, password}
+                content: {
+                    connect: a,
+                    id,
+                    password
+                }
             }
         )
     )

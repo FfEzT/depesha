@@ -170,17 +170,32 @@ let change_status = () => {
     a[user.status] && a[user.status]()
 }
 let change_status_from_profile = () => {
+    let update = () => {
+        ws.send(
+            JSON.stringify(
+                {
+                    type: 'update_status',
+                    content: {
+                        id: user.data.id,
+                        status: user.status
+                    }
+                }
+            )
+        )
+    }
+
     let a = {
         'online': () => {
             user.status = 'idle'
+            update()
             change_status()
         },
         'offline': () => {
-            change_status()
             notice('off_server')
         },
         'idle': () => {
             user.status = 'online'
+            update()
             change_status()
         }
     }
