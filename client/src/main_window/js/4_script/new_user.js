@@ -43,7 +43,7 @@ setTimeout(
                                         width: min(30vw, 40vh);\
                                         height: min(23vw, 30vh);\
                                         transform: translate(-50%,300%);\
-                                        transition: transform 1s cubic-bezier(0.68, -0.5, .25, 1.25);\
+                                        transition: transform 1s cubic-bezier(0.68, -0.5, .25, 1.25), opacity 0.25s cubic-bezier(0.42,0,0.58,1);\
                                         grid-template-columns: 1fr 1.5fr;\
                                         grid-template-rows: repeat(3, 1fr);\
                                         grid-template-areas:'name name'\
@@ -90,6 +90,8 @@ setTimeout(
                     sign_in.style  = back.style      = style.text
                     sign_up.style  = sign_in_.style  = style.btn
                     
+                    grid_.style.opacity = '0'
+
                     name.placeholder = 'nickname'
                     id.placeholder = 'id'
                     password.placeholder = password_.placeholder ='password'
@@ -133,16 +135,24 @@ setTimeout(
                     }
 
                     sign_in.onclick = () => {
+                        grid.style.opacity = '0'
+                        grid_.style.opacity = '100'
+
                         grid.style.transform = 'translate(-325%, -50%)' 
                         grid_.style.transform = 'translate(-50%, -50%)'
+
                         name.tabIndex = '-1'
                         password.tabIndex = '-1'
                         id.tabIndex = '1'
                         password_.tabIndex = '2'
                     }
                     back.onclick = () => {
+                        grid.style.opacity = '100'
+                        grid_.style.opacity = '0'
+
                         grid.style.transform = 'translate(-50%, -50%)'
                         grid_.style.transform = 'translate(275%, -50%)'
+                        
                         name.tabIndex = '1'
                         password.tabIndex = '2'
                         id.tabIndex = '-1'

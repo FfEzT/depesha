@@ -2,7 +2,7 @@
 const sql = require('sqlite3').verbose()
 
 let people = () => {
-    let db = new sql.Database('../data/people.sqlite')
+    let db = new sql.Database('./data/people.sqlite')
 
     let sign_up = (id, nickname, password) => {
         return new Promise(
@@ -31,14 +31,14 @@ let people = () => {
             }
         )
     }
-    
+
     return {sign_up, get_user}
 }
 let temp_mail = () => {
-    let db = new sql.Database('../data/temp_mail.sqlite')
+    let db = new sql.Database('./data/temp_mail.sqlite')
 }
 let friends = () => {
-    let db = new sql.Database('../data/friends.sqlite')
+    let db = new sql.Database('./data/friends.sqlite')
 }
 
 module.exports = {people, temp_mail, friends}
