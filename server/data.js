@@ -18,7 +18,7 @@ let people = () => {
             }
         )
     }
-    let get_user =  id => {
+    let get_user = id => {
         return new Promise(
             resolve => {
                 db.get(
@@ -39,6 +39,13 @@ let temp_mail = () => {
 }
 let friends = () => {
     let db = new sql.Database('./data/friends.sqlite')
+
+    let create_list = id => {
+        let str = `CREATE TABLE ${id} (id TINYTEXT PRIMARY KEY, STATUS TINYTEXT)`
+        db.run(str)
+    }
+
+    return {create_list}
 }
 
 module.exports = {people, temp_mail, friends}

@@ -1,0 +1,89 @@
+Project structure
+    Legend
+        m - module node js
+        f - function
+        !f - unnamed function
+        l - variable
+        * && * - and
+        * || * - or
+        &&? * - if the condition is met then *
+        1* ||? 2* - if the condition is met then 1*, else 2*
+
+    client
+        - main.js
+            - window.js
+                - index.html
+                    - script.js || web.js
+                        - data.js
+                            - f.main
+                                - l.data
+                                - l.bag
+                                - !f
+                                - fs.writefile()
+                        - f.load
+                            - new_user.js
+                                - l.main
+                                - l.bg
+                                - !f
+                                    - !f ||? !f
+                                        - !f
+                                            - l.grid
+                                            - l.name
+                                            - l.password
+                                            - l.sign_in
+                                            - l.sign_up
+                                            - l.grid_
+                                            - l.id
+                                            - l.password_
+                                            - l.back
+                                            - l.sign_in_
+                                            - l.style
+                                            - l.can_create
+                                            - name.onblur
+                                                - l.a
+                                                - l.b
+                                                - l.text
+                                            - password.onblur
+                                                - l.a
+                                                - l.text
+                                            - sign_in.onclick
+                                            - back.onclick
+                                            - sign_up.onclick
+                                                - !f
+                                                    - l.data_for_sending
+                                                    - ws.send
+                                                    - ws.onmessage
+                                                        - l.a
+                                                        - &&? !f
+                                                            - l.bg
+                                                            - l.grid_info_id
+                                                            - l.info_text
+                                                            - l.info_id
+                                                            - l.info_btn
+                                                            - info_btn.onclick
+                                                                - reload()
+                                            - sign_in_.onclick*
+                                            - !f
+                                        - !f*
+                            - f.connection
+                                - ws.onopen
+                                    - f.reload ||? !f
+                                - ws.onclose
+                        - m.electron
+                        - m.fs
+                        - m.ws
+                        - f.close_window
+                        - f.full_window
+                        - f.minimize_window
+                        - f.set_pos_for_bars
+                        - f.roll_down_all
+                        - f.hot_key
+                        - f.focus_blur
+                        - f.focusBlur_right_bar
+                        - f.notice
+                        - f.change_status
+                        - f.change_status_from_profile
+                        - f.auth
+                        - l.user (status, isNewUser, isConnection_closed, data)
+
+    server

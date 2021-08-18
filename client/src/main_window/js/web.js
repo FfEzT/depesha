@@ -131,12 +131,12 @@ let notice = a => {
     wow.append(go)
 
     setTimeout(
-        ()=>{
+        () => {
             go.classList.replace('close', 'first')
         },0
     )
     setTimeout(
-        ()=>{
+        () => {
             go.classList.add('left')
             setTimeout(
                 ()=>{

@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "main": "./js/index.js",
+  "main": "./index.js",
   "dependencies": {
     "sqlite3": "^5.0.2",
     "ws": "^7.5.2"

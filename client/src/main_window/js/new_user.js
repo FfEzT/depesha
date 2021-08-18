@@ -4,16 +4,18 @@ let bg = document.createElement('div')
 bg.style = 'position: absolute; width: 100vw; height: 100vh;\
             background-color: var(--color_1); opacity: 0;\
             transition: opacity .5s cubic-bezier(0.16, 1, 0.3, 1);'
+
 main.append(bg)
+
 setTimeout(
-    ()=>{
+    () => {
         bg.style.opacity = '100'
     },
     10
 )
 
 setTimeout(
-    ()=>{
+    () => {
         document.getElementsByClassName('close')[0].remove()
         document.getElementsByClassName('up_panel')[0].remove()
         document.getElementsByClassName('left_panel')[0].remove()
@@ -42,8 +44,8 @@ setTimeout(
                                         left: 50vw;\
                                         width: min(30vw, 40vh);\
                                         height: min(23vw, 30vh);\
-                                        transform: translate(-50%,300%);\
-                                        transition: transform 1s cubic-bezier(0.68, -0.5, .25, 1.25), opacity 0.25s cubic-bezier(0.42,0,0.58,1);\
+                                        transform: translate(-50%,50%);\
+                                        transition: transform 1s cubic-bezier(0.68, -0.5, .25, 1), opacity .25s cubic-bezier(0.42,0,0.58,1);\
                                         grid-template-columns: 1fr 1.5fr;\
                                         grid-template-rows: repeat(3, 1fr);\
                                         grid-template-areas:'name name'\
@@ -79,7 +81,7 @@ setTimeout(
                                         border-radius: var(--border_round_2);\
                                         cursor: pointer;'
                     } 
-                    let can_creat = {
+                    let can_create = {
                         id: false,
                         password: false
                     }
@@ -91,6 +93,11 @@ setTimeout(
                     sign_up.style  = sign_in_.style  = style.btn
                     
                     grid_.style.opacity = '0'
+                    grid.style.opacity = '0'
+
+                    grid_.style.transform = 'translate(50%, -50%)'
+
+                    grid.style.transition = 'transform 1s cubic-bezier(0.68, -0.5, .25, 1), opacity 1s cubic-bezier(0.42,0,0.58,1)'
 
                     name.placeholder = 'nickname'
                     id.placeholder = 'id'
@@ -107,17 +114,17 @@ setTimeout(
                     id.tabIndex = '-1'
                     password_.tabIndex = '-1'
 
-                    name.onblur = ()=>{
+                    name.onblur = () => {
                         let a = /^[a-zA-Z0-9]{3,15}$/
                         let b = /^\d{3,15}$/
                         let text = name.value
                         
                         !b.test(text)? 
                             a.test(text)?
-                                can_creat.name = true: (can_creat.name = false, notice('sign_in_name'))
+                                can_create.name = true: (can_create.name = false, notice('sign_in_name'))
                         :
                             (
-                                can_creat.name = false,
+                                can_create.name = false,
                                 notice('sign_in_name')
                             )
                     }
@@ -126,10 +133,10 @@ setTimeout(
                         let text = password.value
 
                         a.test(text)?
-                            can_creat.password = true 
+                            can_create.password = true 
                         :   
                             (
-                                can_creat.password = false,
+                                can_create.password = false,
                                 notice('sign_in_password')
                             )
                     }
@@ -138,7 +145,7 @@ setTimeout(
                         grid.style.opacity = '0'
                         grid_.style.opacity = '100'
 
-                        grid.style.transform = 'translate(-325%, -50%)' 
+                        grid.style.transform = 'translate(-150%, -50%)' 
                         grid_.style.transform = 'translate(-50%, -50%)'
 
                         name.tabIndex = '-1'
@@ -151,25 +158,26 @@ setTimeout(
                         grid_.style.opacity = '0'
 
                         grid.style.transform = 'translate(-50%, -50%)'
-                        grid_.style.transform = 'translate(275%, -50%)'
+                        grid_.style.transform = 'translate(50%, -50%)'
                         
                         name.tabIndex = '1'
                         password.tabIndex = '2'
                         id.tabIndex = '-1'
                         password_.tabIndex = '-1'
                     }
-                    sign_up.onclick = ()=>{
+                    sign_up.onclick = () => {
                         user.status == 'online'?
-                            can_creat.name && can_creat.password ? 
+                            can_create.name && can_create.password ? 
                                 !function(){
-                                    let data_for_sending = {
-                                        type: 'sign_up',
-                                        content: {
-                                            nickname    : name.value,
-                                            password: password.value
+                                    let data_for_sending = JSON.stringify(
+                                        {
+                                            type: 'sign_up',
+                                            content: {
+                                                nickname    : name.value,
+                                                password: password.value
+                                            }
                                         }
-                                    }
-                                    data_for_sending = JSON.stringify(data_for_sending)
+                                    )
 
                                     ws.send(data_for_sending)
                                     ws.onmessage = e => {
@@ -181,11 +189,16 @@ setTimeout(
                                             user.data.nickname = name.value
                                             user.data.password = password.value
                                 
-                                            fs.writeFileSync(
+                                            fs.writeFile(
                                                 './src/data/user.json',
-                                                JSON.stringify(user.data)
+                                                JSON.stringify(user.data),
+                                                () => {}
                                             )
 
+                                            // delete old info (list of friends)
+                                            data.main('delete_data')
+
+                                            // show id
                                             let bg = document.createElement('div')
                                             bg.style = 'position: absolute; width: 100vw; height: 100vh;\
                                             background-color: var(--color_1); opacity: 0;\
@@ -274,7 +287,7 @@ setTimeout(
                         :
                             notice('off_server')
                     }
-                    sign_in_.onclick = ()=>{
+                    sign_in_.onclick = () => {
                         // checking password
                         let a = /^\S{9,20}$/
                         a.test(password_.value)?
@@ -322,8 +335,6 @@ setTimeout(
                                             font-family: text;\
                                             user-select: none">\
                                         Войти</div>'
-                    
-                    grid_.style.transform = 'translate(275%, -50%)'
 
                     main.append(grid, grid_)
                     grid.append(name, password, sign_in, sign_up)
@@ -332,6 +343,8 @@ setTimeout(
                     setTimeout(
                         () => {
                             grid.style.transform = 'translate(-50%,-50%)'
+                            grid.style.transition = 'transform 1s cubic-bezier(0.68, -0.5, .25, 1), opacity .25s cubic-bezier(0.42,0,0.58,1)'
+                            grid.style.opacity = '100'
                         },
                         100
                     );

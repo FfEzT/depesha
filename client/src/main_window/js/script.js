@@ -1,5 +1,6 @@
 // import modules
 const fs = require('fs')
+const data = require('../js/data')
 let ws // WebSocket
 
 // after load program
@@ -7,12 +8,12 @@ let load = () => {
     notice('welcome')
 
     user.isNewUser && !function(){
-        require('../js/4_script/new_user')
+        require('../js/new_user')
         setTimeout(
             () => {
                 notice('auth')
             },
-            1300
+            1300 // ? why 1300 ms
         )
     }()
 
@@ -34,19 +35,28 @@ let load = () => {
                         ws.onmessage = e => {
                             let a = JSON.parse(e.data)
 
-                            a.result == '0' && !function(){
-                                // id, nickname, password = null, reload
-                                user.data.id = ''
-                                user.data.nickname = ''
-                                user.data.password = ''
-                    
-                                fs.writeFileSync(
+                            a.result == '0' ?
+                                !function(){
+                                    // id, nickname, password = null, reload
+                                    user.data.id = ''
+                                    user.data.nickname = ''
+                                    user.data.password = ''
+                        
+                                    fs.writeFileSync(
+                                        './src/data/user.json',
+                                        JSON.stringify(user.data)
+                                    )
+                        
+                                    window.location.reload()
+                                }()
+                            :(
+                                user.data.nickname = a.nick,
+                                fs.writeFile(
                                     './src/data/user.json',
-                                    JSON.stringify(user.data)
+                                    JSON.stringify(user.data),
+                                    () => {}
                                 )
-                    
-                                window.location.reload()
-                            }()
+                            )
                         }
                     ) 
                 }()
@@ -69,7 +79,7 @@ let load = () => {
     }();
 
     // final
-    console.log('ready')
+    console.log('ready') // todo u can delete this line
 }
 
 // send id and password for auth
@@ -97,12 +107,8 @@ let user = {
         fs.readFileSync('./src/data/user.json')
     )
 }
-let people
 
 // checking authorization of user
 user.data.id == "" || user.data.nickname == "" || user.data.password == "" ?
     user.isNewUser = true
-:
-    people = JSON.parse(
-        fs.readFileSync('./src/data/people.json')
-    )
+: ''

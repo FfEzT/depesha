@@ -46,7 +46,7 @@ let sign_up = async (e, content) => {
         sign_up(e, content)
     :
         (
-            await db.people().sign_up(id, content.nickname, content.password).then(
+            db.people().sign_up(id, content.nickname, content.password).then(
                 () => {
                     e.send(
                         JSON.stringify(
@@ -54,7 +54,8 @@ let sign_up = async (e, content) => {
                         )
                     )
                 }
-            )
+            ),
+            db.friends().create_list(id)
         )
 }
 let auth = async (e, content) => {
