@@ -24,7 +24,7 @@ let load = () => {
         ws.onopen = () => {
             user.isConnection_closed?
                 window.location.reload()
-            :
+                :
                 !function() {
                     user.status = 'online'
                     change_status()
@@ -33,32 +33,41 @@ let load = () => {
                     !user.isNewUser && (
                         auth(user.data.id, user.data.password, true),
                         ws.onmessage = e => {
+                            // data from server
+                            // type: {Object}
                             let a = JSON.parse(e.data)
-
-                            a.result == '0' ?
-                                !function(){
-                                    // id, nickname, password = null, reload
-                                    user.data.id = ''
-                                    user.data.nickname = ''
-                                    user.data.password = ''
-                        
-                                    fs.writeFileSync(
-                                        './src/data/user.json',
-                                        JSON.stringify(user.data)
-                                    )
-                        
-                                    window.location.reload()
-                                }()
-                            :(
-                                user.data.nickname = a.nick,
-                                fs.writeFile(
-                                    './src/data/user.json',
-                                    JSON.stringify(user.data),
-                                    () => {}
-                                )
-                            )
+                
+                            // like switch(){}
+                            let bag = {
+                                'auth': () => {
+                                    a.result == '0' ?
+                                        (
+                                            // id, nickname, password = null, reload
+                                            user.data.id = '',
+                                            user.data.nickname = '',
+                                            user.data.password = '',
+                                        
+                                            fs.writeFileSync(
+                                                './src/data/user.json',
+                                                JSON.stringify(user.data)
+                                            ),
+                                            
+                                            window.location.reload()
+                                        )
+                                        :
+                                        (
+                                            user.data.nickname = a.nick,
+                                            fs.writeFile(
+                                                './src/data/user.json',
+                                                JSON.stringify(user.data),
+                                                () => {}
+                                            )
+                                        )
+                                }
+                            }
+                            bag[a.type] && bag[a.type]()
                         }
-                    ) 
+                    )
                 }()
         }
         ws.onclose = () => {
@@ -83,7 +92,7 @@ let load = () => {
 }
 
 // send id and password for auth
-function auth(id, password, a=false){
+let auth = (id, password, a=false) => {
     ws.send(
         JSON.stringify(
             {

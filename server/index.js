@@ -26,6 +26,9 @@ let connection_to_server = e => {
                 },
                 'update_status': () => {
                     update_status(data.content)
+                },
+                'get_friends' : () => {
+                    send_friends(e, data.content)
                 }
             }
             cases[data.type] && cases[data.type]()
@@ -44,13 +47,16 @@ let sign_up = async (e, content) => {
 
     check?
         sign_up(e, content)
-    :
+        :
         (
             db.people().sign_up(id, content.nickname, content.password).then(
                 () => {
                     e.send(
                         JSON.stringify(
-                            {result: 1, id}
+                            {
+                                result: 1,
+                                id
+                            }
                         )
                     )
                 }
@@ -59,7 +65,23 @@ let sign_up = async (e, content) => {
         )
 }
 let auth = async (e, content) => {
+    // data frob DataBase
+    // type: {object}
     let people
+
+    let type = 'auth'
+
+    // send to client incorrect data
+    let notice_incorrect_data = () => {
+        e.send(
+            JSON.stringify(
+                {
+                    type,
+                    result: 0
+                }
+            )
+        )
+    }
     
     await db.people().get_user(content.id).then(
         d => people = d
@@ -72,6 +94,7 @@ let auth = async (e, content) => {
                     e.send(
                         JSON.stringify(
                             {
+                                type,
                                 result: 1,
                                 nick: people.nickname
                             }
@@ -90,25 +113,24 @@ let auth = async (e, content) => {
                         )
                     }()
                 )
-            : notice_incorrect_data(e)
+                : notice_incorrect_data()
         )
-    : notice_incorrect_data(e)
+        : notice_incorrect_data()
 }
 let update_status = content => {
     clients[content.id].status = content.status
 }
-
-// send notice incorrect data
-let notice_incorrect_data = e => {
-    e.send(
-        JSON.stringify(
-            {
-                result: 0
-            }
-        )
+let send_friends = (e, content) => {
+    db.friends().get_friends(content.id).then(
+        data => {
+            data = JSON.stringify(data)
+            e.send(data)
+        }
     )
 }
 
+// generate future id for users
+// output str (lenght: 3-7)
 let generate_id = () => {
     function vowel(a){
         let str = 'yuiiooaaeee'

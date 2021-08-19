@@ -1,5 +1,7 @@
-const main = document.getElementsByClassName('background')[0]
+// delete old info (list of friends)
+data.main('delete_data')
 
+const main = document.getElementsByClassName('background')[0]
 let bg = document.createElement('div')
 bg.style = 'position: absolute; width: 100vw; height: 100vh;\
             background-color: var(--color_1); opacity: 0;\
@@ -195,9 +197,6 @@ setTimeout(
                                                 () => {}
                                             )
 
-                                            // delete old info (list of friends)
-                                            data.main('delete_data')
-
                                             // show id
                                             let bg = document.createElement('div')
                                             bg.style = 'position: absolute; width: 100vw; height: 100vh;\
@@ -305,15 +304,30 @@ setTimeout(
                                             './src/data/user.json',
                                             JSON.stringify(user.data)
                                         )
+
+                                        ws.send(
+                                            JSON.stringify(
+                                                {
+                                                    type: 'get_friends',
+                                                    content: {
+                                                        id: user.data.id
+                                                    }
+                                                }
+                                            )
+                                        )
+                                        ws.onmessage = e => {
+                                            let a = JSON.parse(e.data)
+                                            data.main('get_friends', a)
+                                            window.location.reload()
+                                        }
                             
-                                        window.location.reload()
                                     }
                                     else if(b.result == '0'){
                                         notice('auth_err')
                                     }
                                 }
                             )
-                        : notice('sign_up_err')
+                            : notice('sign_up_err')
                     }
                     
                     password.type = password_.type = 'password'

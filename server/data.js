@@ -44,8 +44,22 @@ let friends = () => {
         let str = `CREATE TABLE ${id} (id TINYTEXT PRIMARY KEY, STATUS TINYTEXT)`
         db.run(str)
     }
+    let get_friends = id => {
+        return new Promise(
+            resolve => {
+                let str = `SELECT * FROM ${id} ORDER BY id`
 
-    return {create_list}
+                db.all(
+                    str,
+                    (er, data) => {
+                        resolve(data)
+                    }
+                )
+            }
+        )
+    }
+
+    return {create_list, get_friends}
 }
 
 module.exports = {people, temp_mail, friends}
