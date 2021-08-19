@@ -3,16 +3,16 @@
     <div class="focus"></div>
     <div class="content">
         <div class="marginLeft marginTop photo"></div>
-        <div class="marginRight marginTop nick" onclick="set_pos_for_bars('rightBar')">
-            <div class="nick_text" ondblclick="notice('off_work')">NickName</div>
+        <div class="marginRight marginTop nick" onclick="web.set_pos_for_bars('rightBar')">
+            <div class="nick_text" ondblclick="web.notice('off_work')">NickName</div>
         </div>
         <div class="marginLeft marginRight chat"></div>
     </div>
     <div class="input_text">
-        <textarea id="chat" class="text" tabindex="-1" placeholder="Text..." maxlength="500" onfocus="focusBlur_right_bar(true)" onblur="focusBlur_right_bar(false)"></textarea>
-        <div class="send" onclick="notice('off_work')">
+        <textarea id="chat" class="text" tabindex="-1" placeholder="Text..." maxlength="500" onfocus="web.focusBlur_right_bar(true)" onblur="web.focusBlur_right_bar(false)"></textarea>
+        <div class="send" onclick="web.notice('off_work')">
             <div class="send_btn"></div>
         </div>
     </div>
-    <div class="tab" onclick="set_pos_for_bars('rightBar')"></div>
+    <div class="tab" onclick="web.set_pos_for_bars('rightBar')"></div>
 </div>

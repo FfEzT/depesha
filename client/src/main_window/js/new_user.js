@@ -123,11 +123,11 @@ setTimeout(
                         
                         !b.test(text)? 
                             a.test(text)?
-                                can_create.name = true: (can_create.name = false, notice('sign_in_name'))
+                                can_create.name = true: (can_create.name = false, web.notice('sign_in_name'))
                         :
                             (
                                 can_create.name = false,
-                                notice('sign_in_name')
+                                web.notice('sign_in_name')
                             )
                     }
                     password.onblur = () => {
@@ -139,7 +139,7 @@ setTimeout(
                         :   
                             (
                                 can_create.password = false,
-                                notice('sign_in_password')
+                                web.notice('sign_in_password')
                             )
                     }
 
@@ -282,9 +282,9 @@ setTimeout(
                                     }
                                 }()
                             : 
-                                notice('sign_up_err') 
+                                web.notice('sign_up_err') 
                         :
-                            notice('off_server')
+                            web.notice('off_server')
                     }
                     sign_in_.onclick = () => {
                         // checking password
@@ -323,11 +323,11 @@ setTimeout(
                             
                                     }
                                     else if(b.result == '0'){
-                                        notice('auth_err')
+                                        web.notice('auth_err')
                                     }
                                 }
                             )
-                            : notice('sign_up_err')
+                            : web.notice('sign_up_err')
                     }
                     
                     password.type = password_.type = 'password'

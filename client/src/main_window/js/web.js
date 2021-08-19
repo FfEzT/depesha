@@ -64,7 +64,9 @@ let focus_blur = on => {
 let focusBlur_right_bar = arg => {
     const el = document.getElementById('rightBar')
     arg?
-        el.classList.add('focus'):el.classList.remove('focus')
+        el.classList.add('focus')
+        :
+        el.classList.remove('focus')
     focus_blur(arg? 'focus':'blur')
 }
 
@@ -200,4 +202,18 @@ let change_status_from_profile = () => {
         }
     }
     a[user.status] && a[user.status]()
+}
+
+module.exports = {
+    close_window,
+    full_window,
+    minimize_window,
+    set_pos_for_bars,
+    roll_down_all,
+    hot_key,
+    focus_blur,
+    focusBlur_right_bar,
+    notice,
+    change_status,
+    change_status_from_profile
 }
