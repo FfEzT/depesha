@@ -70,10 +70,8 @@ let friends = () => {
                     str,
                     [to, status],
                     er => {
-                        er ?
-                            reject()
-                            :
-                            resolve()
+                        er && reject()
+                        resolve()
                     }
                 )
             }
