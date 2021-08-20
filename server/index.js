@@ -12,6 +12,19 @@ let clients = {}
 
 // this f is called after the client connects to the server
 let connection_to_server = e => {
+    // send to client 'incorrect data'
+    // input: str(values: auth || do_friends)
+    let notice_incorrect_data = type => {
+        e.send(
+            JSON.stringify(
+                {
+                    type,
+                    result: 0
+                }
+            )
+        )
+    }
+
     e.on(
         'message',
         data => {
@@ -22,13 +35,16 @@ let connection_to_server = e => {
                     sign_up(e, data.content)
                 },
                 'auth': () => {
-                    auth(e, data.content)
+                    auth(e, data.content, notice_incorrect_data)
                 },
                 'update_status': () => {
                     update_status(data.content)
                 },
-                'get_friends' : () => {
+                'get_friends': () => {
                     send_friends(e, data.content)
+                },
+                'do_friend': () => {
+                    do_friend(e, data.content, notice_incorrect_data)
                 }
             }
             cases[data.type] && cases[data.type]()
@@ -64,24 +80,11 @@ let sign_up = async (e, content) => {
             db.friends().create_list(id)
         )
 }
-let auth = async (e, content) => {
-    // data frob DataBase
+let auth = async (e, content, f) => {
+    // data from DataBase
     // type: {object}
     let people
-
     let type = 'auth'
-
-    // send to client incorrect data
-    let notice_incorrect_data = () => {
-        e.send(
-            JSON.stringify(
-                {
-                    type,
-                    result: 0
-                }
-            )
-        )
-    }
     
     await db.people().get_user(content.id).then(
         d => people = d
@@ -113,9 +116,9 @@ let auth = async (e, content) => {
                         )
                     }()
                 )
-                : notice_incorrect_data()
+                : f(type)
         )
-        : notice_incorrect_data()
+        : f(type)
 }
 let update_status = content => {
     clients[content.id].status = content.status
@@ -123,10 +126,58 @@ let update_status = content => {
 let send_friends = (e, content) => {
     db.friends().get_friends(content.id).then(
         data => {
-            data = JSON.stringify(data)
-            e.send(data)
+            let a = {
+                type: 'list_of_friends',
+                data
+            }
+            a = JSON.stringify(a)
+            e.send(a)
         }
     )
+}
+let do_friend = (e, content, f) => {
+    let bag = {
+        'search': () => {
+            db.people().get_user(content.to).then(
+                d => {
+                    !d?
+                        f('do_friends')
+                        :
+                        db.friends().write(content.from, content.to, 'waiting').then(
+                            () => {
+                                db.friends().write(content.to, content.from, 'pending')
+
+                                db.friends().get_friends(content.from).then(
+                                    data => {
+                                        e.send(
+                                            JSON.stringify(
+                                                {
+                                                    type: 'list_of_friends',
+                                                    data
+                                                }
+                                            )
+                                        )
+                                    }
+                                )
+
+                                e.send(
+                                    JSON.stringify(
+                                        {
+                                            type: 'do_friends',
+                                            result: 1
+                                        }
+                                    )
+                                )
+                                
+                            }
+                        ).catch(
+                            () => f('do_friends')
+                        )
+                }
+            )
+        }
+    }
+    bag[content.status] && bag[content.status]()
 }
 
 // generate future id for users

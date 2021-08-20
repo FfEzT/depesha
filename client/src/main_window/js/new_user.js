@@ -317,6 +317,7 @@ setTimeout(
                                         )
                                         ws.onmessage = e => {
                                             let a = JSON.parse(e.data)
+                                            a = a.data
                                             data.main('get_friends', a)
                                             window.location.reload()
                                         }

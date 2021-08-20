@@ -47,7 +47,7 @@ let friends = () => {
     let get_friends = id => {
         return new Promise(
             resolve => {
-                let str = `SELECT * FROM ${id} ORDER BY id`
+                let str = `SELECT * FROM ${id} ORDER BY id` // todo ORDER BY nickname
 
                 db.all(
                     str,
@@ -59,7 +59,28 @@ let friends = () => {
         )
     }
 
-    return {create_list, get_friends}
+    // write to db new friend or update their status
+    // input: str, str, str(values: friend || not_friend || pending || waiting), f (incorrect data), e(ws)
+    let write = (from, to, status) => {
+        return new Promise(
+            (resolve, reject) => {
+                let str = `INSERT INTO ${from} VALUES (?, ?)`
+
+                db.run(
+                    str,
+                    [to, status],
+                    er => {
+                        er ?
+                            reject()
+                            :
+                            resolve()
+                    }
+                )
+            }
+        )
+    }
+
+    return {create_list, get_friends, write}
 }
 
 module.exports = {people, temp_mail, friends}

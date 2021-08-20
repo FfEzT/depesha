@@ -14,8 +14,8 @@ let main = (a, b=[]) => {
             data.friends = []
             data.favorite = []
         },
-        'get_friends': d => { // todo
-            data.friends = d
+        'get_friends': b => {
+            data.friends = b
         }
     }
     bag[a] && bag[a](b)

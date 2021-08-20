@@ -56,7 +56,7 @@ let focus_blur = on => {
             document.querySelector('body').setAttribute('onkeyup', '')
         },
         'blur': () => {
-            document.querySelector('body').setAttribute('onkeyup', 'hot_key(event)')
+            document.querySelector('body').setAttribute('onkeyup', 'web.hot_key(event)')
         }
     }
     a[on] && a[on]()
@@ -70,17 +70,23 @@ let focusBlur_right_bar = arg => {
     focus_blur(arg? 'focus':'blur')
 }
 
+// create notice in app (top-left)
+// input: str (there are values in var bag)
 let notice = a => {
     const wow = document.getElementsByClassName('notice')[0]
     let text, size
 
+    // it set time for removing notice
+    // type: int (dafault: 5000)
+    const time = 5000
+
     // for editting text and resize text
     let bag = {
         'off_work': () => {
-            text = 'У нас дефицит фиксиков, поэтому эта кнопка пока не работает'
+            text = 'В мире мало фиксиков, поэтому эта кнопка пока не работает'
         },
         'btn_more': () => {
-            text = 'Нам не хватило бюджета, чтобы доделать эту кнопку...'
+            text = 'Разрабам не хватило бюджета, чтобы доделать эту кнопку...'
         },
         'welcome': () => {
             text = 'Привет ;)'
@@ -104,7 +110,14 @@ let notice = a => {
             size = 'min(1vw, 1.8vh)'
         },
         'auth_err': () => {
-            text = 'Мы не помним вас, возможно вы ввели неправильные данные'
+            text = 'Хм, я не помню вас, возможно вы ввели неправильные данные'
+        },
+        'no_user': () => {
+            text = 'Я не нашел такого пользователя...('
+            size = 'min(0.7vw, 1.3vh)'
+        },
+        'wait_for_confirmation': () => {
+            text = 'Я отправил запрос, ждите пока не примут заявку'
         }
     }
     bag[a] && bag[a]()
@@ -135,7 +148,7 @@ let notice = a => {
     setTimeout(
         () => {
             go.classList.replace('close', 'first')
-        },0
+        }, 10
     )
     setTimeout(
         () => {
@@ -147,7 +160,7 @@ let notice = a => {
                 500
             ) 
         },
-        5000
+        time
     )
 }
 
@@ -203,6 +216,30 @@ let change_status_from_profile = () => {
     }
     a[user.status] && a[user.status]()
 }
+let f_search_friend = () => {
+    let a = /^[a-zA-Z0-9]{3,15}$/
+    let b = /^\d{3,15}$/
+    
+    !b.test(search_friend.value)? 
+        a.test(search_friend.value)?
+            (
+                ws.send(
+                    JSON.stringify(
+                        {
+                            type: 'do_friend',
+                            content: {
+                                status: 'search',
+                                from: user.data.id,
+                                to: search_friend.value
+                            }
+                        }
+                    )
+                ),
+                search_friend.value = ''
+            )
+            : notice('no_user')
+        : notice('no_user')
+}
 
 module.exports = {
     close_window,
@@ -215,5 +252,6 @@ module.exports = {
     focusBlur_right_bar,
     notice,
     change_status,
-    change_status_from_profile
+    change_status_from_profile,
+    f_search_friend
 }

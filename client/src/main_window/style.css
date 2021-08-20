@@ -228,7 +228,7 @@ body .background{
 	color: var(--color_text);
 	font-size: min(2vw,3vh);
 	background-color: var(--color_3);
-	text-transform: uppercase;
+	text-transform: lowercase;
 	border-radius: 250px 0 0 250px;
 	padding-left: 1vw;
 }

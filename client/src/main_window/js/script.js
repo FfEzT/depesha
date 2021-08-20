@@ -64,6 +64,17 @@ let load = () => {
                                                 () => {}
                                             )
                                         )
+                                },
+                                'do_friends': () => {
+                                    a.result == '0' ?
+                                        web.notice('no_user')
+                                        :
+                                        (
+                                            web.notice('wait_for_confirmation')
+                                        )
+                                },
+                                'list_of_friends': () => {
+                                    data.main('get_friends', a.data)
                                 }
                             }
                             bag[a.type] && bag[a.type]()
