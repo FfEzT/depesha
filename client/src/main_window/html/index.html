@@ -4,19 +4,31 @@
 		<meta charset="UTF-8">
 		<script type="text/javascript" src="../js/script.js"></script>
 		<script type="text/javascript" src="../js/e-html.js"></script>
-		<link rel="stylesheet" type="text/css" href="../style.css">
+		<link rel="stylesheet" type="text/css" href="../css/main.css">
 	</head>
 	<body onkeyup="web.hot_key(event)" onload="load()" tabindex="0">
-		<div class="background">
+		<div id="background">
 			<div class="drag"></div>
+
+			<link rel="stylesheet" type="text/css" href="../css/program_btn.css">
 			<e-html data-src="program_btn.html"></e-html>
-			<div class="close" onclick="web.roll_down_all()">
-				<div class="image"></div>
-			</div>
+
+			<link rel="stylesheet" type="text/css" href="../css/close.css">
+			<e-html data-src="close.html"></e-html>
+
+			<link rel="stylesheet" type="text/css" href="../css/notice.css">
 			<div class="notice"></div>
+
+			<link rel="stylesheet" type="text/css" href="../css/up_panel.css">
 			<e-html data-src="up_panel.html"></e-html>
+
+			<link rel="stylesheet" type="text/css" href="../css/left_panel.css">
 			<e-html data-src="left_panel.html"></e-html>
+
+			<link rel="stylesheet" type="text/css" href="../css/right_panel.css">
 			<e-html data-src="right_panel.html"></e-html>
+
+			<link rel="stylesheet" type="text/css" href="../css/down_panel.css">
 			<e-html data-src="down_panel.html"></e-html>
 		</div>
 	</body>

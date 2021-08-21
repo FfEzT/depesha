@@ -7,7 +7,7 @@ const full_window = () => wnd.isMaximized()?
     wnd.unmaximize() : wnd.maximize()
 const minimize_window = () => wnd.minimize()
 
-// 'leftBar' OR 'rightBar'
+// input: str(leftBar || rightBar || down_panel)
 let set_pos_for_bars = lr => {
     const el = document.getElementById(lr) 
     let isOpen = el.classList.contains('focus')
@@ -18,12 +18,15 @@ let set_pos_for_bars = lr => {
 let roll_down_all = () => {
     const lBar = document.getElementById('leftBar')
     const rBar = document.getElementById('rightBar')
+    const dBar = document.getElementById('down_panel')
     
     const lIsOpen = lBar.classList.contains('focus')
     const rIsOpen = rBar.classList.contains('focus')
+    const dIsOpen = dBar.classList.contains('focus')
 
     lIsOpen && set_pos_for_bars('leftBar')
     rIsOpen && set_pos_for_bars('rightBar')
+    dIsOpen && set_pos_for_bars('down_panel')
 }
 
 let hot_key = e => {
@@ -39,6 +42,10 @@ let hot_key = e => {
         // arrow up
         38: () => {
                 roll_down_all()
+        },
+        // arrow down
+        40: () => {
+            set_pos_for_bars('down_panel')
         },
         // space
         32: () => {
@@ -217,28 +224,33 @@ let change_status_from_profile = () => {
     a[user.status] && a[user.status]()
 }
 let f_search_friend = () => {
-    let a = /^[a-zA-Z0-9]{3,15}$/
-    let b = /^\d{3,15}$/
-    
-    !b.test(search_friend.value)? 
-        a.test(search_friend.value)?
-            (
-                ws.send(
-                    JSON.stringify(
-                        {
-                            type: 'do_friend',
-                            content: {
-                                status: 'search',
-                                from: user.data.id,
-                                to: search_friend.value
-                            }
-                        }
+    user.status == 'offline'?
+        notice('off_server')
+        :
+        !function(){
+            let a = /^[a-zA-Z0-9]{3,15}$/
+            let b = /^\d{3,15}$/
+            
+            !b.test(search_friend.value)? 
+                a.test(search_friend.value)?
+                    (
+                        ws.send(
+                            JSON.stringify(
+                                {
+                                    type: 'do_friend',
+                                    content: {
+                                        status: 'search',
+                                        from: user.data.id,
+                                        to: search_friend.value
+                                    }
+                                }
+                            )
+                        ),
+                        search_friend.value = ''
                     )
-                ),
-                search_friend.value = ''
-            )
-            : notice('no_user')
-        : notice('no_user')
+                    : notice('no_user')
+                : notice('no_user')
+                }()
 }
 
 module.exports = {

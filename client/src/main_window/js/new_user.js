@@ -22,6 +22,7 @@ setTimeout(
         document.getElementsByClassName('up_panel')[0].remove()
         document.getElementsByClassName('left_panel')[0].remove()
         document.getElementsByClassName('right_panel')[0].remove()
+        document.getElementsByClassName('down_panel')[0].remove()
         bg.remove()
 
         user.status == 'online'?
