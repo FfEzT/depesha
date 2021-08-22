@@ -255,20 +255,95 @@ let f_search_friend = () => {
 }
 
 let load_friend = () => {
-    let arr = data.main()
-    arr.forEach(
-        (value, index) => {
-            let a = document.createElement('e-html')
-            a.setAttribute('data-src', 'friend.html')
+    // type: HTML element
+    let tab1 = document.getElementsByClassName('content_for_f1')[0]
+    let tab2 = document.getElementsByClassName('content_for_f2')[0]
 
-            c1 = document.getElementsByClassName('content_for_f1')[0]
+    // it don't working without if/else, because I used <e-html> and e-html.js
+    !(tab1 || tab2) ?
+        setTimeout(
+            load_friend,
+            500
+        )
+        :
+        !function(){
+            // type: array(list of friends)
+            let arr = data.main()
 
-            console.log(a)
-            console.log(c1)
-            c1.append(a)
-            console.log(a)
-        }
-    )
+            arr.forEach(
+                (value, index) => {
+                    // type: html element
+                    let a = document.createElement('div')
+                    a.classList.add('el')
+
+                    if(value.STATUS == 'friend'){
+                        a.innerHTML = `
+                                    <div class="ell">
+                                        <div class="center picture"></div>
+                                    </div>
+                                    <div class="ell">
+                                        <div class="center nickname" onclick="web.notice('off_work')">${value.nickname}</div>
+                                    </div>
+                                    <div class="ell e" onclick="web.notice('off_work')">
+                                        <div class="button center call"></div>
+                                    </div>
+                                    <div class="ell e" onclick="web.notice('off_work')">
+                                        <div class="button center chat"></div>
+                                    </div>
+                                    <div class="ell e" onclick="web.notice('off_work')">
+                                        <div class="button center delete"></div>
+                                    </div>`
+
+                        tab1.append(a)
+
+                        return
+                    }
+                    if(value.STATUS == 'pending' || value.STATUS == 'waiting'){
+                        value.STATUS == 'pending'?
+                            (               
+                                a.style.gridTemplateColumns = '.5fr 1fr 2fr .25fr .25fr',                 
+                                a.innerHTML = `
+                                <div class="ell">
+                                    <div class="center picture"></div>
+                                </div>
+                                <div class="ell e">
+                                    <div class="center nickname u">${value.id}</div>
+                                </div>
+                                <div class="ell">
+                                    <div class="center nickname u">${value.nickname}</div>
+                                </div>
+                                <div class="ell e" onclick="web.notice('off_work')">
+                                    <div class="button center add_friend"></div>
+                                </div>
+                                <div class="ell e" onclick="web.notice('off_work')">
+                                    <div class="button center delete_application"></div>
+                                </div>`
+                            )
+                            :
+                            (
+                                a.style.gridTemplateColumns = '.5fr 1fr 1fr .5fr',
+                                a.innerHTML = `
+                                <div class="ell">
+                                    <div class="center picture"></div>
+                                </div>
+                                <div class="ell e">
+                                    <div class="center nickname u">${value.id}</div>
+                                </div>
+                                <div class="ell">
+                                    <div class="center nickname u">${value.nickname}</div>
+                                </div>
+                                <div class="ell e" onclick="web.notice('off_work')">
+                                    <div class="button center delete_application"></div>
+                                </div>`
+                            )
+
+                        tab2.append(a)
+
+                        return
+                    }
+                }
+            )
+        }()
 }
 
 module.exports = {

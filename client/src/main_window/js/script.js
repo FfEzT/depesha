@@ -18,9 +18,6 @@ let load = () => {
         )
     }()
 
-    // loading list of friends
-    web.load_friend()
-
     // WebSocket
     !function connection(){
         ws = new WebSocket('ws://localhost:5480') // todo change str
@@ -101,6 +98,9 @@ let load = () => {
             }()
         }
     }();
+
+    // loading list of friends
+    web.load_friend()
 
     // final
     console.log('ready') // todo u can delete this line
