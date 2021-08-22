@@ -223,6 +223,7 @@ let change_status_from_profile = () => {
     }
     a[user.status] && a[user.status]()
 }
+
 let f_search_friend = () => {
     user.status == 'offline'?
         notice('off_server')
@@ -253,6 +254,23 @@ let f_search_friend = () => {
                 }()
 }
 
+let load_friend = () => {
+    let arr = data.main()
+    arr.forEach(
+        (value, index) => {
+            let a = document.createElement('e-html')
+            a.setAttribute('data-src', 'friend.html')
+
+            c1 = document.getElementsByClassName('content_for_f1')[0]
+
+            console.log(a)
+            console.log(c1)
+            c1.append(a)
+            console.log(a)
+        }
+    )
+}
+
 module.exports = {
     close_window,
     full_window,
@@ -265,5 +283,6 @@ module.exports = {
     notice,
     change_status,
     change_status_from_profile,
-    f_search_friend
+    f_search_friend,
+    load_friend
 }

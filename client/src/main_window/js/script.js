@@ -18,6 +18,9 @@ let load = () => {
         )
     }()
 
+    // loading list of friends
+    web.load_friend()
+
     // WebSocket
     !function connection(){
         ws = new WebSocket('ws://localhost:5480') // todo change str
