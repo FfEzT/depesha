@@ -1,14 +1,14 @@
 // import modules
 const sql = require('sqlite3').verbose()
 
-let people = () => {
-    let db = new sql.Database('./data/people.sqlite')
+let db = new sql.Database('./data/main.sqlite')
 
+let people = () => {
     let sign_up = (id, nickname, password) => {
         return new Promise(
             (resolve, reject) => {
                 db.run(
-                    'INSERT INTO main values(?, ?, ?)',
+                    'INSERT INTO main values(?, ?, ?, "offline")',
                     [id, nickname, password],
                     err => {
                         err && reject()
@@ -34,24 +34,22 @@ let people = () => {
 
     return {sign_up, get_user}
 }
-let temp_mail = () => {
-    let db = new sql.Database('./data/temp_mail.sqlite')
-}
+let temp_mail = () => {}
 let friends = () => {
-    let db = new sql.Database('./data/friends.sqlite')
-
     let create_list = id => {
-        let str = `CREATE TABLE ${id} (id TINYTEXT PRIMARY KEY, STATUS TINYTEXT)`
+        let str = `CREATE TABLE ${id} (id TINYTEXT PRIMARY KEY, status TINYTEXT)`
         db.run(str)
     }
     let get_friends = id => {
         return new Promise(
             resolve => {
-                let str = `SELECT * FROM ${id} ORDER BY id` // todo ORDER BY nickname
+                let str = `SELECT ${id}.id, main.nickname, ${id}.status FROM ${id} JOIN main ON ${id}.id = main.id ORDER BY ${id}.status, main.nickname`
 
                 db.all(
                     str,
                     (er, data) => {
+                        console.log(er)
+                        console.log(data)
                         resolve(data)
                     }
                 )

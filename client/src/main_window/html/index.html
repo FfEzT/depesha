@@ -3,33 +3,132 @@
 	<head>
 		<meta charset="UTF-8">
 		<script type="text/javascript" src="../js/script.js"></script>
-		<script type="text/javascript" src="../js/e-html.js"></script>
 		<link rel="stylesheet" type="text/css" href="../css/main.css">
 	</head>
-	<body onkeyup="web.hot_key(event)" onload="load()" tabindex="0">
+	<body onkeyup="web.hot_key(event)" onload="load.main()" tabindex="0">
 		<div id="background">
 			<div class="drag"></div>
 
 			<link rel="stylesheet" type="text/css" href="../css/program_btn.css">
-			<e-html data-src="program_btn.html"></e-html>
+			<div class="program_btn">
+				<div class="win_btn button_close" id="button_close" onclick="web.close_window()"></div>
+				<div class="win_btn button_full" onclick="web.full_window()"></div>
+				<div class="win_btn button_hide" onclick="web.minimize_window()"></div>
+				<div class="line_1"></div>
+				<div class="line_2"></div>
+			</div>
 
 			<link rel="stylesheet" type="text/css" href="../css/close.css">
-			<e-html data-src="close.html"></e-html>
+			<div class="close" onclick="web.roll_down_all()">
+				<div class="image"></div>
+			</div>
 
 			<link rel="stylesheet" type="text/css" href="../css/notice.css">
 			<div class="notice"></div>
 
 			<link rel="stylesheet" type="text/css" href="../css/up_panel.css">
-			<e-html data-src="up_panel.html"></e-html>
+			<div class="up_panel">
+				<div class="container_search">
+					<div class="search">
+						<input type="text" class="text" id="search_friend" placeholder="id" maxlength="7" tabindex="1" onfocus="web.focus_blur('focus')" onblur="web.focus_blur('blur')">
+						<div class="line"></div>
+						<div class="btn_search" onclick="web.f_search_friend()">
+							<div class="picture_btn_search"></div>
+						</div>
+					</div>
+				</div>
+				<div class="btn" onclick="web.notice('off_work')" style="grid-column: 4/5;">
+					<div class="btn_piq mail"></div>
+				</div>
+				<div class="btn" onclick="web.notice('btn_more')" style="grid-column: 5/6;">
+					<div class="btn_piq more"></div>
+				</div>
+				<div class="btn" onclick="web.notice('btn_more')" style="grid-column: 7/8;">
+					<div class="btn_piq more"></div>
+				</div>
+				<div class="btn" onclick="web.notice('btn_more')" style="grid-column: 8/9;">
+					<div class="btn_piq more"></div>
+				</div>
+				<div class="btn" onclick="web.notice('btn_more')" style="grid-column: 9/10;">
+					<div class="btn_piq more"></div>
+				</div>
+				<div class="btn" onclick="web.notice('off_work')" style="grid-column: 10/11;">
+					<div class="btn_piq settings"></div>
+				</div>
+				<div class="profile">
+					<div class="status" id="status" onclick="web.change_status_from_profile()">
+						<div class="text" id="text_of_status">offline</div>
+					</div>
+					<div class="container_for_photo">
+						<div class="photo" onclick="web.notice('btn_more')"></div>
+					</div>
+				</div>
+			</div>
 
 			<link rel="stylesheet" type="text/css" href="../css/left_panel.css">
-			<e-html data-src="left_panel.html"></e-html>
+			<div class="left_panel" id="leftBar">
+				<div class="background"></div>
+				<div class="tab" onclick="web.set_pos_for_bars('leftBar')"></div>
+				<div class="content" onclick="web.set_pos_for_bars('leftBar')"></div>
+				<div class="window"></div>
+				<div class="bar_for_btn"></div>
+				<div class="btns">
+					<input hidden type="checkbox"  id="microphone">
+					<input hidden type="checkbox"  id="earphone">
+					<label for="microphone" class="container">
+						<div class="btn mic" onclick="web.notice('off_work')"></div>
+					</label>
+					<label class="container">
+						<div class="btn bye" onclick="web.notice('off_work')"></div>
+					</label>
+					<label for="earphone" class="container">
+						<div class="btn headphone" onclick="web.notice('off_work')"></div>
+					</label>
+				</div>
+			</div>
 
 			<link rel="stylesheet" type="text/css" href="../css/right_panel.css">
-			<e-html data-src="right_panel.html"></e-html>
+			<div class="right_panel" id="rightBar">
+				<div class="background"></div>
+				<div class="focus"></div>
+				<div class="content">
+					<div class="marginLeft marginTop photo"></div>
+					<div class="marginRight marginTop nick" onclick="web.set_pos_for_bars('rightBar')">
+						<div class="nick_text" ondblclick="web.notice('off_work')">NickName</div>
+					</div>
+					<div class="marginLeft marginRight chat"></div>
+				</div>
+				<div class="input_text">
+					<textarea id="chat" class="text" tabindex="-1" placeholder="Text..." maxlength="500" onfocus="web.focusBlur_right_bar(true)" onblur="web.focusBlur_right_bar(false)"></textarea>
+					<div class="send" onclick="web.notice('off_work')">
+						<div class="send_btn"></div>
+					</div>
+				</div>
+				<div class="tab" onclick="web.set_pos_for_bars('rightBar')"></div>
+			</div>
 
 			<link rel="stylesheet" type="text/css" href="../css/down_panel.css">
-			<e-html data-src="down_panel.html"></e-html>
+			<div id="down_panel" class="down_panel">
+				<div class="body">
+					<div class="bg">
+						<input hidden type="radio" checked name="friends" id="f1">
+						<input hidden type="radio" name="friends" id="f2">
+						<label for="f1" class="tabs for1">
+							<div class="text">Друзья</div>
+							<div class="backg"></div>
+						</label>
+						<label for="f2" class="tabs for2">
+							<div class="text">Заявки</div>
+							<div class="backg"></div>
+						</label>
+			
+						<link rel="stylesheet" type="text/css" href="../css/friend.css">
+						<div class="content_for_f1 contents"></div>
+						<div class="content_for_f2 contents"></div>
+					</div>
+				</div>
+				<div class="btn" onclick="web.set_pos_for_bars('down_panel')"></div>
+			</div>
 		</div>
 	</body>
 </html>

@@ -3,9 +3,9 @@
 	bottom: -56vh;
 	left: 50vw;
 	width: 40vw;
-	height: 70vh;
+	height: 75vh;
 	display: grid;
-	grid-template-rows: 5vh max(2vh, 15px) auto;
+	grid-template-rows: 10.9vh max(2vh, 15px) auto;
 	transform: translate(-50%,0) scale(.75);
 	transition: bottom .5s cubic-bezier(0.5, 0, 0.15, 1), transform .5s cubic-bezier(0.42,0,0.58,1);
 }

@@ -1,14 +1,13 @@
 // delete old info (list of friends)
 data.main('delete_data')
 
-const main = document.getElementsByClassName('background')[0]
+const main = document.getElementById('background')
 let bg = document.createElement('div')
 bg.style = 'position: absolute; width: 100vw; height: 100vh;\
             background-color: var(--color_1); opacity: 0;\
             transition: opacity .5s cubic-bezier(0.16, 1, 0.3, 1);'
 
 main.append(bg)
-
 setTimeout(
     () => {
         bg.style.opacity = '100'
@@ -320,6 +319,7 @@ setTimeout(
                                             let a = JSON.parse(e.data)
                                             a = a.data
                                             data.main('get_friends', a)
+                                            
                                             window.location.reload()
                                         }
                             
@@ -365,7 +365,7 @@ setTimeout(
                         100
                     );
             }()
-        :
+            :
             // offline
             !function(){
                     let offline = document.createElement('div')

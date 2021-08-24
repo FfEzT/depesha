@@ -41,7 +41,7 @@ let connection_to_server = e => {
                     update_status(data.content)
                 },
                 'get_friends': () => {
-                    send_friends(e, data.content)
+                    send_friends(e, data.content.id)
                 },
                 'do_friend': () => {
                     do_friend(e, data.content, notice_incorrect_data)
@@ -124,7 +124,7 @@ let update_status = content => {
     clients[content.id].status = content.status
 }
 let send_friends = (e, content) => {
-    db.friends().get_friends(content.id).then(
+    db.friends().get_friends(content).then(
         data => {
             let a = {
                 type: 'list_of_friends',
@@ -147,18 +147,7 @@ let do_friend = (e, content, f) => {
                             () => {
                                 db.friends().write(content.to, content.from, 'pending')
 
-                                db.friends().get_friends(content.from).then(
-                                    data => {
-                                        e.send(
-                                            JSON.stringify(
-                                                {
-                                                    type: 'list_of_friends',
-                                                    data
-                                                }
-                                            )
-                                        )
-                                    }
-                                )
+                                send_friends(e, content.from)
 
                                 e.send(
                                     JSON.stringify(
