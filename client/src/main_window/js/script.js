@@ -8,18 +8,27 @@ let ws // WebSocket
 
 // send id and password for auth
 let auth = (id, password, a=false) => {
-    ws.send(
-        JSON.stringify(
-            {
-                type: 'auth',
-                content: {
-                    connect: a,
-                    id,
-                    password
-                }
+    send_data(
+        {
+            type: 'auth',
+            content: {
+                connect: a,
+                id,
+                password
             }
-        )
+        }
     )
+}
+
+// send data to server
+// input Object (type: str, content: {})
+let send_data = data => {
+    user.status == 'offline' ?
+        web.notice('off_server')
+        :
+        ws.send(
+            JSON.stringify(data)
+        )
 }
 
 // info about user and his 'people'

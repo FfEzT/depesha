@@ -193,16 +193,14 @@ let change_status = () => {
 }
 let change_status_from_profile = () => {
     let update = () => {
-        ws.send(
-            JSON.stringify(
-                {
-                    type: 'update_status',
-                    content: {
-                        id: user.data.id,
-                        status: user.status
-                    }
+        send_data(
+            {
+                type: 'update_status',
+                content: {
+                    id: user.data.id,
+                    status: user.status
                 }
-            )
+            }
         )
     }
 
@@ -235,17 +233,15 @@ let f_search_friend = () => {
             !b.test(search_friend.value)? 
                 a.test(search_friend.value)?
                     (
-                        ws.send(
-                            JSON.stringify(
-                                {
-                                    type: 'do_friend',
-                                    content: {
-                                        status: 'search',
-                                        from: user.data.id,
-                                        to: search_friend.value
-                                    }
+                        send_data(
+                            {
+                                type: 'do_friend',
+                                content: {
+                                    status: 'search',
+                                    from: user.data.id,
+                                    to: search_friend.value
                                 }
-                            )
+                            }
                         ),
                         search_friend.value = ''
                     )

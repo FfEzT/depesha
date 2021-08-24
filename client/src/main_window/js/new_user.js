@@ -170,8 +170,8 @@ setTimeout(
                     sign_up.onclick = () => {
                         user.status == 'online'?
                             can_create.name && can_create.password ? 
-                                !function(){
-                                    let data_for_sending = JSON.stringify(
+                                !function(){                                    
+                                    send_data(
                                         {
                                             type: 'sign_up',
                                             content: {
@@ -180,8 +180,6 @@ setTimeout(
                                             }
                                         }
                                     )
-
-                                    ws.send(data_for_sending)
                                     ws.onmessage = e => {
                                         let a = JSON.parse(e.data)
                                         
@@ -305,16 +303,15 @@ setTimeout(
                                             JSON.stringify(user.data)
                                         )
 
-                                        ws.send(
-                                            JSON.stringify(
-                                                {
-                                                    type: 'get_friends',
-                                                    content: {
-                                                        id: user.data.id
-                                                    }
+                                        send_data(
+                                            {
+                                                type: 'get_friends',
+                                                content: {
+                                                    id: user.data.id
                                                 }
-                                            )
+                                            }
                                         )
+
                                         ws.onmessage = e => {
                                             let a = JSON.parse(e.data)
                                             a = a.data
