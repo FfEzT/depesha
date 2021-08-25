@@ -104,13 +104,13 @@ let auth = async (e, content, f) => {
                         )
                     ),
                     content.connect && !function(){
-                        clients[people.id] = {
-                            status: 'online',
-                            ws
-                        }
+                        db.people().update_status(content.id, 'online')
+                        clients[people.id] = ws
+                        
                         e.on(
                             'close',
                             () => {
+                                db.people().update_status(people.id, 'offline')
                                 delete clients[people.id]
                             }
                         )
@@ -121,8 +121,10 @@ let auth = async (e, content, f) => {
         : f(type)
 }
 let update_status = content => {
-    clients[content.id].status = content.status
+    db.people().update_status(content.id, content.status)
 }
+// send list of friends to client
+// input: object(from WebSocket), str(id of client)
 let send_friends = (e, content) => {
     db.friends().get_friends(content).then(
         data => {
@@ -163,6 +165,16 @@ let do_friend = (e, content, f) => {
                             () => f('do_friends')
                         )
                 }
+            )
+        },
+        'add': () => {
+            db.friends().add_friend(content.from, content.to).then(
+                () => send_friends(e, content.from)
+            )
+        },
+        'delete': () => {
+            db.friends().delete_friend(content.from, content.to).then(
+                () => send_friends(e, content.from)
             )
         }
     }

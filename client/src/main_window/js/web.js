@@ -192,34 +192,27 @@ let change_status = () => {
     a[user.status] && a[user.status]()
 }
 let change_status_from_profile = () => {
-    let update = () => {
-        send_data(
-            {
-                type: 'update_status',
-                content: {
-                    id: user.data.id,
-                    status: user.status
-                }
-            }
-        )
-    }
-
     let a = {
         'online': () => {
             user.status = 'idle'
-            update()
             change_status()
-        },
-        'offline': () => {
-            notice('off_server')
         },
         'idle': () => {
             user.status = 'online'
-            update()
             change_status()
         }
     }
     a[user.status] && a[user.status]()
+
+    send_data(
+        {
+            type: 'update_status',
+            content: {
+                id: user.data.id,
+                status: user.status
+            }
+        }
+    )
 }
 
 let f_search_friend = () => {
@@ -278,7 +271,7 @@ let load_friend = () => {
                             <div class="ell e" onclick="web.notice('off_work')">
                                 <div class="button center chat"></div>
                             </div>
-                            <div class="ell e" onclick="web.notice('off_work')">
+                            <div class="ell e" onclick="web.delete_friend('${value.id}')">
                                 <div class="button center delete"></div>
                             </div>`
 
@@ -300,10 +293,10 @@ let load_friend = () => {
                         <div class="ell">
                             <div class="center nickname u">${value.nickname}</div>
                         </div>
-                        <div class="ell e" onclick="web.notice('off_work')">
+                        <div class="ell e" onclick="web.add_friend('${value.id}')">
                             <div class="button center add_friend"></div>
                         </div>
-                        <div class="ell e" onclick="web.notice('off_work')">
+                        <div class="ell e" onclick="web.delete_friend('${value.id}')">
                             <div class="button center delete_application"></div>
                         </div>`
                     )
@@ -320,7 +313,7 @@ let load_friend = () => {
                         <div class="ell">
                             <div class="center nickname u">${value.nickname}</div>
                         </div>
-                        <div class="ell e" onclick="web.notice('off_work')">
+                        <div class="ell e" onclick="web.delete_friend('${value.id}')">
                             <div class="button center delete_application"></div>
                         </div>`
                     )
@@ -328,6 +321,36 @@ let load_friend = () => {
                 tab2.append(a)
 
                 return
+            }
+        }
+    )
+}
+
+// send request to delete friend to server
+// input: str(id of friend, who we want to delete)
+let delete_friend = str => {
+    send_data(
+        {
+            type: 'do_friend',
+            content: {
+                status: 'delete',
+                from: user.data.id,
+                to: str
+            }
+        }
+    )
+}
+
+// send request to add friend to server
+// input: str(id of friend, who we want to add)
+let add_friend = str => {
+    send_data(
+        {
+            type: 'do_friend',
+            content: {
+                status: 'add',
+                from: user.data.id,
+                to: str
             }
         }
     )
@@ -346,5 +369,7 @@ module.exports = {
     change_status,
     change_status_from_profile,
     f_search_friend,
-    load_friend
+    load_friend,
+    delete_friend,
+    add_friend
 }

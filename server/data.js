@@ -32,7 +32,14 @@ let people = () => {
         )
     }
 
-    return {sign_up, get_user}
+    // change status of client
+    // input: str(id of client), str(online || offline || idle)
+    let update_status = (who, status) => {
+        let str = `UPDATE main SET status = '${status}' WHERE id = '${who}'`
+        db.run(str)
+    }
+
+    return {sign_up, get_user, update_status}
 }
 let temp_mail = () => {}
 let friends = () => {
@@ -48,8 +55,6 @@ let friends = () => {
                 db.all(
                     str,
                     (er, data) => {
-                        console.log(er)
-                        console.log(data)
                         resolve(data)
                     }
                 )
@@ -76,7 +81,39 @@ let friends = () => {
         )
     }
 
-    return {create_list, get_friends, write}
+    // update status of friends to 'friend'
+    // input: str, str
+    let add_friend = (whom, who) => {
+        return new Promise(
+            resolve => {
+                let str_1 = `UPDATE ${whom} SET status = "friend" WHERE id = '${who}'`
+                let str_2 = `UPDATE ${who} SET status = "friend" WHERE id = '${whom}'`
+
+                db.run(str_1)
+                db.run(str_2)
+
+                resolve()
+            }
+        )
+    }
+
+    // delete people from list of friends
+    // input: str, str
+    let delete_friend = (whom, who) => {
+        return new Promise(
+            resolve => {
+                let str_1 = `DELETE FROM ${whom} WHERE id = '${who}'`
+                let str_2 = `DELETE FROM ${who} WHERE id = '${whom}'`
+
+                db.run(str_1)
+                db.run(str_2)
+                
+                resolve()
+            }
+        )
+    }
+
+    return {create_list, get_friends, write, add_friend, delete_friend}
 }
 
 module.exports = {people, temp_mail, friends}
