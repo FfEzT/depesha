@@ -54,6 +54,7 @@ let main = () => {
                             },
                             'list_of_friends': () => {
                                 data.main('get_friends', a.data)
+                                web.load_friend()
                             }
                         }
                         bag[a.type] && bag[a.type]()

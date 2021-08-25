@@ -125,6 +125,9 @@ let notice = a => {
         },
         'wait_for_confirmation': () => {
             text = 'Я отправил запрос, ждите пока не примут заявку'
+        },
+        'it_is_u': () => {
+            text = 'Простите не узнал... это же вы...)'
         }
     }
     bag[a] && bag[a]()
@@ -216,34 +219,44 @@ let change_status_from_profile = () => {
 }
 
 let f_search_friend = () => {
-    user.status == 'offline'?
-        notice('off_server')
-        :
-        !function(){
-            let a = /^[a-zA-Z0-9]{3,15}$/
-            let b = /^\d{3,15}$/
-            
-            !b.test(search_friend.value)? 
-                a.test(search_friend.value)?
-                    (
-                        send_data(
-                            {
-                                type: 'do_friend',
-                                content: {
-                                    status: 'search',
-                                    from: user.data.id,
-                                    to: search_friend.value
-                                }
-                            }
-                        ),
-                        search_friend.value = ''
-                    )
-                    : notice('no_user')
-                : notice('no_user')
-                }()
+    let a = /^[a-zA-Z]{3,10}$/
+    let b = search_friend.value
+
+    if(b == user.data.id){
+        notice('no_user')
+        setTimeout(
+            () => notice('it_is_u'),
+            1500
+        )
+        search_friend.value = ''
+        return
+    }
+    
+    a.test(b)?
+        (
+            send_data(
+                {
+                    type: 'do_friend',
+                    content: {
+                        status: 'search',
+                        from: user.data.id,
+                        to: b
+                    }
+                }
+            ),
+            search_friend.value = ''
+        )
+        : notice('no_user')
 }
 
 let load_friend = () => {
+    let temp = [...document.getElementsByClassName('el')]
+    temp && !function(){
+        for(let i = 0; i < temp.length; i++){
+            temp[i].remove()
+        }
+    }()
+
     // type: HTML element
     let tab1 = document.getElementsByClassName('content_for_f1')[0]
     let tab2 = document.getElementsByClassName('content_for_f2')[0]
@@ -297,7 +310,7 @@ let load_friend = () => {
                             <div class="button center add_friend"></div>
                         </div>
                         <div class="ell e" onclick="web.delete_friend('${value.id}')">
-                            <div class="button center delete_application"></div>
+                            <div class="button center delete"></div>
                         </div>`
                     )
                     :
@@ -314,7 +327,7 @@ let load_friend = () => {
                             <div class="center nickname u">${value.nickname}</div>
                         </div>
                         <div class="ell e" onclick="web.delete_friend('${value.id}')">
-                            <div class="button center delete_application"></div>
+                            <div class="button center delete"></div>
                         </div>`
                     )
 
