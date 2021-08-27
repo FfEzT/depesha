@@ -8,7 +8,7 @@ let people = () => {
         return new Promise(
             (resolve, reject) => {
                 db.run(
-                    'INSERT INTO main values(?, ?, ?, "offline")',
+                    'INSERT INTO main values(?, ?, ?, "offline", 0)',
                     [id, nickname, password],
                     err => {
                         err && reject()
@@ -39,7 +39,14 @@ let people = () => {
         db.run(str)
     }
 
-    return {sign_up, get_user, update_status}
+    // change status of client
+    // input: str(id of client), int (0||1)
+    let update_friends = (who, status) => {
+        let str = `UPDATE main SET changes_friends = ${status} WHERE id = '${who}'`
+        db.run(str)
+    }
+
+    return {sign_up, get_user, update_status, update_friends}
 }
 let temp_mail = () => {}
 let friends = () => {
@@ -115,5 +122,16 @@ let friends = () => {
 
     return {create_list, get_friends, write, add_friend, delete_friend}
 }
+
+// todo delete
+// db.run(
+//     'DELETE FROM main'
+// )
+// db.run(
+//     'CREATE TABLE main (id TINYTEXT PRIMARY KEY, nickname TINYTEXT, password TINYTEXT, status TINYTEXT, changes_friends TINYINT)'
+// )
+
+
+
 
 module.exports = {people, temp_mail, friends}

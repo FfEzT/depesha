@@ -220,7 +220,7 @@ let change_status_from_profile = () => {
 
 let f_search_friend = () => {
     let a = /^[a-zA-Z]{3,10}$/
-    let b = search_friend.value
+    let b = search_friend.value.toLowerCase()
 
     if(b == user.data.id){
         notice('no_user')

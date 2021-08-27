@@ -105,7 +105,17 @@ let auth = async (e, content, f) => {
                     ),
                     content.connect && !function(){
                         db.people().update_status(content.id, 'online')
-                        clients[people.id] = ws
+                        clients[people.id] = e
+
+                        db.people().get_user(content.id).then(
+                            d => {
+                                d.changes_friends == 1 && !function(){
+                                    send_friends(e, content.id)
+                                    
+                                    db.people().update_friends(content.id, 0)
+                                }()
+                            }
+                        )
                         
                         e.on(
                             'close',
@@ -133,7 +143,9 @@ let send_friends = (e, content) => {
                 data
             }
             a = JSON.stringify(a)
-            e.send(a)
+
+            // clients[content].send(a)
+            clients[content].send(a)
         }
     )
 }
@@ -150,6 +162,11 @@ let do_friend = (e, content, f) => {
                                 db.friends().write(content.to, content.from, 'pending')
 
                                 send_friends(e, content.from)
+
+                                clients[content.to] ?
+                                    send_friends(e, content.to)
+                                    :
+                                    db.people().update_friends(content.to, 1)
 
                                 e.send(
                                     JSON.stringify(
@@ -169,12 +186,26 @@ let do_friend = (e, content, f) => {
         },
         'add': () => {
             db.friends().add_friend(content.from, content.to).then(
-                () => send_friends(e, content.from)
+                () => {
+                    send_friends(e, content.from)
+
+                    clients[content.to] ?
+                        send_friends(e, content.to)
+                        :
+                        db.people().update_friends(content.to, 1)
+                }
             )
         },
         'delete': () => {
             db.friends().delete_friend(content.from, content.to).then(
-                () => send_friends(e, content.from)
+                () => {
+                    send_friends(e, content.from)
+
+                    clients[content.to] ?
+                        send_friends(e, content.to)
+                        :
+                        db.people().update_friends(content.to, 1)
+                }
             )
         }
     }
