@@ -84,7 +84,7 @@ let notice = a => {
     let text, size
 
     // it set time for removing notice
-    // type: int (dafault: 5000)
+    // type: int (default: 5000)
     const time = 5000
 
     // for editting text and resize text

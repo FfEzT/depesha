@@ -83,12 +83,8 @@ let sign_up = async (e, content) => {
 let auth = async (e, content, f) => {
     // data from DataBase
     // type: {object}
-    let people
+    let people = await db.people().get_user(content.id)
     let type = 'auth'
-    
-    await db.people().get_user(content.id).then(
-        d => people = d
-    )
 
     people?
         (
@@ -138,14 +134,15 @@ let update_status = content => {
 let send_friends = (e, content) => {
     db.friends().get_friends(content).then(
         data => {
-            let a = {
-                type: 'list_of_friends',
-                data
-            }
-            a = JSON.stringify(a)
+            let a = JSON.stringify(
+                {
+                    type: 'list_of_friends',
+                    data
+                }
+            )
 
-            // clients[content].send(a)
-            clients[content].send(a)
+            let ws = clients[content] || e
+            ws.send(a)
         }
     )
 }
