@@ -175,7 +175,7 @@ setTimeout(
                                         type: 'sign_up',
                                         content: {
                                             nickname: name.value,
-                                            password: hashing(password.value)
+                                            password: cipher.hashing(password.value)
                                         }
                                     }
                                 )
@@ -186,7 +186,7 @@ setTimeout(
                                         // write data about user (user.json)
                                         user.data.id = a.id
                                         user.data.nickname = name.value
-                                        user.data.password = hashing(password.value)
+                                        user.data.password = cipher.hashing(password.value)
                             
                                         fs.writeFile(
                                             './src/data/user.json',
@@ -288,7 +288,7 @@ setTimeout(
                             (
                                 auth(
                                     id.value,
-                                    hashing(password_.value)
+                                    cipher.hashing(password_.value)
                                 ),
                                 ws.onmessage = e => {
                                     let b = JSON.parse(e.data)
@@ -296,7 +296,7 @@ setTimeout(
                                         // write data about user (user.json)
                                         user.data.id = id.value
                                         user.data.nickname = b.nick
-                                        user.data.password = hashing(password_.value)
+                                        user.data.password = cipher.hashing(password_.value)
                             
                                         fs.writeFileSync(
                                             './src/data/user.json',

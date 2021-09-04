@@ -1,12 +1,14 @@
 // import modules
 const fs = require('fs')
-const crypto = require('crypto')
 const data = require('../js/data')
 const load = require('../js/load')
 const web = require('../js/web')
+const cipher = require('../js/cipher')
 const connection = require('../js/ws')
+let ws // WebSocket
 
 // send id and password for auth
+// in: str, str, bool
 let auth = (id, password, a=false) => {
     send_data(
         {
@@ -18,9 +20,6 @@ let auth = (id, password, a=false) => {
             }
         }
     )
-}
-let hashing = str => {
-    return crypto.scryptSync(str, str, 32).toString('hex')
 }
 
 // send data to server
@@ -34,9 +33,6 @@ let send_data = data => {
         )
 }
 
-// WebSocket
-let ws
-
 // info about user and his 'people'
 let user = {
     status: 'offline',
@@ -44,6 +40,9 @@ let user = {
     isConnection_closed: false,
     data: JSON.parse(
         fs.readFileSync('./src/data/user.json')
+    ),
+    key: JSON.parse(
+        fs.readFileSync('./src/data/.key')
     )
 }
 

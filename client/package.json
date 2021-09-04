@@ -9,6 +9,7 @@
   "author": "FfEzT",
   "license": "ISC",
   "dependencies": {
+    "cryptico": "^1.0.2",
     "electron": "^13.1.9"
   }
 }
