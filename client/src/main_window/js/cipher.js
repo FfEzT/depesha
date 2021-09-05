@@ -10,16 +10,16 @@ let hashing = str => {
 }
 
 let rsa = {
-    createPrivate = pass_phrase => {
-        return cryptico.generateRSAKey(passPhrase, 2048)
+    createPrivate: pass_phrase => {
+        return cryptico.generateRSAKey(pass_phrase, 2048)
     },
-    createPublic = private_key => {
+    createPublic: private_key => {
         return cryptico.publicKeyString(private_key)
     },
-    encrypt = (str, public_key) => {
+    encrypt: (str, public_key) => {
         return cryptico.encrypt(str, public_key).cipher
     },
-    decrypt = str => {
+    decrypt: str => {
         return cryptico.decrypt(str, user.key).plaintext
     }
 }
