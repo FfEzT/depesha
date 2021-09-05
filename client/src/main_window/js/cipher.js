@@ -10,10 +10,10 @@ let hashing = str => {
 }
 
 let rsa = {
-    createPrivate: pass_phrase => {
-        return cryptico.generateRSAKey(pass_phrase, 2048)
+    create_private: pass_phrase => {
+        return cryptico.generateRSAKey(pass_phrase, 1024)
     },
-    createPublic: private_key => {
+    create_public: private_key => {
         return cryptico.publicKeyString(private_key)
     },
     encrypt: (str, public_key) => {
@@ -24,12 +24,4 @@ let rsa = {
     }
 }
 
-let writing_key = str => {
-    fs.writeFile(
-        './src/data/.key',
-        JSON.stringify(str),
-        () => {}
-    )
-}
-
-module.exports = {hashing, rsa, writing_key}
+module.exports = {hashing, rsa}

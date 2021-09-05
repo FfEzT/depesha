@@ -25,9 +25,6 @@ let main = () => {
             1500
         )
     }()
-    
-    // WebSocket
-    connection.main()
 
     // loading list of friends
     web.load_friend()

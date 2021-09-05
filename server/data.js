@@ -4,12 +4,12 @@ const sql = require('sqlite3').verbose()
 let db = new sql.Database('./data/main.sqlite')
 
 let people = () => {
-    let sign_up = (id, nickname, password) => {
+    let sign_up = (id, nickname, password, key) => {
         return new Promise(
             (resolve, reject) => {
                 db.run(
-                    'INSERT INTO main values(?, ?, ?, "offline", 0)',
-                    [id, nickname, password],
+                    'INSERT INTO main values(?, ?, ?, ?, "offline", 0)',
+                    [id, nickname, password, key],
                     err => {
                         err && reject()
                         resolve()
@@ -128,7 +128,7 @@ let friends = () => {
 //     'DELETE FROM main'
 // )
 // db.run(
-//     'CREATE TABLE main (id TINYTEXT PRIMARY KEY, nickname TINYTEXT, password TINYTEXT, status TINYTEXT, changes_friends TINYINT)'
+    // 'CREATE TABLE main (id TINYTEXT PRIMARY KEY, nickname TINYTEXT, password TINYTEXT, key TINYTEXT, status TINYTEXT, changes_friends TINYINT)'
 // )
 
 

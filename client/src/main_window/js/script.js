@@ -7,6 +7,9 @@ const cipher = require('../js/cipher')
 const connection = require('../js/ws')
 let ws // WebSocket
 
+// WebSocket
+connection.main()
+
 // send id and password for auth
 // in: str, str, bool
 let auth = (id, password, a=false) => {
@@ -41,10 +44,12 @@ let user = {
     data: JSON.parse(
         fs.readFileSync('./src/data/user.json')
     ),
-    key: fs.readFileSync('./src/data/private.key').toString()
+    key: JSON.parse(
+        fs.readFileSync('./src/data/private.key')
+    )
 }
 
 // checking authorization of user
 user.data.id == "" || user.data.nickname == "" || user.data.password == "" ?
     user.isNewUser = true
-: ''
+    : ''

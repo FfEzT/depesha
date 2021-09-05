@@ -55,17 +55,13 @@ let connection_to_server = e => {
 // for f:connection_to_server
 let sign_up = async (e, content) => {
     let id = generate_id()
-    let check
-
-    await db.people().get_user(id).then(
-        d => check = d
-    )
+    let check = await db.people().get_user(id)
 
     check?
         sign_up(e, content)
         :
         (
-            db.people().sign_up(id, content.nickname, content.password).then(
+            db.people().sign_up(id, content.nickname, content.password, content.public_key).then(
                 () => {
                     e.send(
                         JSON.stringify(
