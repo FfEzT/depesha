@@ -2,31 +2,18 @@
 data.main('delete_data')
 
 const main = document.getElementById('background')
-let bg = document.createElement('div')
-bg.style = 'position: absolute; width: 100vw; height: 100vh;\
-            background-color: var(--color_1); opacity: 0;\
-            transition: opacity .5s cubic-bezier(0.16, 1, 0.3, 1);'
 
-main.append(bg)
-setTimeout(
-    () => {
-        bg.style.opacity = '100'
-    },
-    10
-)
+!function(){
+    document.getElementsByClassName('close')[0].remove()
+    document.getElementsByClassName('up_panel')[0].remove()
+    document.getElementsByClassName('left_panel')[0].remove()
+    document.getElementsByClassName('right_panel')[0].remove()
+    document.getElementsByClassName('down_panel')[0].remove()
+}()
 
-setTimeout(
-    () => {
-        document.getElementsByClassName('close')[0].remove()
-        document.getElementsByClassName('up_panel')[0].remove()
-        document.getElementsByClassName('left_panel')[0].remove()
-        document.getElementsByClassName('right_panel')[0].remove()
-        document.getElementsByClassName('down_panel')[0].remove()
-        bg.remove()
-
-        user.status == 'online'?
-            // online
-            !function(){
+user.status == 'online'?
+    // online
+    !function(){
                     let grid = document.createElement('div'),
                         name = document.createElement('input'),
                         password = document.createElement('input'),
@@ -361,10 +348,10 @@ setTimeout(
                         },
                         100
                     );
-            }()
-            :
-            // offline
-            !function(){
+    }()
+    :
+    // offline
+    !function(){
                     let offline = document.createElement('div')
                     offline.style = 
                         'position: absolute;\
@@ -397,7 +384,5 @@ setTimeout(
                         }, 
                         100
                     );
-            }();
-    },
-    250
-)
+    }();
+

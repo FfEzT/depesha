@@ -1,6 +1,21 @@
 let main = () => {
     web.notice('welcome')
 
+    !function(){
+        setTimeout(
+            () => {
+                start.style.opacity = 0
+            },
+            10
+        )
+        setTimeout(
+            () => {
+                start.remove()
+            },
+            1000
+        )
+    }()
+
     user.isNewUser && !function(){
         require('../js/new_user')
         setTimeout(

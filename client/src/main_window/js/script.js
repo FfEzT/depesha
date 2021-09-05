@@ -41,9 +41,7 @@ let user = {
     data: JSON.parse(
         fs.readFileSync('./src/data/user.json')
     ),
-    key: JSON.parse(
-        fs.readFileSync('./src/data/.key')
-    )
+    key: fs.readFileSync('./src/data/private.key').toString()
 }
 
 // checking authorization of user
