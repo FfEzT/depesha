@@ -5,13 +5,15 @@ let main = () => {
         user.isConnection_closed?
             window.location.reload()
             :
-            !function() {
+            !function(){
                 user.status = 'online'
-                web.change_status()
+                try{
+                    web.change_status()
+                }
+                catch (error){}
 
                 // sign in
                 !user.isNewUser && (
-                    auth(user.data.id, user.data.password, true),
                     ws.onmessage = e => {
                         // data from server
                         // type: {Object}
@@ -58,7 +60,8 @@ let main = () => {
                             }
                         }
                         bag[a.type] && bag[a.type]()
-                    }
+                    },
+                    auth(user.data.id, user.data.password, true)
                 )
             }()
     }
@@ -75,7 +78,11 @@ let main = () => {
             user.isConnection_closed = true
             web.notice('off_server')
             user.status = 'offline'
-            web.change_status()
+            
+            try{
+                web.change_status()
+            }
+            catch (error){}
         }()
     }
 }

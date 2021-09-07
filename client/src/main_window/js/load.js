@@ -1,6 +1,22 @@
 let main = () => {
     web.notice('welcome')
 
+    user.isNewUser?
+        !function(){
+            require('../js/new_user')
+            setTimeout(
+                () => {
+                    web.notice('auth')
+                },
+                1500
+            )
+        }()
+        :
+        !function(){
+            // loading list of friends
+            web.load_friend()
+        }();
+
     !function(){
         setTimeout(
             () => {
@@ -15,19 +31,6 @@ let main = () => {
             1000
         )
     }()
-
-    user.isNewUser && !function(){
-        require('../js/new_user')
-        setTimeout(
-            () => {
-                web.notice('auth')
-            },
-            1500
-        )
-    }()
-
-    // loading list of friends
-    web.load_friend()
 
     // final
     console.log('ready') // todo u can delete this line
