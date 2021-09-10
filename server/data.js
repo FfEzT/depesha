@@ -1,3 +1,5 @@
+"use strict"
+
 // import modules
 const sql = require('sqlite3').verbose()
 

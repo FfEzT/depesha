@@ -1,3 +1,5 @@
+"use strict"
+
 // import modules
 const ws = require('ws')
 const db = require('./data.js')
