@@ -133,7 +133,4 @@ let friends = () => {
     // 'CREATE TABLE main (id TINYTEXT PRIMARY KEY, nickname TINYTEXT, password TINYTEXT, key TINYTEXT, status TINYTEXT, changes_friends TINYINT)'
 // )
 
-
-
-
 module.exports = {people, temp_mail, friends}

@@ -325,7 +325,7 @@ let load_friend = () => {
                         <div class="ell">
                             <div class="center picture"></div>
                         </div>
-                        <div class="ell e">
+                        <div class="ell">
                             <div class="center nickname u">${value.id}</div>
                         </div>
                         <div class="ell">
