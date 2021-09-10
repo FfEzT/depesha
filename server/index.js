@@ -210,13 +210,13 @@ let do_friend = (e, content, f) => {
 // generate future id for users
 // output str (lenght: 3-7)
 let generate_id = () => {
-    function vowel(a){
+    let vowel = a => {
         let str = 'yuiiooaaeee'
     
-        !a?
-            letter = 0
-        :
+        a?
             letter = 1
+            :
+            letter = 0
     
         let rand = Math.round(
             Math.random() * (str.length - 1)
@@ -224,7 +224,7 @@ let generate_id = () => {
     
         return str[rand]
     }
-    function consonant(){
+    let consonant = () => {
         let str = 'ttttnnnssshhrrddllccmmwwffggppbbvvkkxjqz'
     
         letter = 2

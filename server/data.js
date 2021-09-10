@@ -59,7 +59,11 @@ let friends = () => {
     let get_friends = id => {
         return new Promise(
             resolve => {
-                let str = `SELECT ${id}.id, main.nickname, ${id}.status FROM ${id} JOIN main ON ${id}.id = main.id ORDER BY ${id}.status, main.nickname`
+                let str = `SELECT ${id}.id, main.nickname, ${id}.status, main.key
+                            FROM ${id}
+                            JOIN main
+                            ON ${id}.id = main.id
+                            ORDER BY ${id}.status, main.nickname`
 
                 db.all(
                     str,

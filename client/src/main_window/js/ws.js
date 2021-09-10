@@ -1,6 +1,13 @@
 "use strict"
 
 let main = () => {
+    let trycatch = () => {
+        try{
+            web.change_status()
+        }
+        catch (error){}
+    }
+
     ws = new WebSocket('ws://localhost:5480') // todo change str
 
     ws.onopen = () => {
@@ -9,10 +16,7 @@ let main = () => {
             :
             !function(){
                 user.status = 'online'
-                try{
-                    web.change_status()
-                }
-                catch (error){}
+                trycatch()
 
                 // sign in
                 !user.isNewUser && (
@@ -52,9 +56,7 @@ let main = () => {
                                 a.result == '0' ?
                                     web.notice('no_user')
                                     :
-                                    (
-                                        web.notice('wait_for_confirmation')
-                                    )
+                                    web.notice('wait_for_confirmation')
                             },
                             'list_of_friends': () => {
                                 data.main('get_friends', a.data)
@@ -81,10 +83,7 @@ let main = () => {
             web.notice('off_server')
             user.status = 'offline'
             
-            try{
-                web.change_status()
-            }
-            catch (error){}
+            trycatch()
         }()
     }
 }

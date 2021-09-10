@@ -11,19 +11,15 @@ fs.writeFile(
 
 const main = document.getElementById('background')
 
-!function(){
-    document.getElementsByClassName('close')[0].remove()
-    document.getElementsByClassName('up_panel')[0].remove()
-    document.getElementsByClassName('left_panel')[0].remove()
-    document.getElementsByClassName('right_panel')[0].remove()
-    document.getElementsByClassName('down_panel')[0].remove()
-}()
+document.getElementsByClassName('close')[0].remove()
+document.getElementsByClassName('up_panel')[0].remove()
+document.getElementsByClassName('left_panel')[0].remove()
+document.getElementsByClassName('right_panel')[0].remove()
+document.getElementsByClassName('down_panel')[0].remove()
 
 !function(){
     let load_form_sign_up = () => {
-        !function(){
-            offline.remove()
-        }()
+        offline.remove()
     
         let grid = document.createElement('div'),
             name = document.createElement('input'),

@@ -255,6 +255,8 @@ let f_search_friend = () => {
 }
 
 let load_friend = () => {
+    let Friend = require('../js/Friend')
+
     let temp = [...document.getElementsByClassName('el')]
     temp && !function(){
         for(let i = 0; i < temp.length; i++){
@@ -262,84 +264,10 @@ let load_friend = () => {
         }
     }()
 
-    // type: HTML element
-    let tab1 = document.getElementsByClassName('content_for_f1')[0]
-    let tab2 = document.getElementsByClassName('content_for_f2')[0]
-
     // type: array(list of friends)
-    let arr = data.main()
-
-    arr.forEach(
+    data.main().forEach(
         (value, index) => {
-            // type: html element
-            let a = document.createElement('div')
-            a.classList.add('el')
-
-            if(value.status == 'friend'){
-                a.innerHTML = `
-                            <div class="ell">
-                                <div class="center picture"></div>
-                            </div>
-                            <div class="ell">
-                                <div class="center nickname" onclick="web.notice('off_work')">${value.nickname}</div>
-                            </div>
-                            <div class="ell e" onclick="web.notice('off_work')">
-                                <div class="button center call"></div>
-                            </div>
-                            <div class="ell e" onclick="web.notice('off_work')">
-                                <div class="button center chat"></div>
-                            </div>
-                            <div class="ell e" onclick="web.delete_friend('${value.id}')">
-                                <div class="button center delete"></div>
-                            </div>`
-
-                tab1.append(a)
-
-                return
-            }
-            if(value.status == 'pending' || value.status == 'waiting'){
-                value.status == 'pending'?
-                    (               
-                        a.style.gridTemplateColumns = '.5fr 1fr 2fr .25fr .25fr',                 
-                        a.innerHTML = `
-                        <div class="ell">
-                            <div class="center picture"></div>
-                        </div>
-                        <div class="ell e">
-                            <div class="center nickname u">${value.id}</div>
-                        </div>
-                        <div class="ell">
-                            <div class="center nickname u">${value.nickname}</div>
-                        </div>
-                        <div class="ell e" onclick="web.add_friend('${value.id}')">
-                            <div class="button center add_friend"></div>
-                        </div>
-                        <div class="ell e" onclick="web.delete_friend('${value.id}')">
-                            <div class="button center delete"></div>
-                        </div>`
-                    )
-                    :
-                    (
-                        a.style.gridTemplateColumns = '.5fr 1fr 1fr .5fr',
-                        a.innerHTML = `
-                        <div class="ell">
-                            <div class="center picture"></div>
-                        </div>
-                        <div class="ell">
-                            <div class="center nickname u">${value.id}</div>
-                        </div>
-                        <div class="ell">
-                            <div class="center nickname u">${value.nickname}</div>
-                        </div>
-                        <div class="ell e" onclick="web.delete_friend('${value.id}')">
-                            <div class="button center delete"></div>
-                        </div>`
-                    )
-
-                tab2.append(a)
-
-                return
-            }
+            friends[value.id] = new Friend(value.id, value.nickname, value.status)
         }
     )
 }
@@ -373,6 +301,8 @@ let add_friend = str => {
         }
     )
 }
+
+let friends = {}
 
 module.exports = {
     close_window,
