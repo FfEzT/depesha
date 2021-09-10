@@ -1,3 +1,5 @@
+"use strict"
+
 // this function manages thr data in the friend.json
 // input: str ('delete_data' || 'get_friends'), array(list of friends)
 // output: data.friends(array)

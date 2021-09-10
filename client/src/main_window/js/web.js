@@ -1,3 +1,5 @@
+"use strict"
+
 // import modules
 const wnd = require('electron').remote.getCurrentWindow()
 

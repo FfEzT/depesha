@@ -1,3 +1,5 @@
+"use strict"
+
 // delete old info (list of friends)
 data.main('delete_data')
 
@@ -290,7 +292,7 @@ const main = document.getElementById('background')
                                 }
                             )
                         },
-                        500
+                        300
                     )
                 }()
                 : 

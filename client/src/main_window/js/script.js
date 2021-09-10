@@ -1,3 +1,5 @@
+"use strict"
+
 // import modules
 const fs = require('fs')
 const data = require('../js/data')

@@ -1,3 +1,5 @@
+"use strict"
+
 let main = () => {
     ws = new WebSocket('ws://localhost:5480') // todo change str
 
