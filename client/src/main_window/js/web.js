@@ -70,6 +70,7 @@ let focus_blur = on => {
     }
     a[on] && a[on]()
 }
+// in: boolean(true/false)
 let focusBlur_right_bar = arg => {
     const el = document.getElementById('rightBar')
     arg?
@@ -203,14 +204,15 @@ let change_status_from_profile = () => {
     let a = {
         'online': () => {
             user.status = 'idle'
-            change_status()
         },
         'idle': () => {
             user.status = 'online'
-            change_status()
         }
     }
+    
     a[user.status] && a[user.status]()
+
+    change_status()
 
     send_data(
         {

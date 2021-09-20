@@ -164,8 +164,6 @@ document.getElementsByClassName('down_panel')[0].remove()
         sign_up.onclick = () => {
             can_create.name && can_create.password ? 
                 !function(){
-                    web.notice('wait')
-
                     setTimeout(
                         () => {
                             let hash = cipher.hashing(password.value)
@@ -290,6 +288,7 @@ document.getElementsByClassName('down_panel')[0].remove()
                         },
                         300
                     )
+                    web.notice('wait')
                 }()
                 : 
                 web.notice('sign_up_err') 
@@ -302,8 +301,6 @@ document.getElementsByClassName('down_panel')[0].remove()
                     ws.onmessage = e => {
                         let b = JSON.parse(e.data)
                         if(b.result == '1'){
-                            web.notice('wait')
-
                             setTimeout(
                                 () => {
                                     let hash = cipher.hashing(password_.value)
@@ -344,8 +341,9 @@ document.getElementsByClassName('down_panel')[0].remove()
                                         }
                                     )
                                 },
-                                500
+                                300
                             )
+                            web.notice('wait')
                         }
                         else if(b.result == '0'){
                             web.notice('auth_err')
