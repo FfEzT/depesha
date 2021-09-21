@@ -11,11 +11,17 @@ const minimize_window = () => wnd.minimize()
 
 // input: str(leftBar || rightBar || down_panel)
 let set_pos_for_bars = lr => {
-    const el = document.getElementById(lr) 
+    const el = document.getElementById(lr)
     let isOpen = el.classList.contains('focus')
 
     isOpen?
         el.classList.remove('focus') : el.classList.add('focus')
+}
+// checking whether the panel is fixed or not
+// in: str(leftBar || rightBar || down_panel)
+// out: boolean (true || false)
+let check_pos_for_bars = str => {
+    return document.getElementById(str).classList.contains('focus')
 }
 let roll_down_all = () => {
     const lBar = document.getElementById('leftBar')
@@ -51,7 +57,7 @@ let hot_key = e => {
         },
         // space
         32: () => {
-                document.getElementById('rightBar').classList.contains('focus') && document.getElementById('chat').focus()
+            document.getElementById('rightBar').classList.contains('focus') && document.getElementById('chat').focus()
         }
     }
 
@@ -268,7 +274,7 @@ let load_friend = () => {
 
     // type: array(list of friends)
     data.main().forEach(
-        (value, index) => {
+        value => {
             friends[value.id] = new Friend(value.id, value.nickname, value.status)
         }
     )
@@ -304,6 +310,38 @@ let add_friend = str => {
     )
 }
 
+// choose friend to chat with him
+// in: str(nickname of your friend)
+let chooseFriend = str => {
+    // todo render messages
+    !function(){
+        user.activeFriend = str
+        
+        let messages = JSON.parse(
+            fs.readFileSync('./src/data/message.key')
+        )
+        // todo for(let i = messages.length; i >= 0; i--){}
+    }()
+
+    // change nicname in right panel
+    !function(){
+        document.getElementsByClassName('nick_text')[0].innerText = str
+    }()
+
+    // open right panel
+    !function(){
+        !check_pos_for_bars('rightBar') && set_pos_for_bars('rightBar')
+    }()
+
+    // open down panel
+    !function(){
+        !check_pos_for_bars('down_panel') && set_pos_for_bars('down_panel')
+    }()
+
+    // todo check redPoint
+    !function(){}()
+}
+
 let friends = {}
 
 module.exports = {
@@ -321,5 +359,6 @@ module.exports = {
     f_search_friend,
     load_friend,
     delete_friend,
-    add_friend
+    add_friend,
+    chooseFriend
 }
