@@ -27,7 +27,8 @@
 .right_panel .content{
 	position: absolute;
 	display: grid;
-	grid-template-areas: 'photo nick' 'chat chat';
+	grid-template-areas: 'photo nick'
+						'chat chat';
 	grid-template-rows: 10vh auto;
 	grid-template-columns: 10vh auto;
 	top: 0vh;
@@ -63,11 +64,12 @@
 	text-decoration: underline;
 }
 .right_panel .content .chat{
+	overflow-y: scroll;
 	background-color: var(--color_3_active);
 	border-radius: .5vw;
+	width: 26vw;
+	height: 46vh;
 	grid-area: chat;
-	margin-top: 2vh;
-	margin-bottom: 2vh;
 }
 .right_panel .input_text{
 	position: absolute;

@@ -341,6 +341,19 @@ let chooseFriend = str => {
     // todo check redPoint
     !function(){}()
 }
+//todo render
+/* let f = (c) => {let a = document.getElementsByClassName('chat')[0]
+
+let b = document.createElement('div')
+b.classList.add('lol')
+b.innerText = c
+a.prepend(b) || append (render from file || render from get or send message)
+
+document.getElementsByClassName('chat')[0].scrollTo({top:document.getElementsByClassName('chat')[0].scrollHeight,behavior:'smooth'})
+}
+
+for(let i = 0;i<5000000;i++){f(i)} */
+
 
 let friends = {}
 
