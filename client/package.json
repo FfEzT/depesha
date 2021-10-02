@@ -1,15 +1,15 @@
 {
-  "name": "extent",
-  "description": "This app is for text and voice communication ;) It's Explicit Content",
-  "homepage": "#",
-  "main": "./src/main.js",
-  "scripts": {
-    "start": "electron ."
-  },
-  "author": "FfEzT",
-  "license": "ISC",
-  "dependencies": {
-    "cryptico": "^1.0.2",
-    "electron": "^13.1.9"
-  }
+    "name": "extent",
+    "description": "This app is for text and voice communication ;) It's Explicit Content",
+    "homepage": "#",
+    "main": "./src/main.js",
+    "scripts": {
+        "start": "electron ."
+    },
+    "author": "FfEzT",
+    "license": "ISC",
+    "dependencies": {
+        "cryptico": "^1.0.2",
+        "electron": "^13.1.9"
+    }
 }

@@ -8,7 +8,7 @@ let main = () => {
         catch (error){}
     }
 
-    ws = new WebSocket('ws://localhost:5480') // todo change str
+    ws = new WebSocket('ws://localhost:5480') //todo change str
 
     ws.onopen = () => {
         user.isConnection_closed?
@@ -18,19 +18,19 @@ let main = () => {
                 user.status = 'online'
                 trycatch()
 
-                // sign in
+                //sign in
                 !user.isNewUser && (
                     ws.onmessage = e => {
-                        // data from server
-                        // type: {Object}
+                        //data from server
+                        //type: {Object}
                         let a = JSON.parse(e.data)
             
-                        // like switch(){}
+                        //like switch(){}
                         let bag = {
                             'auth': () => {
                                 a.result == '0' ?
                                     (
-                                        // id, nickname, password = null, reload
+                                        //id, nickname, password = null, reload
                                         user.data.id = '',
                                         user.data.nickname = '',
                                         user.data.password = '',
@@ -70,7 +70,7 @@ let main = () => {
             }()
     }
     ws.onclose = () => {
-        // reconnection every 10 sec
+        //reconnection every 10 sec
         setTimeout(
             () => {
                 main()

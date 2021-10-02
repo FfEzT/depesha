@@ -1,21 +1,21 @@
 "use strict"
 
-// import modules
+//import modules
 const ws = require('ws')
 const db = require('./data.js')
 
-// creating server with port 5480
+//creating server with port 5480
 const server = new ws.Server(
     {port: 5480}
 )
 
-// list of connected clients
+//list of connected clients
 let clients = {}
 
-// this f is called after the client connects to the server
+//this f is called after the client connects to the server
 let connection_to_server = e => {
-    // send to client 'incorrect data'
-    // input: str(values: auth || do_friends)
+    //send to client 'incorrect data'
+    //input: str(values: auth || do_friends)
     let notice_incorrect_data = type => {
         e.send(
             JSON.stringify(
@@ -54,7 +54,7 @@ let connection_to_server = e => {
     )
 }
 
-// for f:connection_to_server
+//for f:connection_to_server
 let sign_up = async (e, content) => {
     let id = generate_id()
     let check = await db.people().get_user(id)
@@ -79,56 +79,54 @@ let sign_up = async (e, content) => {
         )
 }
 let auth = async (e, content, f) => {
-    // data from DataBase
-    // type: {object}
+    //data from DataBase
+    //type: {object}
     let people = await db.people().get_user(content.id)
     let type = 'auth'
 
     people?
-        (
-            people.password == content.password ?
-                (
-                    e.send(
-                        JSON.stringify(
-                            {
-                                type,
-                                result: 1,
-                                nick: people.nickname
-                            }
-                        )
-                    ),
-                    content.connect && !function(){
-                        db.people().update_status(content.id, 'online')
-                        clients[people.id] = e
+        people.password == content.password ?
+            (
+                e.send(
+                    JSON.stringify(
+                        {
+                            type,
+                            result: 1,
+                            nick: people.nickname
+                        }
+                    )
+                ),
+                content.connect && !function(){
+                    db.people().update_status(content.id, 'online')
+                    clients[people.id] = e
 
-                        db.people().get_user(content.id).then(
-                            d => {
-                                d.changes_friends == 1 && !function(){
-                                    send_friends(e, content.id)
-                                    
-                                    db.people().update_friends(content.id, 0)
-                                }()
-                            }
-                        )
-                        
-                        e.on(
-                            'close',
-                            () => {
-                                db.people().update_status(people.id, 'offline')
-                                delete clients[people.id]
-                            }
-                        )
-                    }()
-                )
-                : f(type)
-        )
+                    db.people().get_user(content.id).then(
+                        d => {
+                            d.changes_friends == 1 && !function(){
+                                send_friends(e, content.id)
+                                
+                                db.people().update_friends(content.id, 0)
+                            }()
+                        }
+                    )
+                    
+                    e.on(
+                        'close',
+                        () => {
+                            db.people().update_status(people.id, 'offline')
+                            delete clients[people.id]
+                        }
+                    )
+                }()
+            )
+            : f(type)
         : f(type)
 }
 let update_status = content => {
     db.people().update_status(content.id, content.status)
 }
-// send list of friends to client
-// input: object(from WebSocket), str(id of client)
+//send list of friends to client
+//input: object(from WebSocket), str(id of client)
 let send_friends = (e, content) => {
     db.friends().get_friends(content).then(
         data => {
@@ -158,7 +156,7 @@ let do_friend = (e, content, f) => {
 
                                 send_friends(e, content.from)
 
-                                clients[content.to] ?
+                                clients[content.to]?
                                     send_friends(e, content.to)
                                     :
                                     db.people().update_friends(content.to, 1)
@@ -184,7 +182,7 @@ let do_friend = (e, content, f) => {
                 () => {
                     send_friends(e, content.from)
 
-                    clients[content.to] ?
+                    clients[content.to]?
                         send_friends(e, content.to)
                         :
                         db.people().update_friends(content.to, 1)
@@ -196,7 +194,7 @@ let do_friend = (e, content, f) => {
                 () => {
                     send_friends(e, content.from)
 
-                    clients[content.to] ?
+                    clients[content.to]?
                         send_friends(e, content.to)
                         :
                         db.people().update_friends(content.to, 1)
@@ -207,8 +205,8 @@ let do_friend = (e, content, f) => {
     bag[content.status] && bag[content.status]()
 }
 
-// generate future id for users
-// output str (lenght: 3-7)
+//generate future id for users
+//output str (lenght: 3-7)
 let generate_id = () => {
     let vowel = a => {
         let str = 'yuiiooaaeee'
@@ -242,7 +240,7 @@ let generate_id = () => {
     )
     
     for (let i = 0; i < value; i++){
-        if (!letter || letter == 0){
+        if(!letter || letter == 0){
             let first_rand = Math.round(
                 Math.random()
             )
@@ -258,10 +256,10 @@ let generate_id = () => {
     
             bag[first_rand] && bag[first_rand]()
         }
-        else if (letter == 1){
+        else if(letter == 1){
             result += consonant()
         }
-        else if (letter == 2){
+        else if(letter == 2){
             result += vowel()
         }
     }
@@ -269,5 +267,5 @@ let generate_id = () => {
     return result
 }
 
-// add events for server
+//add events for server
 server.on('connection', connection_to_server)

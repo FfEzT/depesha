@@ -1,1 +1,8 @@
-.right_panel .content .chat .lol{}
+.right_panel .content .chat .block{
+    width: 100%;
+    background-color: var(--color_3_active);
+    border-bottom: var(--color_line) 3px solid;
+}
+.right_panel .content .chat .block .from{}
+.right_panel .content .chat .block .time{}
+.right_panel .content .chat .block .content{}

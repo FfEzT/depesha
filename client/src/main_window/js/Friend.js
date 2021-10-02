@@ -7,9 +7,9 @@ class Friend{
         this.render()
     }
 
-    // show friend in down_panel
+    //show friend in down_panel
     render = () => {
-        // type: html element
+        //type: html element
         this.a = document.createElement('div')
         this.a.classList.add('el')
 
@@ -88,7 +88,7 @@ class Friend{
                 <div class="button center delete"></div>
             </div>`
     }
-    // type: HTML element
+    //type: HTML element
     tab1 = document.getElementsByClassName('content_for_f1')[0]
     tab2 = document.getElementsByClassName('content_for_f2')[0]
 }

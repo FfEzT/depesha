@@ -65,7 +65,7 @@
 }
 .right_panel .content .chat{
 	overflow-y: scroll;
-	background-color: var(--color_3_active);
+	background-color: var(--color_3_hover);
 	border-radius: .5vw;
 	width: 26vw;
 	height: 46vh;

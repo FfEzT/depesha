@@ -1,15 +1,15 @@
 "use strict"
 
-// import modules
+//import modules
 const wnd = require('electron').remote.getCurrentWindow()
 
-// window's btns
+//window's btns
 const close_window = () => wnd.close()
 const full_window = () => wnd.isMaximized()?
     wnd.unmaximize() : wnd.maximize()
 const minimize_window = () => wnd.minimize()
 
-// input: str(leftBar || rightBar || down_panel)
+//input: str(leftBar || rightBar || down_panel)
 let set_pos_for_bars = lr => {
     const el = document.getElementById(lr)
     let isOpen = el.classList.contains('focus')
@@ -17,9 +17,9 @@ let set_pos_for_bars = lr => {
     isOpen?
         el.classList.remove('focus') : el.classList.add('focus')
 }
-// checking whether the panel is fixed or not
-// in: str(leftBar || rightBar || down_panel)
-// out: boolean (true || false)
+//checking whether the panel is fixed or not
+//in: str(leftBar || rightBar || down_panel)
+//out: boolean (true || false)
 let check_pos_for_bars = str => {
     return document.getElementById(str).classList.contains('focus')
 }
@@ -39,23 +39,23 @@ let roll_down_all = () => {
 
 let hot_key = e => {
     let a = {
-        // arrow left
+        //arrow left
         37: () => {
                 set_pos_for_bars('leftBar')
         },
-        // arrow right
+        //arrow right
         39: () => {
                 set_pos_for_bars('rightBar')
         },
-        // arrow up
+        //arrow up
         38: () => {
                 roll_down_all()
         },
-        // arrow down
+        //arrow down
         40: () => {
             set_pos_for_bars('down_panel')
         },
-        // space
+        //space
         32: () => {
             document.getElementById('rightBar').classList.contains('focus') && document.getElementById('chat').focus()
         }
@@ -64,7 +64,7 @@ let hot_key = e => {
     a[e.keyCode] && a[e.keyCode]()
 }
 
-// for serching
+//for serching
 let focus_blur = on => {
     let a = {
         'focus': () => {
@@ -76,7 +76,7 @@ let focus_blur = on => {
     }
     a[on] && a[on]()
 }
-// in: boolean(true/false)
+//in: boolean(true/false)
 let focusBlur_right_bar = arg => {
     const el = document.getElementById('rightBar')
     arg?
@@ -86,17 +86,17 @@ let focusBlur_right_bar = arg => {
     focus_blur(arg? 'focus':'blur')
 }
 
-// create notice in app (top-left)
-// input: str (there are values in var bag)
+//create notice in app (top-left)
+//input: str (there are values in var bag)
 let notice = a => {
     const wow = document.getElementsByClassName('notice')[0]
     let text, size
 
-    // it set time for removing notice
-    // type: int (default: 5000)
+    //it set time for removing notice
+    //type: int (default: 5000)
     const time = 5000
 
-    // for editting text and resize text
+    //for editting text and resize text
     let bag = {
         'off_work': () => {
             text = 'В мире мало фиксиков, поэтому эта кнопка пока не работает'
@@ -154,7 +154,7 @@ let notice = a => {
     go.prepend(go_text)
     go_text.innerHTML = text
 
-    // todo u can remake this part of the code
+    //todo u can remake this part of the code
     document.getElementsByClassName('first')[0]? (
         document.getElementsByClassName('second')[0]? (
             document.getElementsByClassName('left')[0]? (
@@ -272,7 +272,7 @@ let load_friend = () => {
         }
     }()
 
-    // type: array(list of friends)
+    //type: array(list of friends)
     data.main().forEach(
         value => {
             friends[value.id] = new Friend(value.id, value.nickname, value.status)
@@ -280,8 +280,8 @@ let load_friend = () => {
     )
 }
 
-// send request to delete friend to server
-// input: str(id of friend, who we want to delete)
+//send request to delete friend to server
+//input: str(id of friend, who we want to delete)
 let delete_friend = str => {
     send_data(
         {
@@ -295,8 +295,8 @@ let delete_friend = str => {
     )
 }
 
-// send request to add friend to server
-// input: str(id of friend, who we want to add)
+//send request to add friend to server
+//input: str(id of friend, who we want to add)
 let add_friend = str => {
     send_data(
         {
@@ -310,50 +310,76 @@ let add_friend = str => {
     )
 }
 
-// choose friend to chat with him
-// in: str(nickname of your friend)
+//choose friend to chat with him
+//in: str(nickname of your friend)
 let chooseFriend = str => {
-    // todo render messages
+    //load messages from file
     !function(){
         user.activeFriend = str
-        
         let messages = JSON.parse(
-            fs.readFileSync('./src/data/message.key')
+            fs.readFileSync('./src/data/message.json')
         )
-        // todo for(let i = messages.length; i >= 0; i--){}
+        
+        //todo debug
+        //send obj to render
+        let f = i => {
+            if(i != -1){
+                renderMessage(messages[i], 'load')
+                setTimeout(
+                    () => {
+                        f(i-1)
+                    },
+                    100 //todo u can change this value
+                )
+            }
+        }
+        f(messages[messages.length - 1])
     }()
 
-    // change nicname in right panel
+    //change nickname in right panel
     !function(){
         document.getElementsByClassName('nick_text')[0].innerText = str
     }()
 
-    // open right panel
+    //open right panel
     !function(){
         !check_pos_for_bars('rightBar') && set_pos_for_bars('rightBar')
     }()
 
-    // open down panel
+    //open down panel
     !function(){
         !check_pos_for_bars('down_panel') && set_pos_for_bars('down_panel')
     }()
 
-    // todo check redPoint
+    //todo check redPoint
+    !function(){}()
+
+    //todo delete old list
     !function(){}()
 }
-//todo render
-/* let f = (c) => {let a = document.getElementsByClassName('chat')[0]
+//show message to right panel
+//in: obj(content and time), str('newMessage' || 'load')
+let renderMessage = (data, type) => {
+    let a = document.getElementsByClassName('chat')[0]
+    let b = document.createElement('div')
 
-let b = document.createElement('div')
-b.classList.add('lol')
-b.innerText = c
-a.prepend(b) || append (render from file || render from get or send message)
+    //todo show content and time
+    b.innerText = data.content
 
-document.getElementsByClassName('chat')[0].scrollTo({top:document.getElementsByClassName('chat')[0].scrollHeight,behavior:'smooth'})
+    if(type == 'newMessage'){
+        a.append(b)
+
+        a.scrollTo(
+            {
+                top: a.scrollHeight,
+                behavior: 'smooth'
+            }
+        )
+    }
+    else if(type == 'load'){
+        a.prepend(b)
+    }
 }
-
-for(let i = 0;i<5000000;i++){f(i)} */
-
 
 let friends = {}
 

@@ -1,6 +1,9 @@
 "use strict"
 
 let main = () => {
+    //todo delete
+    web.set_pos_for_bars('rightBar')
+
     web.notice('welcome')
 
     user.isNewUser?
@@ -15,7 +18,7 @@ let main = () => {
         }()
         :
         !function(){
-            // loading list of friends
+            //loading list of friends
             web.load_friend()
         }();
 
@@ -34,8 +37,8 @@ let main = () => {
         )
     }()
 
-    // final
-    console.log('ready') // todo u can delete this line
+    //final
+    console.log('ready') //todo u can delete this line
 }
 
 module.exports = {main}

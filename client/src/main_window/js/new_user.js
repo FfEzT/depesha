@@ -1,6 +1,6 @@
 "use strict"
 
-// delete old info (list of friends)
+//delete old info (list of friends)
 data.main('delete_data')
 
 fs.writeFile(
@@ -180,7 +180,7 @@ document.getElementsByClassName('down_panel')[0].remove()
                                 let a = JSON.parse(e.data)
                                 
                                 a.result == 1 && !function(){
-                                    // write data about user (user.json)
+                                    //write data about user (user.json)
                                     user.data.id = a.id
                                     user.data.nickname = name.value
                                     user.data.password = cipher.hashing(password.value)
@@ -191,7 +191,7 @@ document.getElementsByClassName('down_panel')[0].remove()
                                         () => {}
                                     )
                                     
-                                    // show id
+                                    //show id
                                     let bg = document.createElement('div')
                                     bg.style = 'position: absolute; width: 100vw; height: 100vh;\
                                     background-color: var(--color_1); opacity: 0;\
@@ -294,7 +294,7 @@ document.getElementsByClassName('down_panel')[0].remove()
                 web.notice('sign_up_err') 
         }
         sign_in_.onclick = () => {
-            // checking password
+            //checking password
             let a = /^\S{9,20}$/
             a.test(password_.value)?
                 (
@@ -308,7 +308,7 @@ document.getElementsByClassName('down_panel')[0].remove()
                                         cipher.hashing(hash)
                                     )
     
-                                    // write data about user (user.json)
+                                    //write data about user (user.json)
                                     user.data.id = id.value
                                     user.data.nickname = b.nick
                                     user.data.password = hash
