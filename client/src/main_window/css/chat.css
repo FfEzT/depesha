@@ -1,8 +1,40 @@
 .right_panel .content .chat .block{
+    display: grid;
+    grid-template-columns: 10px auto;
+    grid-template-rows: min-content min-content;
+    grid-template-areas: 'from time'
+                        'from message';
     width: 100%;
+    height: min-content;
     background-color: var(--color_3_active);
-    border-bottom: var(--color_line) 3px solid;
+    border-bottom: var(--color_line) 1px solid;
 }
-.right_panel .content .chat .block .from{}
-.right_panel .content .chat .block .time{}
-.right_panel .content .chat .block .content{}
+.right_panel .content .chat .block .time{
+    font-family: text;
+    color: var(--color_text);
+    border-bottom: 3px solid var(--color_line);
+    padding: 5px;
+    grid-area: time;
+    font-size: max(
+        min(1vw, 1.7vh),
+        12px
+    );
+}
+.right_panel .content .chat .block .from{
+    border-radius: var(--border_round_2) 0 0 var(--border_round_2);
+    grid-area: from;
+    border-right: 3px solid var(--color_line);
+}
+.right_panel .content .chat .block .from.me{
+    background-color: var(--color_text);
+}
+.right_panel .content .chat .block .message{
+    font-size: max(
+        min(1vw, 1.7vh),
+        12px
+    );
+    font-family: text;
+    color: var(--color_text);
+    padding: 5px;
+    grid-area: message;
+}
