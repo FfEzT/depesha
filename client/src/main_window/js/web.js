@@ -1,25 +1,23 @@
-"use strict"
-
-//import modules
+// import modules
 const wnd = require('electron').remote.getCurrentWindow()
 
-//window's btns
+// window's btns
 const close_window = () => wnd.close()
 const full_window = () => wnd.isMaximized()?
     wnd.unmaximize() : wnd.maximize()
 const minimize_window = () => wnd.minimize()
 
-//input: str(leftBar || rightBar || down_panel)
+// input: str(leftBar || rightBar || down_panel)
 let set_pos_for_bars = lr => {
     const el = document.getElementById(lr)
-    let isOpen = el.classList.contains('focus')
+    const isOpen = el.classList.contains('focus')
 
     isOpen?
         el.classList.remove('focus') : el.classList.add('focus')
 }
-//checking whether the panel is fixed or not
-//in: str(leftBar || rightBar || down_panel)
-//out: boolean (true || false)
+// checking whether the panel is fixed or not
+// in: str(leftBar || rightBar || down_panel)
+// out: boolean (true || false)
 let check_pos_for_bars = str => {
     return document.getElementById(str).classList.contains('focus')
 }
@@ -38,7 +36,7 @@ let roll_down_all = () => {
 }
 
 let hot_key = e => {
-    let a = {
+    const a = {
         //arrow left
         37: () => {
                 set_pos_for_bars('leftBar')
@@ -60,13 +58,12 @@ let hot_key = e => {
             document.getElementById('rightBar').classList.contains('focus') && document.getElementById('chat').focus()
         }
     }
-
     a[e.keyCode] && a[e.keyCode]()
 }
 
 //for serching
 let focus_blur = on => {
-    let a = {
+    const a = {
         'focus': () => {
             document.querySelector('body').setAttribute('onkeyup', '')
         },
@@ -76,7 +73,7 @@ let focus_blur = on => {
     }
     a[on] && a[on]()
 }
-//in: boolean(true/false)
+// in: boolean(true/false)
 let focusBlur_right_bar = arg => {
     const el = document.getElementById('rightBar')
     arg?
@@ -86,18 +83,18 @@ let focusBlur_right_bar = arg => {
     focus_blur(arg? 'focus':'blur')
 }
 
-//create notice in app (top-left)
-//input: str (there are values in var bag)
+// create notice in app (top-left)
+// input: str (there are values in var bag)
 let notice = a => {
     const wow = document.getElementsByClassName('notice')[0]
     let text, size
 
-    //it set time for removing notice
-    //type: int (default: 5000)
+    // it set time for removing notice
+    // type: int (default: 5000)
     const time = 5000
 
-    //for editting text and resize text
-    let bag = {
+    // for editting text and resize text
+    const bag = {
         'off_work': () => {
             text = 'В мире мало фиксиков, поэтому эта кнопка пока не работает'
         },
@@ -149,12 +146,14 @@ let notice = a => {
 
     const go_text = document.createElement('div')
     go_text.classList.add('text')
+
     size?
         go_text.style.fontSize = size : ''
+
     go.prepend(go_text)
     go_text.innerHTML = text
 
-    //todo u can remake this part of the code
+    // todo u can remake this part of the code
     document.getElementsByClassName('first')[0]? (
         document.getElementsByClassName('second')[0]? (
             document.getElementsByClassName('left')[0]? (
@@ -190,7 +189,7 @@ let change_status = () => {
     const object = document.getElementById('status')
     const text_of_object = document.getElementById('text_of_status')
 
-    let a = {
+    const a = {
         'online': () => {
             object.style.backgroundColor = '#35B8E7'
             text_of_object.innerText = 'online'
@@ -204,10 +203,11 @@ let change_status = () => {
             text_of_object.innerText = 'idle'
         }
     }
+
     a[user.status] && a[user.status]()
 }
 let change_status_from_profile = () => {
-    let a = {
+    const a = {
         'online': () => {
             user.status = 'idle'
         },
@@ -232,17 +232,17 @@ let change_status_from_profile = () => {
 }
 
 let f_search_friend = () => {
-    let a = /^[a-zA-Z]{3,10}$/
-    let b = search_friend.value.toLowerCase()
+    const a = /^[a-zA-Z]{3,10}$/
+    const b = search_friend.value.toLowerCase()
 
-    if(b == user.data.id){
+    if (b == user.data.id) {
         notice('no_user')
         setTimeout(
             () => notice('it_is_u'),
             1500
         )
         search_friend.value = ''
-        return
+        return 0
     }
     
     a.test(b)?
@@ -266,13 +266,13 @@ let load_friend = () => {
     let Friend = require('../js/Friend')
 
     let temp = [...document.getElementsByClassName('el')]
-    temp && !function(){
-        for(let i = 0; i < temp.length; i++){
+    temp && !function() {
+        for (let i = 0; i < temp.length; i++) {
             temp[i].remove()
         }
     }()
 
-    //type: array(list of friends)
+    // type: array(list of friends)
     data.main().forEach(
         value => {
             friends[value.id] = new Friend(value.id, value.nickname, value.status)
@@ -280,8 +280,8 @@ let load_friend = () => {
     )
 }
 
-//send request to delete friend to server
-//input: str(id of friend, who we want to delete)
+// send request to delete friend to server
+// input: str(id of friend, who we want to delete)
 let delete_friend = str => {
     send_data(
         {
@@ -295,8 +295,8 @@ let delete_friend = str => {
     )
 }
 
-//send request to add friend to server
-//input: str(id of friend, who we want to add)
+// send request to add friend to server
+// input: str(id of friend, who we want to add)
 let add_friend = str => {
     send_data(
         {
@@ -310,75 +310,105 @@ let add_friend = str => {
     )
 }
 
-//choose friend to chat with him
-//in: str(nickname of your friend)
+// choose friend to chat with him
+// in: str(nickname of your friend)
 let chooseFriend = str => {
-    //load messages from file
-    !function(){
+    // open panel
+    // in: str(rightBar || down_panel)
+    const open_panels = a => {
+        !check_pos_for_bars(a) && set_pos_for_bars(a)
+    }
+
+    // load messages from file
+    !function() {
         user.activeFriend = str
-        let messages = JSON.parse(
+        const messages = JSON.parse(
             fs.readFileSync('./src/data/message.json')
         )
         
-        //todo debug
-        //send obj to render
-        let f = i => {
-            if(i != -1){
+        // todo debug
+        // send obj to render
+        const f = i => {
+            if (i != -1) {
                 renderMessage(messages[i], 'load')
                 setTimeout(
                     () => {
                         f(i-1)
                     },
-                    100 //todo u can change this value
+                    100 // todo u can change this value
                 )
             }
         }
         f(messages[messages.length - 1])
     }()
 
-    //change nickname in right panel
-    !function(){
+    // change nickname in right panel
+    !function() {
         document.getElementsByClassName('nick_text')[0].innerText = str
     }()
 
-    //open right panel
-    !function(){
-        !check_pos_for_bars('rightBar') && set_pos_for_bars('rightBar')
+    // open panel
+    !function() {
+        open_panels('rightBar')
+        open_panels('down_panel')
     }()
 
-    //open down panel
-    !function(){
-        !check_pos_for_bars('down_panel') && set_pos_for_bars('down_panel')
-    }()
+    // todo check redPoint
+    !function() {}()
 
-    //todo check redPoint
-    !function(){}()
-
-    //todo delete old list
-    !function(){}()
+    // todo delete old list
+    !function() {}()
 }
-//show message to right panel
-//in: obj(content and time), str('newMessage' || 'load')
+// show message to right panel
+// in: obj(content, time, who_send(i || friend)), str('newMessage' || 'load')
 let renderMessage = (data, type) => {
-    let a = document.getElementsByClassName('chat')[0]
-    let b = document.createElement('div')
+    const a = document.getElementsByClassName('chat')[0]
+    const b = document.createElement('div')
 
-    //todo show content and time
-    b.innerText = data.content
+    const time = new Date(data.time)
+    const out_time = {
+        year  : time.getUTCFullYear(),
+        month : time.getUTCMonth(),
+        day   : time.getUTCDate(),
+        hour  : time.getUTCHours(),
+        minute: time.getUTCMinutes()
+    }
 
-    if(type == 'newMessage'){
+    b.classList.add('block')
+    b.innerHTML = `
+        <div class="time">${out_time.hour} : ${out_time.minute}    ${out_time.day}.${out_time.month}.${out_time.year}</div>
+        <div class="from"></div>
+        <div class="message">${data.content}</div>
+    `
+
+    if (data.who_send == 'i') {
+        setTimeout(
+            () => {
+                b.children[1].style.backgroundColor = 'var(--color_text)'
+            },
+            10
+        )
+    }
+
+    if (type == 'newMessage') {
         a.append(b)
-
         a.scrollTo(
             {
                 top: a.scrollHeight,
                 behavior: 'smooth'
             }
         )
-    }
-    else if(type == 'load'){
+    } else if (type == 'load') {
         a.prepend(b)
     }
+
+    setTimeout(
+        () => {
+            b.style.opacity = 100
+            b.style.top = 0
+        },
+        10
+    )
 }
 
 let friends = {}

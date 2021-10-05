@@ -1,5 +1,3 @@
-"use strict"
-
 const crypto = require('crypto')
 const cryptico = require('cryptico')
 

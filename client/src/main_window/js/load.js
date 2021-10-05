@@ -1,5 +1,3 @@
-"use strict"
-
 let main = () => {
     //todo delete
     web.set_pos_for_bars('rightBar')

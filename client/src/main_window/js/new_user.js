@@ -1,6 +1,4 @@
-"use strict"
-
-//delete old info (list of friends)
+// delete old info (list of friends)
 data.main('delete_data')
 
 fs.writeFile(
