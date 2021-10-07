@@ -137,6 +137,9 @@ let notice = a => {
         },
         'wait': () => {
             text = 'Подождите, программа не зависла'
+        },
+        'empty_message': () => {
+            text = 'Зачем вы хотите отправить воздух?'
         }
     }
     bag[a] && bag[a]()
@@ -411,6 +414,30 @@ let renderMessage = (data, type) => {
     )
 }
 
+let send_message = () => {
+    const input = chat.value
+
+    input != '' ?
+        !function() {
+            user.status != 'offline' ?
+                !function() {
+                    chat.value = ''
+                    
+                    // todo send data to server
+                    !function() {}()
+                    
+                    // todo write our message
+                    !function() {}()
+                    
+                    // todo render message
+                    !function() {}()
+                }()
+                
+            : notice('off_server')
+        }()
+    : notice('empty_message')
+}
+
 /*
 todo это внедрить в функцию, которая будет удалять первые пробелы и \n при вводе сообщений
 const a = chat.value
@@ -441,5 +468,6 @@ module.exports = {
     load_friend,
     delete_friend,
     add_friend,
-    chooseFriend
+    chooseFriend,
+    send_message
 }

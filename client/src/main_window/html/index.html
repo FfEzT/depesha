@@ -96,14 +96,13 @@
                     <div class="marginRight marginTop nick" onclick="web.set_pos_for_bars('rightBar')">
                         <div class="nick_text" ondblclick="web.notice('off_work')">NickName</div>
                     </div>
+
                     <link rel="stylesheet" type="text/css" href="../css/chat.css">
                     <div class="marginLeft marginTop chat"></div>
                 </div>
                 <div class="input_text">
                     <textarea id="chat" class="text" tabindex="-1" placeholder="Text..." maxlength="1500" onfocus="web.focusBlur_right_bar(true)" onblur="web.focusBlur_right_bar(false)"></textarea>
-                    <div class="send" onclick="web.notice('off_work')">
-                        <div class="send_btn"></div>
-                    </div>
+                    <div class="send" onclick="web.send_message()">
                         <div class="send_btn"></div>
                     </div>
                 </div>
