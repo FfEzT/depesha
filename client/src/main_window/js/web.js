@@ -411,6 +411,18 @@ let renderMessage = (data, type) => {
     )
 }
 
+/*
+todo это внедрить в функцию, которая будет удалять первые пробелы и \n при вводе сообщений
+const a = chat.value
+const b = /^\n{0,}/
+const c = /^\s{0,}/
+
+const t = a.match(b)
+const t1 = a.match(c)
+
+console.log(t, t1)
+*/
+
 let friends = {}
 
 module.exports = {
