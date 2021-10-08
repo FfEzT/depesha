@@ -366,6 +366,7 @@ let chooseFriend = str => {
 let renderMessage = (data, type) => {
     const a = document.getElementsByClassName('chat')[0]
     const b = document.createElement('div')
+
     const time = new Date(data.time)
     const out_time = {
         year  : time.getFullYear(),

@@ -32,6 +32,8 @@
     transition: background-color .5s cubic-bezier(0.42,0,0.58,1);
 }
 .right_panel .content .chat .block .message{
+    white-space: pre-line;
+    word-break: break-all;
     font-size: max(
         min(1vw, 1.7vh),
         12px
