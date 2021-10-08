@@ -1,12 +1,13 @@
 .right_panel .content .chat .block{
     display: grid;
     position: relative;
-    grid-template-columns: 10px auto;
+    grid-template-columns: 7px auto;
     grid-template-rows: min-content min-content;
     grid-template-areas: 'from time'
                         'from message';
     width: 100%;
     height: min-content;
+    border-radius: min(1.5vh, 0.7vw);
     background-color: var(--color_3_active);
     border-bottom: var(--color_line) 3px solid;
     transition: top .25s cubic-bezier(0.42,0,0.58,1), opacity .25s cubic-bezier(0.42,0,0.58,1);

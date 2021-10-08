@@ -12,13 +12,13 @@ module.exports.createWindow = () => {
             show                   : false,
             frame                  : false,
             webPreferences         :{
-                //devTools        : false, //todo activate this line
+                // devTools        : false, // todo activate this line
                 nodeIntegration    : true,
                 enableRemoteModule : true,
-                contextIsolation   : false, //<-- "require('electron').remote.getCurrentWindow()" didn't work without this line
+                contextIsolation   : false, // <-- "require('electron').remote.getCurrentWindow()" didn't work without this line
             },
             backgroundColor        : '#191729',
-            //todo--> icon: "path"
+            // todo--> icon: "path"
         }
     )
     win.loadFile('./src/main_window/html/index.html')

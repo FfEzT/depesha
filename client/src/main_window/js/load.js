@@ -1,7 +1,4 @@
 let main = () => {
-    //todo delete
-    web.set_pos_for_bars('rightBar')
-
     web.notice('welcome')
 
     user.isNewUser?

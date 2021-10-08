@@ -322,6 +322,9 @@ let chooseFriend = str => {
         !check_pos_for_bars(a) && set_pos_for_bars(a)
     }
 
+    // todo delete old list
+    !function() {}()
+
     // load messages from file
     !function() {
         user.activeFriend = str
@@ -331,8 +334,9 @@ let chooseFriend = str => {
         
         // todo debug
         // send obj to render
+        // in: int
         const f = i => {
-            if (i != -1) {
+            if (i < 0) {
                 renderMessage(messages[i], 'load')
                 setTimeout(
                     () => {
@@ -342,13 +346,11 @@ let chooseFriend = str => {
                 )
             }
         }
-        f(messages[messages.length - 1])
+        f(messages.length - 1)
     }()
 
     // change nickname in right panel
-    !function() {
-        document.getElementsByClassName('nick_text')[0].innerText = str
-    }()
+    document.getElementsByClassName('nick_text')[0].innerText = str
 
     // open panel
     !function() {
@@ -358,23 +360,19 @@ let chooseFriend = str => {
 
     // todo check redPoint
     !function() {}()
-
-    // todo delete old list
-    !function() {}()
 }
 // show message to right panel
 // in: obj(content, time, who_send(i || friend)), str('newMessage' || 'load')
 let renderMessage = (data, type) => {
     const a = document.getElementsByClassName('chat')[0]
     const b = document.createElement('div')
-
     const time = new Date(data.time)
     const out_time = {
-        year  : time.getUTCFullYear(),
-        month : time.getUTCMonth(),
-        day   : time.getUTCDate(),
-        hour  : time.getUTCHours(),
-        minute: time.getUTCMinutes()
+        year  : time.getFullYear(),
+        month : time.getMonth(),
+        day   : time.getDate(),
+        hour  : time.getHours(),
+        minute: time.getMinutes()
     }
 
     b.classList.add('block')
@@ -421,16 +419,27 @@ let send_message = () => {
         !function() {
             user.status != 'offline' ?
                 !function() {
-                    chat.value = ''
-                    
+                    const time = new Date().toUTCString()
+
                     // todo send data to server
                     !function() {}()
                     
                     // todo write our message
                     !function() {}()
                     
-                    // todo render message
-                    !function() {}()
+                    // render message
+                    !function() {
+                        renderMessage(
+                            {
+                                content: input,
+                                time,
+                                who_send: 'i'
+                            },
+                            'newMessage'
+                        )
+                    }()
+
+                    chat.value = ''
                 }()
                 
             : notice('off_server')
