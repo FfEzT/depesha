@@ -79,8 +79,8 @@ let sign_up = async (e, content) => {
         )
 }
 let auth = async (e, content, f) => {
-    //data from DataBase
-    //type: {object}
+    // data from DataBase
+    // type: {object}
     let people = await db.people().get_user(content.id)
     let type = 'auth'
 

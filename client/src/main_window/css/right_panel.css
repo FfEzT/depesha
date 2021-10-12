@@ -64,12 +64,19 @@
     text-decoration: underline;
 }
 .right_panel .content .chat{
-    overflow-y: scroll;
     background-color: var(--color_3_hover);
     border-radius: .5vw;
     width: 26vw;
     height: 46vh;
     grid-area: chat;
+}
+.right_panel .content .chat .bottom{
+    position: absolute;
+    bottom: 2vh;
+    width: 26vw;
+    max-height: 46vh;
+    border-radius: .5vw;
+    overflow-y: scroll;
 }
 .right_panel .input_text{
     position: absolute;

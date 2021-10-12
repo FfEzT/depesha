@@ -314,7 +314,7 @@ let add_friend = str => {
 }
 
 // choose friend to chat with him
-// in: str(nickname of your friend)
+// in: str(nickname of friend)
 let chooseFriend = str => {
     // open panel
     // in: str(rightBar || down_panel)
@@ -328,25 +328,26 @@ let chooseFriend = str => {
     // load messages from file
     !function() {
         user.activeFriend = str
-        const messages = JSON.parse(
-            fs.readFileSync('./src/data/message.json')
-        )
-        
-        // todo debug
-        // send obj to render
-        // in: int
-        const f = i => {
-            if (i < 0) {
-                renderMessage(messages[i], 'load')
-                setTimeout(
-                    () => {
-                        f(i-1)
-                    },
-                    100 // todo u can change this value
-                )
+        const messages = data.message.get(str)
+
+        if (messages) {
+            // send obj to render
+            // in: int
+            const f = i => {
+                if (i >= 0) {
+                    renderMessage(messages[i], 'load')
+                    setTimeout(
+                        () => {
+                            if(messages.length - 15 < i) {
+                                f(i-1)
+                            }
+                        },
+                        100 // todo u can change this value
+                    )
+                }
             }
+            f(messages.length - 1)
         }
-        f(messages.length - 1)
     }()
 
     // change nickname in right panel
@@ -364,7 +365,7 @@ let chooseFriend = str => {
 // show message to right panel
 // in: obj(content, time, who_send(i || friend)), str('newMessage' || 'load')
 let renderMessage = (data, type) => {
-    const a = document.getElementsByClassName('chat')[0]
+    const a = document.getElementsByClassName('bottom')[0]
     const b = document.createElement('div')
 
     const time = new Date(data.time)
@@ -394,15 +395,16 @@ let renderMessage = (data, type) => {
 
     if (type == 'newMessage') {
         a.append(b)
-        a.scrollTo(
-            {
-                top: a.scrollHeight,
-                behavior: 'smooth'
-            }
-        )
     } else if (type == 'load') {
         a.prepend(b)
     }
+
+    a.scrollTo(
+        {
+            top: a.scrollHeight,
+            behavior: 'smooth'
+        }
+    )
 
     setTimeout(
         () => {
@@ -425,8 +427,17 @@ let send_message = () => {
                     // todo send data to server
                     !function() {}()
                     
-                    // todo write our message
-                    !function() {}()
+                    // write your message
+                    !function() {
+                        data.message.write(
+                            user.activeFriend,
+                            {
+                                content: input,
+                                time,
+                                who_send: 'i'
+                            }
+                        )
+                    }()
                     
                     // render message
                     !function() {

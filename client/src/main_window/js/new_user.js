@@ -1,11 +1,7 @@
-// delete old info (list of friends)
+// delete old info (list of friends, key, messages)
 data.main('delete_data')
-
-fs.writeFile(
-    './src/data/private.key',
-    '{}',
-    () => {}
-)
+data.key_to_null()
+data.message.message_to_null()
 
 const main = document.getElementById('background')
 
