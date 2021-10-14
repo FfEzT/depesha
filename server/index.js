@@ -47,6 +47,10 @@ let connection_to_server = e => {
                 },
                 'do_friend': () => {
                     do_friend(e, data.content, notice_incorrect_data)
+                },
+                // todo this function
+                'message_to_friend': () => {
+                    console.log(data.content)
                 }
             }
             cases[data.type] && cases[data.type]()

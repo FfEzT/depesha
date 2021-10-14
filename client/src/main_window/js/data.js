@@ -53,7 +53,7 @@ let message = {
             fs.readFileSync(message.file)
         )[id]
     },
-    // write obj with meesage to file
+    // write obj with message to file
     // in: str(id of friend), obj(content, time, who_send)
     write: (id, obj) => {
         let friend = message.get(id)

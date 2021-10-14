@@ -43,7 +43,10 @@ let user = {
     status: 'offline',
     isNewUser: false,
     isConnection_closed: false,
-    activeFriend: undefined,
+    friend: {
+        activeFriend: undefined,
+        key: undefined
+    },
     data: JSON.parse(
         fs.readFileSync('./src/data/user.json')
     ),

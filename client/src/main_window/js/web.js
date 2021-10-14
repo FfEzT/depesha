@@ -7,6 +7,8 @@ const full_window = () => wnd.isMaximized()?
     wnd.unmaximize() : wnd.maximize()
 const minimize_window = () => wnd.minimize()
 
+let friends = {}
+
 // input: str(leftBar || rightBar || down_panel)
 let set_pos_for_bars = lr => {
     const el = document.getElementById(lr)
@@ -266,7 +268,7 @@ let f_search_friend = () => {
 }
 
 let load_friend = () => {
-    let Friend = require('../js/Friend')
+    const Friend = require('../js/Friend')
 
     let temp = [...document.getElementsByClassName('el')]
     temp && !function() {
@@ -278,7 +280,7 @@ let load_friend = () => {
     // type: array(list of friends)
     data.main().forEach(
         value => {
-            friends[value.id] = new Friend(value.id, value.nickname, value.status)
+            friends[value.id] = new Friend(value.id, value.nickname, value.status, value.key)
         }
     )
 }
@@ -315,7 +317,7 @@ let add_friend = str => {
 
 // choose friend to chat with him
 // in: str(nickname of friend)
-let chooseFriend = str => {
+let chooseFriend = (str, key) => {
     // open panel
     // in: str(rightBar || down_panel)
     const open_panels = a => {
@@ -327,7 +329,9 @@ let chooseFriend = str => {
 
     // load messages from file
     !function() {
-        user.activeFriend = str
+        user.friend.activeFriend = str
+        user.friend.key = key
+
         const messages = data.message.get(str)
 
         if (messages) {
@@ -418,19 +422,43 @@ let renderMessage = (data, type) => {
 let send_message = () => {
     const input = chat.value
 
+    // todo delete space and \n
+    {
+        /*
+            const a = chat.value
+            const b = /^\n{0,}/
+            const c = /^\s{0,}/
+
+            const t = a.match(b)
+            const t1 = a.match(c)
+
+            console.log(t, t1)
+        */
+    }
+
     input != '' ?
         !function() {
             user.status != 'offline' ?
                 !function() {
                     const time = new Date().toUTCString()
 
-                    // todo send data to server
-                    !function() {}()
-                    
+                    // send data to server
+                    send_data(
+                        {
+                            type: 'message_to_friend',
+                            content: {
+                                who: user.data.id,
+                                to: user.friend.activeFriend,
+                                time,
+                                content: cipher.rsa.encrypt(input, user.friend.key)
+                            }
+                        }
+                    )
+
                     // write your message
                     !function() {
                         data.message.write(
-                            user.activeFriend,
+                            user.friend.activeFriend,
                             {
                                 content: input,
                                 time,
@@ -458,20 +486,6 @@ let send_message = () => {
         }()
     : notice('empty_message')
 }
-
-/*
-todo это внедрить в функцию, которая будет удалять первые пробелы и \n при вводе сообщений
-const a = chat.value
-const b = /^\n{0,}/
-const c = /^\s{0,}/
-
-const t = a.match(b)
-const t1 = a.match(c)
-
-console.log(t, t1)
-*/
-
-let friends = {}
 
 module.exports = {
     close_window,
