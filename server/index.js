@@ -48,9 +48,8 @@ let connection_to_server = e => {
                 'do_friend': () => {
                     do_friend(e, data.content, notice_incorrect_data)
                 },
-                // todo this function
                 'message_to_friend': () => {
-                    console.log(data.content)
+                    send_message(data.content)
                 }
             }
             cases[data.type] && cases[data.type]()
@@ -269,6 +268,29 @@ let generate_id = () => {
     }
     
     return result
+}
+
+// send message to peoples
+// in: obj (from client)
+let send_message = data => {
+    const man = clients[data.to]
+    
+    man? (
+        man.send(
+            JSON.stringify(
+                [
+                    {
+                        who: data.who,
+                        time: data.time,
+                        content: data.content
+                    }
+                ]
+            )
+        )
+    ):(
+        // todo
+        ''
+    )
 }
 
 //add events for server
