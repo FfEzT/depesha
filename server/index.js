@@ -5,9 +5,7 @@ const ws = require('ws')
 const db = require('./data.js')
 
 //creating server with port 5480
-const server = new ws.Server(
-    {port: 5480}
-)
+const server = new ws.Server({port: 5480})
 
 //list of connected clients
 let clients = {}
@@ -208,6 +206,29 @@ let do_friend = (e, content, f) => {
     bag[content.status] && bag[content.status]()
 }
 
+// send message to peoples
+// in: obj (from client)
+let send_message = data => {
+    const man = clients[data.to]
+    
+    man? 
+        man.send(
+            JSON.stringify(
+                [
+                    {
+                        who: data.who,
+                        time: data.time,
+                        content: data.content
+                    }
+                ]
+            )
+        )
+    :(
+        db.people().update_new_message(data.to, 1),
+        db.temp_mail.set(data.to, data.who, data.time, data.content)
+    )
+}
+
 //generate future id for users
 //output str (lenght: 3-7)
 let generate_id = () => {
@@ -268,29 +289,6 @@ let generate_id = () => {
     }
     
     return result
-}
-
-// send message to peoples
-// in: obj (from client)
-let send_message = data => {
-    const man = clients[data.to]
-    
-    man? (
-        man.send(
-            JSON.stringify(
-                [
-                    {
-                        who: data.who,
-                        time: data.time,
-                        content: data.content
-                    }
-                ]
-            )
-        )
-    ):(
-        // todo
-        ''
-    )
 }
 
 //add events for server

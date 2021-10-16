@@ -4,7 +4,7 @@
     top: 15vh;
     width: 35vw;
     height: 70vh;
-    transition: left .35s cubic-bezier(0.5, 0, 0.15, 1);
+    transition: left .4s cubic-bezier(0.5, 0, 0.15, 1);
 }
 .left_panel:hover, .left_panel.focus{
     left: 0vw;

@@ -1,5 +1,3 @@
-"use strict"
-
 //import modules
 const sql = require('sqlite3').verbose()
 
@@ -10,7 +8,7 @@ let people = () => {
         return new Promise(
             (resolve, reject) => {
                 db.run(
-                    'INSERT INTO main values(?, ?, ?, ?, "offline", 0)',
+                    'INSERT INTO main values (?, ?, ?, ?, "offline", 0, 0)',
                     [id, nickname, password, key],
                     err => {
                         err && reject()
@@ -42,15 +40,50 @@ let people = () => {
     }
 
     //change status of client
-    //input: str(id of client), int (0||1)
+    //input: str(id of client), int (0 || 1)
     let update_friends = (who, status) => {
         let str = `UPDATE main SET changes_friends = ${status} WHERE id = '${who}'`
         db.run(str)
     }
 
-    return {sign_up, get_user, update_status, update_friends}
+    // change status of new_message
+    // in: str (id of people), int (0 = there isn't new message, and 1 = there is new message)
+    let update_new_message = (who, status) => {
+        let str = `UPDATE main SET new_message = '${status}' WHERE id = '${who}'`
+        db.run(str)
+    }
+
+    return {
+        sign_up,
+        get_user,
+        update_status,
+        update_friends,
+        update_new_message
+    }
 }
-let temp_mail = () => {}
+let temp_mail = {
+    // // in: str (id of people)
+    // todo get: id => {
+    //     return new Promise(
+    //         resolve => {
+    //             const str = `SELECT who, time, content FROM temp_message WHERE id = '${id}'`
+
+    //             db.all(
+    //                 str,
+    //                 (er, data) => {
+    //                     resolve(data)
+    //                 }
+    //             )
+    //         }
+    //     )
+    // }
+    // write data to db
+    // in: str, str, str, str
+    set: (id, who, time, content) => {
+        const str = `INSERT INTO temp_message values (${id}, ${who}, ${time}, ${content})`
+        db.run(str)
+    }
+}
 let friends = () => {
     let create_list = id => {
         let str = `CREATE TABLE ${id} (id TINYTEXT PRIMARY KEY, status TINYTEXT)`
@@ -126,15 +159,24 @@ let friends = () => {
         )
     }
 
-    return {create_list, get_friends, write, add_friend, delete_friend}
+    return {
+        create_list,
+        get_friends,
+        write,
+        add_friend,
+        delete_friend
+    }
 }
 
-//todo delete
-//db.run(
+// todo delete
+// db.run(
 //    'DELETE FROM main'
-//)
-//db.run(
-    //'CREATE TABLE main (id TINYTEXT PRIMARY KEY, nickname TINYTEXT, password TINYTEXT, key TINYTEXT, status TINYTEXT, changes_friends TINYINT)'
-//)
+// )
+// db.run(
+//     'CREATE TABLE main (id TINYTEXT PRIMARY KEY, nickname TINYTEXT, password TINYTEXT, key TINYTEXT, status TINYTEXT, changes_friends TINYINT, new_message TYNYINT)'
+// )
+// db.run(
+//     'CREATE TABLE temp_message (id TINYTEXT, who TINYTEXT, time TINYTEXT, content TEXT)'
+// )
 
 module.exports = {people, temp_mail, friends}
