@@ -62,25 +62,24 @@ let people = () => {
     }
 }
 let temp_mail = {
-    // // in: str (id of people)
-    // todo get: id => {
-    //     return new Promise(
-    //         resolve => {
-    //             const str = `SELECT who, time, content FROM temp_message WHERE id = '${id}'`
-
-    //             db.all(
-    //                 str,
-    //                 (er, data) => {
-    //                     resolve(data)
-    //                 }
-    //             )
-    //         }
-    //     )
-    // }
+    // in: str (id of people)
+    get: id => {
+        return new Promise(
+            resolve => {
+                const str = `SELECT who, time, content FROM temp_message WHERE id = '${id}'`
+                db.all(
+                    str,
+                    (er, data) => {
+                        resolve(data)
+                    }
+                )
+            }
+        )
+    },
     // write data to db
     // in: str, str, str, str
     set: (id, who, time, content) => {
-        const str = `INSERT INTO temp_message values (${id}, ${who}, ${time}, ${content})`
+        const str = `INSERT INTO temp_message values ('${id}', '${who}', '${time}', '${content}')`
         db.run(str)
     }
 }

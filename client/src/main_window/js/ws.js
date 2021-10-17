@@ -59,6 +59,9 @@ let main = () => {
                             'list_of_friends': () => {
                                 data.main('get_friends', a.data)
                                 web.load_friend()
+                            },
+                            'new_message': () => {
+                                console.log(a.data)
                             }
                         }
                         bag[a.type] && bag[a.type]()

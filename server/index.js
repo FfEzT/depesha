@@ -108,6 +108,21 @@ let auth = async (e, content, f) => {
                                 
                                 db.people().update_friends(content.id, 0)
                             }()
+                            d.new_message == 1 && !function() {
+                                db.temp_mail.get(content.id).then(
+                                    data => {
+                                        e.send(
+                                            JSON.stringify(
+                                                {
+                                                    type: 'new_message',
+                                                    data
+                                                }
+                                            )
+                                        )
+                                    }
+                                )
+                                db.people().update_new_message(content.id, 0)
+                            }()
                         }
                     )
                     
