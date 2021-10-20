@@ -225,8 +225,8 @@ let do_friend = (e, content, f) => {
 // in: obj (from client)
 let send_message = data => {
     const man = clients[data.to]
-    
-    man? 
+
+    man?
         man.send(
             JSON.stringify(
                 [

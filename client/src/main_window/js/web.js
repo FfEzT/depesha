@@ -317,7 +317,7 @@ let add_friend = str => {
 
 // choose friend to chat with him
 // in: str(nickname of friend)
-let chooseFriend = (str, key) => {
+let chooseFriend = (str, id, key) => {
     // open panel
     // in: str(rightBar || down_panel)
     const open_panels = a => {
@@ -330,6 +330,7 @@ let chooseFriend = (str, key) => {
     // load messages from file
     !function() {
         user.friend.activeFriend = str
+        user.friend.id = id
         user.friend.key = key
 
         const messages = data.message.get(str)
@@ -448,7 +449,7 @@ let send_message = () => {
                             type: 'message_to_friend',
                             content: {
                                 who: user.data.id,
-                                to: user.friend.activeFriend,
+                                to: user.friend.id,
                                 time,
                                 content: cipher.rsa.encrypt(input, user.friend.key)
                             }
@@ -487,6 +488,20 @@ let send_message = () => {
     : notice('empty_message')
 }
 
+// processing incoming messages from the server
+// in: arr of obj (messages)
+const get_message = arr => {
+    arr.forEach(
+        el => {
+            // todo
+            const from = el.who
+            const content = cipher.rsa.decrypt(el.content) // ! do not working
+
+            console.log(el, from, content)
+        }
+    )
+}
+
 module.exports = {
     close_window,
     full_window,
@@ -504,5 +519,6 @@ module.exports = {
     delete_friend,
     add_friend,
     chooseFriend,
-    send_message
+    send_message,
+    get_message
 }

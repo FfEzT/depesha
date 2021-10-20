@@ -45,6 +45,7 @@ let user = {
     isConnection_closed: false,
     friend: {
         activeFriend: undefined,
+        id: undefined,
         key: undefined
     },
     data: JSON.parse(

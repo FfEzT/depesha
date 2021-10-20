@@ -37,7 +37,7 @@ class Friend{
                 <div class="ell e" onclick="web.notice('off_work')">
                     <div class="button center call"></div>
                 </div>
-                <div class="ell e" onclick="web.chooseFriend('${this.nickname}', '${this.key}')">
+                <div class="ell e" onclick="web.chooseFriend('${this.nickname}', '${this.id}', '${this.key}')">
                     <div class="button center chat"></div>
                 </div>
                 <div class="ell e" onclick="web.delete_friend('${this.id}')">

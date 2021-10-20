@@ -21,10 +21,10 @@ let main = () => {
                     ws.onmessage = e => {
                         //data from server
                         //type: {Object}
-                        let a = JSON.parse(e.data)
+                        const a = JSON.parse(e.data)
             
                         //like switch(){}
-                        let bag = {
+                        const bag = {
                             'auth': () => {
                                 a.result == '0' ?
                                     (
@@ -61,7 +61,7 @@ let main = () => {
                                 web.load_friend()
                             },
                             'new_message': () => {
-                                console.log(a.data)
+                                web.get_message(a.data)
                             }
                         }
                         bag[a.type] && bag[a.type]()
