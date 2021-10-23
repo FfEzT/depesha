@@ -226,19 +226,22 @@ let do_friend = (e, content, f) => {
 let send_message = data => {
     const man = clients[data.to]
 
-    man?
+    man? (
         man.send(
             JSON.stringify(
-                [
-                    {
-                        who: data.who,
-                        time: data.time,
-                        content: data.content
-                    }
-                ]
+                {
+                    type: 'new_message',
+                    data: [
+                        {
+                            who: data.who,
+                            time: data.time,
+                            content: data.content
+                        }
+                    ]
+                }
             )
         )
-    :(
+    ) : (
         db.people().update_new_message(data.to, 1),
         db.temp_mail.set(data.to, data.who, data.time, data.content)
     )

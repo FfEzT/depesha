@@ -333,7 +333,7 @@ let chooseFriend = (str, id, key) => {
         user.friend.id = id
         user.friend.key = key
 
-        const messages = data.message.get(str)
+        const messages = data.message.get(id)
 
         if (messages) {
             // send obj to render
@@ -459,7 +459,7 @@ let send_message = () => {
                     // write your message
                     !function() {
                         data.message.write(
-                            user.friend.activeFriend,
+                            user.friend.id,
                             {
                                 content: input,
                                 time,
@@ -493,11 +493,32 @@ let send_message = () => {
 const get_message = arr => {
     arr.forEach(
         el => {
-            // todo
+            // who, time, content
             const from = el.who
-            const content = cipher.rsa.decrypt(el.content) // ! do not working
+            const content = cipher.rsa.decrypt(el.content)
+            const time = el.time
+            const who_send = 'friend'
 
-            console.log(el, from, content)
+            setTimeout(
+                () => {
+                    data.message.write(
+                        from,
+                        {
+                            content,
+                            time,
+                            who_send
+                        }
+                    )
+                },
+                1
+            )
+
+            user.friend.id == from ? (
+                renderMessage(
+                    {content, time, who_send},
+                    'newMessage'
+                )
+            ) : ('')
         }
     )
 }

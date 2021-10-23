@@ -21,6 +21,9 @@ let rsa = {
     },
     decrypt: str => {
         return cryptico.decrypt(str, user.key).plaintext
+    },
+    import_private: obj => {
+        return cryptico.RSAKey.parse(obj)
     }
 }
 

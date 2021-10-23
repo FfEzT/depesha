@@ -421,14 +421,9 @@ document.getElementsByClassName('down_panel')[0].remove()
 
     main.append(offline)
     
-    setTimeout(
-        () => {
-            let el = document.getElementById('offline')
-            el.style.opacity = '100'
-            el.style.transform = 'scale(1)'
-        }, 
-        0
-    );
+    const el = document.getElementById('offline')
+    el.style.opacity = '100'
+    el.style.transform = 'scale(1)'
 
     checking_status()
 }();

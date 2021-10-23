@@ -22,7 +22,7 @@ let main = (a, b=[]) => {
     //write data to friend.json
     fs.writeFileSync(
         './src/data/friend.json',
-        JSON.stringify(data)
+        JSON.stringify(data, null, 2) // todo before publishing remove last 2 arguments
     )
     return data.friends
 }
@@ -56,7 +56,7 @@ let message = {
     // write obj with message to file
     // in: str(id of friend), obj(content, time, who_send)
     write: (id, obj) => {
-        let friend = message.get(id)
+        const friend = message.get(id)
 
         let data = JSON.parse(
             fs.readFileSync(message.file)
@@ -68,7 +68,10 @@ let message = {
 
         data[id].push(obj)
 
-        fs.writeFileSync(message.file, JSON.stringify(data))
+        fs.writeFileSync(
+            message.file,
+            JSON.stringify(data, null, 2) // todo before publishing remove last 2 arguments
+        )
     }
 }
 
