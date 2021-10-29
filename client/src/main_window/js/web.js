@@ -1,4 +1,4 @@
-// import modules
+// import electron module
 const wnd = require('electron').remote.getCurrentWindow()
 
 // window's btns
