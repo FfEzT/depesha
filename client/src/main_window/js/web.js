@@ -142,6 +142,9 @@ let notice = a => {
         },
         'empty_message': () => {
             text = 'Зачем вы хотите отправить воздух?'
+        },
+        'new_message': () => {
+            text = 'О, у вас новое сообщение!'
         }
     }
     bag[a] && bag[a]()
@@ -324,8 +327,8 @@ let chooseFriend = (str, id, key) => {
         !check_pos_for_bars(a) && set_pos_for_bars(a)
     }
 
-    // todo delete old list
-    !function() {}()
+    // delete old list
+    document.getElementsByClassName('chat')[0].innerHTML = ''
 
     // load messages from file
     !function() {
@@ -364,13 +367,13 @@ let chooseFriend = (str, id, key) => {
         open_panels('down_panel')
     }()
 
-    // todo check redPoint
-    !function() {}()
+    // delete redPoint
+    friends[id].red_point.delete()
 }
 // show message to right panel
 // in: obj(content, time, who_send(i || friend)), str('newMessage' || 'load')
 let renderMessage = (data, type) => {
-    const a = document.getElementsByClassName('bottom')[0]
+    const a = document.getElementsByClassName('chat')[0]
     const b = document.createElement('div')
 
     const time = new Date(data.time)
@@ -421,21 +424,7 @@ let renderMessage = (data, type) => {
 }
 
 let send_message = () => {
-    const input = chat.value
-
-    // todo delete space and \n
-    {
-        /*
-            const a = chat.value
-            const b = /^\n{0,}/
-            const c = /^\s{0,}/
-
-            const t = a.match(b)
-            const t1 = a.match(c)
-
-            console.log(t, t1)
-        */
-    }
+    const input = chat.value.trim()
 
     input != '' ?
         !function() {
@@ -518,7 +507,10 @@ const get_message = arr => {
                     {content, time, who_send},
                     'newMessage'
                 )
-            ) : ('')
+            ) : (
+                notice('new_message'),
+                friends[from].red_point.set()
+            )
         }
     )
 }

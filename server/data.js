@@ -70,6 +70,9 @@ let temp_mail = {
                 db.all(
                     str,
                     (er, data) => {
+                        db.run(
+                            `DELETE FROM temp_message WHERE id = '${id}'`
+                        )
                         resolve(data)
                     }
                 )

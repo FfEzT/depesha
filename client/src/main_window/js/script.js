@@ -1,4 +1,4 @@
-// "use strict"
+"use strict"
 
 //import modules
 const fs = require('fs')

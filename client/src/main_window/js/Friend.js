@@ -29,7 +29,9 @@ class Friend{
     show_friend = () => {
         this.a.innerHTML = `
                 <div class="ell">
-                    <div class="center picture"></div>
+                    <div class="center picture">
+                        <div class="red_point" style="transform: scale(0)"></div>
+                    </div>
                 </div>
                 <div class="ell">
                     <div class="center nickname" onclick="web.notice('off_work')">${this.nickname}</div>
@@ -88,6 +90,21 @@ class Friend{
             <div class="ell e" onclick="web.delete_friend('${this.id}')">
                 <div class="button center delete"></div>
             </div>`
+    }
+    red_point = {
+        there_is : false,
+        set   : () => {
+            !this.red_point.there_is && !function(a, red_point) {
+                a.children[0].children[0].children[0].style.transform = "scale(1)"
+                red_point.there_is = true
+            }(this.a, this.red_point)
+        },
+        delete: () => {
+            this.red_point.there_is && !function(a, red_point) {
+                a.children[0].children[0].children[0].style.transform = "scale(0)"
+                red_point.there_is = false
+            }(this.a, this.red_point)
+        }
     }
     //type: HTML element
     tab1 = document.getElementsByClassName('content_for_f1')[0]
