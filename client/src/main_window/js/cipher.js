@@ -1,5 +1,5 @@
 const crypto = require('crypto')
-const cryptico = require('cryptico')
+const cryptico = require('../js/cryptico')
 
 //hashing str
 //in: str

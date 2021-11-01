@@ -1,15 +1,12 @@
 {
-    "name": "extent",
-    "description": "This app is for text and voice communication ;) It's Explicit Content",
-    "homepage": "#",
+    "name": "onchat",
+    "description": "This app is for text and voice communication ;) You're OnChat",
     "main": "./src/main.js",
     "scripts": {
         "start": "electron ."
     },
     "author": "FfEzT",
-    "license": "ISC",
     "dependencies": {
-        "cryptico": "^1.0.2",
         "electron": "^13.1.9"
     }
 }
