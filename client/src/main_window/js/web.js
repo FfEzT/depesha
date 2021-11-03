@@ -337,11 +337,11 @@ let chooseFriend = (str, id, key) => {
         user.friend.key = key
 
         const messages = data.message.get(id)
-        let index_of_messages = messages.length - 1
-
         const win = document.getElementsByClassName('chat')[0]
 
         if (messages) {
+            let index_of_messages = messages.length - 1
+
             // todo you can optimize this code
             // send obj to render
             // in: int

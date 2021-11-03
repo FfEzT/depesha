@@ -50,13 +50,14 @@ let user = {
     },
     data: JSON.parse(
         fs.readFileSync('./src/data/user.json')
-    ),
-    key: cipher.rsa.import_private(
-        fs.readFileSync('./src/data/private.key')
     )
 }
 
 //checking authorization of user
 user.data.id == "" || user.data.nickname == "" || user.data.password == "" ? (
         user.isNewUser = true
-) : ''
+) : (
+    user.key = cipher.rsa.import_private(
+        fs.readFileSync('./src/data/private.key')
+    )
+)
