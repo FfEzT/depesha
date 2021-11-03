@@ -57,7 +57,7 @@ let hot_key = e => {
         },
         //space
         32: () => {
-            document.getElementById('rightBar').classList.contains('focus') && document.getElementById('chat').focus()
+            document.getElementById('rightBar').classList.contains('focus') && chat.focus()
         }
     }
     a[e.keyCode] && a[e.keyCode]()
@@ -337,31 +337,50 @@ let chooseFriend = (str, id, key) => {
         user.friend.key = key
 
         const messages = data.message.get(id)
+        let index_of_messages = messages.length - 1
+
+        const win = document.getElementsByClassName('chat')[0]
 
         if (messages) {
+            // todo you can optimize this code
             // send obj to render
             // in: int
-            const f = i => {
-                if (i >= 0) {
-                    renderMessage(messages[i], 'load')
-                    setTimeout(
-                        () => {
-                            if(messages.length - 15 < i) {
-                                f(i-1)
+            const f = () => {
+                if (index_of_messages >= 0) {
+                    if (win.scrollTop <= 300) {
+                        renderMessage(messages[index_of_messages], 'load')
+                        setTimeout(
+                            () => {
+                                --index_of_messages
+                                f()
+                            },
+                            10 // todo u can change this value
+                        )
+                    }
+                    else {
+                        win.onscroll = () => {
+                            if (win.scrollTop <= 300 && index_of_messages >= 0) {
+                                renderMessage(messages[index_of_messages], 'load', true)
+                                setTimeout(
+                                    () => {
+                                        --index_of_messages
+                                        f()
+                                    },
+                                    10 // todo u can change this value
+                                )
                             }
-                        },
-                        100 // todo u can change this value
-                    )
+                        }
+                    }
                 }
             }
-            f(messages.length - 1)
+            f()
         }
     }()
 
     // change nickname in right panel
     document.getElementsByClassName('nick_text')[0].innerText = str
 
-    // open panel
+    // open panels
     !function() {
         open_panels('rightBar')
         open_panels('down_panel')
@@ -371,8 +390,8 @@ let chooseFriend = (str, id, key) => {
     friends[id].red_point.delete()
 }
 // show message to right panel
-// in: obj(content, time, who_send(i || friend)), str('newMessage' || 'load')
-let renderMessage = (data, type) => {
+// in: obj(content, time, who_send(i || friend)), str('newMessage' || 'load'), bool
+let renderMessage = (data, type, without_scroll) => {
     const a = document.getElementsByClassName('chat')[0]
     const b = document.createElement('div')
 
@@ -407,10 +426,10 @@ let renderMessage = (data, type) => {
         a.prepend(b)
     }
 
-    a.scrollTo(
+    !without_scroll && a.scrollTo(
         {
-            top: a.scrollHeight,
-            behavior: 'smooth'
+            top: a.scrollHeight
+            // behavior: 'smooth' // if use smooth-mode u can get a bug (loading messages)
         }
     )
 
