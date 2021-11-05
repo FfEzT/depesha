@@ -143,6 +143,9 @@ let notice = a => {
         'empty_message': () => {
             text = 'Зачем вы хотите отправить воздух?'
         },
+        'empty_adress': () => {
+            text = 'Кому выхотите это отправить?'
+        },
         'new_message': () => {
             text = 'О, у вас новое сообщение!'
         }
@@ -443,57 +446,61 @@ let renderMessage = (data, type, without_scroll) => {
 }
 
 let send_message = () => {
-    const input = chat.value.trim()
-
-    input != '' ?
+    user.friend.id? (
         !function() {
-            user.status != 'offline' ?
+            const input = chat.value.trim()
+
+            input != '' ? (
                 !function() {
-                    const time = new Date().toUTCString()
+                    user.status != 'offline' ?
+                        !function() {
+                            const time = new Date().toUTCString()
 
-                    // send data to server
-                    send_data(
-                        {
-                            type: 'message_to_friend',
-                            content: {
-                                who: user.data.id,
-                                to: user.friend.id,
-                                time,
-                                content: cipher.rsa.encrypt(input, user.friend.key)
-                            }
-                        }
-                    )
+                            // send data to server
+                            send_data(
+                                {
+                                    type: 'message_to_friend',
+                                    content: {
+                                        who: user.data.id,
+                                        to: user.friend.id,
+                                        time,
+                                        content: cipher.rsa.encrypt(input, user.friend.key)
+                                    }
+                                }
+                            )
 
-                    // write your message
-                    !function() {
-                        data.message.write(
-                            user.friend.id,
-                            {
-                                content: input,
-                                time,
-                                who_send: 'i'
-                            }
-                        )
-                    }()
-                    
-                    // render message
-                    !function() {
-                        renderMessage(
-                            {
-                                content: input,
-                                time,
-                                who_send: 'i'
-                            },
-                            'newMessage'
-                        )
-                    }()
+                            // write your message
+                            !function() {
+                                data.message.write(
+                                    user.friend.id,
+                                    {
+                                        content: input,
+                                        time,
+                                        who_send: 'i'
+                                    }
+                                )
+                            }()
+                            
+                            // render message
+                            !function() {
+                                renderMessage(
+                                    {
+                                        content: input,
+                                        time,
+                                        who_send: 'i'
+                                    },
+                                    'newMessage'
+                                )
+                            }()
 
-                    chat.value = ''
+                            chat.value = ''
+                        }()
+                        
+                    : notice('off_server')
                 }()
-                
-            : notice('off_server')
+            ) : notice('empty_message')
         }()
-    : notice('empty_message')
+    ) : notice('empty_adress')
 }
 
 // processing incoming messages from the server
