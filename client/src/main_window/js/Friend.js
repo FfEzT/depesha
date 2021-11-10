@@ -1,5 +1,5 @@
-class Friend{
-    constructor(id, nickname, status, key){
+class Friend {
+    constructor(id, nickname, status, key) {
         this.id = id
         this.nickname = nickname
         this.status = status
@@ -8,20 +8,20 @@ class Friend{
         this.render()
     }
 
-    //show friend in down_panel
+    // show friend in down_panel
     render = () => {
-        //type: html element
+        // type: html element
         this.a = document.createElement('div')
         this.a.classList.add('el')
 
         this.checking_status()
     }
     checking_status = () => {
-        if(this.status == 'friend'){
+        if (this.status == 'friend') {
             this.show_friend()
             return
         }
-        if(this.status == 'pending' || 'waiting'){
+        if (this.status == 'pending' || 'waiting') {
             this.show_application()
             return
         }
@@ -106,7 +106,7 @@ class Friend{
             }(this.a, this.red_point)
         }
     }
-    //type: HTML element
+    // type: HTML element
     tab1 = document.getElementsByClassName('content_for_f1')[0]
     tab2 = document.getElementsByClassName('content_for_f2')[0]
 }

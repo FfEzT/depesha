@@ -39,23 +39,23 @@ let roll_down_all = () => {
 
 let hot_key = e => {
     const a = {
-        //arrow left
+        // arrow left
         37: () => {
                 set_pos_for_bars('leftBar')
         },
-        //arrow right
+        // arrow right
         39: () => {
                 set_pos_for_bars('rightBar')
         },
-        //arrow up
+        // arrow up
         38: () => {
                 roll_down_all()
         },
-        //arrow down
+        // arrow down
         40: () => {
             set_pos_for_bars('down_panel')
         },
-        //space
+        // space
         32: () => {
             document.getElementById('rightBar').classList.contains('focus') && chat.focus()
         }
@@ -63,7 +63,7 @@ let hot_key = e => {
     a[e.keyCode] && a[e.keyCode]()
 }
 
-//for serching
+// for serching
 let focus_blur = on => {
     const a = {
         'focus': () => {
@@ -177,13 +177,14 @@ let notice = a => {
     setTimeout(
         () => {
             go.classList.replace('close', 'first')
-        }, 10
+        },
+        1
     )
     setTimeout(
         () => {
             go.classList.add('left')
             setTimeout(
-                ()=>{
+                () => {
                     go.remove()
                 },
                 500
@@ -275,7 +276,7 @@ let load_friend = () => {
 
     let temp = [...document.getElementsByClassName('el')]
     temp && !function() {
-        for (let i = 0; i < temp.length; i++) {
+        for (let i = 0; i < temp.length; ++i) {
             temp[i].remove()
         }
     }()
@@ -422,7 +423,8 @@ let renderMessage = (data, type, without_scroll) => {
 
     if (type == 'newMessage') {
         a.append(b)
-    } else if (type == 'load') {
+    }
+    else if (type == 'load') {
         a.prepend(b)
     }
 

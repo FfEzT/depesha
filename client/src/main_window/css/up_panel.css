@@ -1,4 +1,4 @@
-.up_panel{
+.up_panel {
     position: absolute;
     left: 15vw;
     top: 2vh;
@@ -13,7 +13,7 @@
     background-color: var(--color_2);
     border-radius: 0 0 var(--border_round_1) var(--border_round_1);
 }
-.up_panel .container_search{
+.up_panel .container_search {
     display: grid;
     grid-column: 2/4;
     width: 100%;
@@ -26,7 +26,7 @@
     display: grid;
     grid-template-columns: auto 1px min(4vw, 5.25vh);
 }
-.up_panel .container_search .search .text{
+.up_panel .container_search .search .text {
     width: 100%;
     height: 100%;
     color: var(--color_text);
@@ -36,12 +36,12 @@
     border-radius: 250px 0 0 250px;
     padding-left: 1vw;
 }
-.up_panel .container_search .search .line{
+.up_panel .container_search .search .line {
     width: 100%;
     height: 100%;
     background-color: var(--color_line);
 }
-.up_panel .container_search .search .btn_search{
+.up_panel .container_search .search .btn_search {
     width: 100%;
     height: 100%;
     border-radius: 0 250px 250px 0;
@@ -51,13 +51,13 @@
     justify-items: center;
     transition: background-color .1s cubic-bezier(0.42,0,0.58,1);
 }
-.up_panel .container_search .search .btn_search:hover{
+.up_panel .container_search .search .btn_search:hover {
     background-color: var(--color_3_hover);
 }
-.up_panel .container_search .search .btn_search:active{
+.up_panel .container_search .search .btn_search:active {
     background-color: var(--color_3_active);
 }
-.up_panel .container_search .search .btn_search .picture_btn_search{
+.up_panel .container_search .search .btn_search .picture_btn_search {
     position: relative;
     border-radius: 25%;
     left: -.25vh;
@@ -68,24 +68,24 @@
     background-size: contain;
     transition: transform .25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.up_panel .container_search .search .btn_search:hover .picture_btn_search{
+.up_panel .container_search .search .btn_search:hover .picture_btn_search {
     transform: scale(1.25);
 }
-.up_panel .container_search .search .btn_search:active .picture_btn_search{
+.up_panel .container_search .search .btn_search:active .picture_btn_search {
     transition: transform .1s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform: scale(.75);
 }
-.up_panel .btn{
+.up_panel .btn {
     width: min(5vw, 5.25vh);
     height: min(5vw, 5.25vh);
     transition: transform .25s cubic-bezier(0.34, 1.56, 0.64, 1);
     border-radius: 22px;
 }
-.up_panel .btn:hover{
+.up_panel .btn:hover {
     transform: scale(1.25);
     transition: transform .5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.up_panel .btn .btn_piq{
+.up_panel .btn .btn_piq {
     width: 100%;
     height: 100%;
     border-radius: 22px;
@@ -93,22 +93,22 @@
     background-size: contain;
     transition: transform .25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color .1s cubic-bezier(0.42,0,0.58,1);
 }
-.up_panel .btn .btn_piq.more{
+.up_panel .btn .btn_piq.more {
     background-image: url(../materials/picture/more.svg);
 }
-.up_panel .btn .btn_piq.mail{
+.up_panel .btn .btn_piq.mail {
     background-image: url(../materials/picture/mail.svg);
 }
-.up_panel .btn .btn_piq.settings{
+.up_panel .btn .btn_piq.settings {
     border-radius: 50%;
     transform: rotate(-90deg);
     background-image: url(../materials/picture/settings.svg);
 }
-.up_panel .btn:active .btn_piq{
+.up_panel .btn:active .btn_piq {
     transform: scale(.75);
     transition: transform .1s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.up_panel .profile{
+.up_panel .profile {
     grid-column: 6/7;
     position: relative;
     top: -12.5vh;
@@ -124,10 +124,10 @@
     box-shadow: 0px -1vh 1vw 0.5vw var(--color_shadow);
     transition: top .25s cubic-bezier(0.42,0,0.58,1);
 }
-.up_panel .profile:hover{
+.up_panel .profile:hover {
     top: -7vh;
 }
-.up_panel .profile .status{
+.up_panel .profile .status {
     display: grid;
     height: 75%;
     width: 75%;
@@ -136,10 +136,10 @@
     background-color: var(--color_text);
     transition: transform .25s cubic-bezier(0.42,0,0.58,1), background-color .5s ease-in-out;
 }
-.up_panel .profile .status:hover{
+.up_panel .profile .status:hover {
     transform: scale(1.25);
 }
-.up_panel .profile .status .text{
+.up_panel .profile .status .text {
     margin: auto;
     text-align: justify;
     font-size: min(1vw,2vh);
@@ -147,23 +147,23 @@
     color: var(--color_important);
     user-select: none;
 }
-.up_panel .profile .container_for_photo{
+.up_panel .profile .container_for_photo {
     height: min(4vw, 7vh);
     width: min(4vw, 7vh);
     margin-bottom: 1vh;
     border-radius: 50%;
     transition: transform .25s cubic-bezier(0.42,0,0.58,1);
 }
-.up_panel .profile .container_for_photo .photo{
+.up_panel .profile .container_for_photo .photo {
     width: 100%;
     height: 100%;
     border-radius: 50%;
     background-color: var(--color_3_active);
     transition: transform .25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.up_panel .profile .container_for_photo:hover{
+.up_panel .profile .container_for_photo:hover {
     transform: scale(1.125);
 }
-.up_panel .profile .container_for_photo:active .photo{
+.up_panel .profile .container_for_photo:active .photo {
     transform: scale(.875);
 }

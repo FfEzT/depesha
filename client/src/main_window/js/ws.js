@@ -1,34 +1,34 @@
 let main = () => {
     let trycatch = () => {
-        try{
+        try {
             web.change_status()
         }
-        catch (error){}
+        catch (error) {}
     }
 
-    ws = new WebSocket('ws://localhost:5480') //todo change str
+    ws = new WebSocket('ws://localhost:5480') // todo change str
 
     ws.onopen = () => {
         user.isConnection_closed?
             window.location.reload()
             :
-            !function(){
+            !function() {
                 user.status = 'online'
                 trycatch()
 
-                //sign in
+                // sign in
                 !user.isNewUser && (
                     ws.onmessage = e => {
-                        //data from server
-                        //type: {Object}
+                        // data from server
+                        // type: {Object}
                         const a = JSON.parse(e.data)
             
-                        //like switch(){}
+                        // like switch(){}
                         const bag = {
                             'auth': () => {
                                 a.result == '0' ?
                                     (
-                                        //id, nickname, password = null, reload
+                                        // id, nickname, password = null, reload
                                         user.data.id = '',
                                         user.data.nickname = '',
                                         user.data.password = '',
@@ -71,7 +71,7 @@ let main = () => {
             }()
     }
     ws.onclose = () => {
-        //reconnection every 10 sec
+        // reconnection every 10 sec
         setTimeout(
             () => {
                 main()
@@ -79,7 +79,7 @@ let main = () => {
             10000
         );
 
-        !user.isConnection_closed && !function(){
+        !user.isConnection_closed && !function() {
             user.isConnection_closed = true
             web.notice('off_server')
             user.status = 'offline'

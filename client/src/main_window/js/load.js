@@ -2,7 +2,7 @@ let main = () => {
     web.notice('welcome')
 
     user.isNewUser?
-        !function(){
+        !function() {
             require('../js/new_user')
             setTimeout(
                 () => {
@@ -12,12 +12,12 @@ let main = () => {
             )
         }()
         :
-        !function(){
-            //loading list of friends
+        !function() {
+            // loading list of friends
             web.load_friend()
         }();
 
-    !function(){
+    !function() {
         setTimeout(
             () => {
                 start.style.opacity = 0
@@ -32,8 +32,8 @@ let main = () => {
         )
     }()
 
-    //final
-    console.log('ready') //todo u can delete this line
+    // final
+    console.log('ready') // todo u can delete this line
 }
 
 module.exports = {main}

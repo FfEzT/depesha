@@ -11,7 +11,7 @@ document.getElementsByClassName('left_panel')[0].remove()
 document.getElementsByClassName('right_panel')[0].remove()
 document.getElementsByClassName('down_panel')[0].remove()
 
-!function(){
+!function() {
     let load_form_sign_up = () => {
         offline.remove()
     
@@ -157,7 +157,7 @@ document.getElementsByClassName('down_panel')[0].remove()
         }
         sign_up.onclick = () => {
             can_create.name && can_create.password ? 
-                !function(){
+                !function() {
                     setTimeout(
                         () => {
                             let hash = cipher.hashing(password.value)
@@ -173,8 +173,8 @@ document.getElementsByClassName('down_panel')[0].remove()
                             ws.onmessage = e => {
                                 let a = JSON.parse(e.data)
                                 
-                                a.result == 1 && !function(){
-                                    //write data about user (user.json)
+                                a.result == 1 && !function() {
+                                    // write data about user (user.json)
                                     user.data.id = a.id
                                     user.data.nickname = name.value
                                     user.data.password = cipher.hashing(password.value)
@@ -185,7 +185,7 @@ document.getElementsByClassName('down_panel')[0].remove()
                                         () => {}
                                     )
                                     
-                                    //show id
+                                    // show id
                                     let bg = document.createElement('div')
                                     bg.style = 'position: absolute; width: 100vw; height: 100vh;\
                                     background-color: var(--color_1); opacity: 0;\
@@ -288,13 +288,13 @@ document.getElementsByClassName('down_panel')[0].remove()
                 web.notice('sign_up_err') 
         }
         sign_in_.onclick = () => {
-            //checking password
+            // checking password
             let a = /^\S{9,20}$/
             a.test(password_.value)?
                 (
                     ws.onmessage = e => {
                         let b = JSON.parse(e.data)
-                        if(b.result == '1'){
+                        if (b.result == '1') {
                             setTimeout(
                                 () => {
                                     let hash = cipher.hashing(password_.value)
@@ -302,7 +302,7 @@ document.getElementsByClassName('down_panel')[0].remove()
                                         cipher.hashing(hash)
                                     )
     
-                                    //write data about user (user.json)
+                                    // write data about user (user.json)
                                     user.data.id = id.value
                                     user.data.nickname = b.nick
                                     user.data.password = hash
@@ -339,7 +339,7 @@ document.getElementsByClassName('down_panel')[0].remove()
                             )
                             web.notice('wait')
                         }
-                        else if(b.result == '0'){
+                        else if (b.result == '0') {
                             web.notice('auth_err')
                         }
                     },
@@ -385,11 +385,11 @@ document.getElementsByClassName('down_panel')[0].remove()
         );
     }
     let checking_status = () => {
-        if(user.status == 'online'){
+        if (user.status == 'online'){
             load_form_sign_up()
         }
-        else if(user.isConnection_closed){}
-        else{
+        else if (user.isConnection_closed) {}
+        else {
             setTimeout(
                 checking_status,
                 5000

@@ -1,4 +1,4 @@
-// P.S. from FfEzT: It's not my library,
+// from FfEzT: It's not my library,
 //      I have installed it from npm (npm i cryptico) and github (https://github.com/beenotung/cryptico/tree/patch-2)
 
 // Copyright (c) 2005  Tom Wu

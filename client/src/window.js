@@ -2,7 +2,7 @@ module.exports.createWindow = () => {
     const {BrowserWindow, screen} = require('electron')
     let win = new BrowserWindow(
         {
-            title                  : 'Extent',
+            title                  : 'Onchat',
             width                  : 1280,
             height                 : 720,
             minWidth               : 940,
@@ -11,7 +11,7 @@ module.exports.createWindow = () => {
             maxHeight              : screen.getPrimaryDisplay().size.height,
             show                   : false,
             frame                  : false,
-            webPreferences         :{
+            webPreferences         : {
                 // devTools        : false, // todo activate this line
                 nodeIntegration    : true,
                 enableRemoteModule : true,

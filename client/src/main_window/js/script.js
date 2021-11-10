@@ -1,19 +1,19 @@
 "use strict"
 
-//import modules
+// import modules
 const fs = require('fs')
 const data = require('../js/data')
 const load = require('../js/load')
 const web = require('../js/web')
 const cipher = require('../js/cipher')
 const connection = require('../js/ws')
-let ws //WebSocket
+let ws // WebSocket
 
-//WebSocket
+// WebSocket
 connection.main()
 
-//send id and password for auth
-//in: str, str, bool
+// send id and password for auth
+// in: str, str, bool
 let auth = (id, password, a=false) => {
     send_data(
         {
@@ -27,8 +27,8 @@ let auth = (id, password, a=false) => {
     )
 }
 
-//send data to server
-//input Object (type: str, content: {})
+// send data to server
+// input Object (type: str, content: {})
 let send_data = data => {
     user.status == 'offline' ?
         web.notice('off_server')
@@ -38,7 +38,7 @@ let send_data = data => {
         )
 }
 
-//info about user and his 'people'
+// info about user and his 'people'
 let user = {
     status: 'offline',
     isNewUser: false,
@@ -53,7 +53,7 @@ let user = {
     )
 }
 
-//checking authorization of user
+// checking authorization of user
 user.data.id == "" || user.data.nickname == "" || user.data.password == "" ? (
         user.isNewUser = true
 ) : (

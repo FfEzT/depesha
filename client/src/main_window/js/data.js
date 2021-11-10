@@ -2,13 +2,13 @@
 // input: str ('delete_data' || 'get_friends'), array(list of friends)
 // output: data.friends(array)
 let main = (a, b=[]) => {
-    //get data from friend.json
-    //type: JSON
+    // get data from friend.json
+    // type: JSON
     let data = JSON.parse(
         fs.readFileSync('./src/data/friend.json')
     )
     
-    //like switch(){}
+    // like switch() {}
     let bag = {
         'delete_data' : () => {
             data.friends = []
@@ -19,7 +19,7 @@ let main = (a, b=[]) => {
     }
     bag[a] && bag[a](b)
 
-    //write data to friend.json
+    // write data to friend.json
     fs.writeFileSync(
         './src/data/friend.json',
         JSON.stringify(data, null, 2) // todo before publishing remove last 2 arguments

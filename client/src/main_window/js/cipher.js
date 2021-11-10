@@ -1,9 +1,9 @@
 const crypto = require('crypto')
 const cryptico = require('../js/cryptico')
 
-//hashing str
-//in: str
-//out: str
+// hashing str
+// in: str
+// out: str
 let hashing = str => {
     let a = crypto.scryptSync(str, str, 32).toString('hex')
     return crypto.scryptSync(a, a, 32).toString('hex')
