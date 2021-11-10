@@ -1,9 +1,10 @@
 class Friend {
-    constructor(id, nickname, status, key) {
+    constructor(id, nickname, status, key, red_point=false) {
         this.id = id
         this.nickname = nickname
         this.status = status
         this.key = key
+        this.has_new_message = red_point
 
         this.render()
     }
@@ -46,6 +47,7 @@ class Friend {
                     <div class="button center delete"></div>
                 </div>`
         this.tab1.append(this.a)
+        this.has_new_message && this.red_point.set()
     }
     show_application = () => {
         this.status == 'pending'?

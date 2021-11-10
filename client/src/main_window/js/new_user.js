@@ -1,5 +1,6 @@
 // delete old info (list of friends, key, messages)
 data.main('delete_data')
+data.red_point.to_null()
 data.key_to_null()
 data.message.message_to_null()
 

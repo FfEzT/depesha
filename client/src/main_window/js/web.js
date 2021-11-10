@@ -143,6 +143,9 @@ let notice = a => {
         'empty_message': () => {
             text = 'Зачем вы хотите отправить воздух?'
         },
+        'empty_adress': () => {
+            text = 'Кому выхотите это отправить?'
+        },
         'new_message': () => {
             text = 'О, у вас новое сообщение!'
         }
@@ -178,7 +181,7 @@ let notice = a => {
         () => {
             go.classList.replace('close', 'first')
         },
-        1
+        50
     )
     setTimeout(
         () => {
@@ -273,6 +276,7 @@ let f_search_friend = () => {
 
 let load_friend = () => {
     const Friend = require('../js/Friend')
+    const list = data.red_point.open_file().new_message
 
     let temp = [...document.getElementsByClassName('el')]
     temp && !function() {
@@ -284,7 +288,7 @@ let load_friend = () => {
     // type: array(list of friends)
     data.main().forEach(
         value => {
-            friends[value.id] = new Friend(value.id, value.nickname, value.status, value.key)
+            friends[value.id] = new Friend(value.id, value.nickname, value.status, value.key, list[value.id])
         }
     )
 }
@@ -389,6 +393,8 @@ let chooseFriend = (str, id, key) => {
 
     // delete redPoint
     friends[id].red_point.delete()
+    // delete redPoint in files
+    data.red_point.delete(id)
 }
 // show message to right panel
 // in: obj(content, time, who_send(i || friend)), str('newMessage' || 'load'), bool
@@ -445,57 +451,61 @@ let renderMessage = (data, type, without_scroll) => {
 }
 
 let send_message = () => {
-    const input = chat.value.trim()
-
-    input != '' ?
+    user.friend.id? (
         !function() {
-            user.status != 'offline' ?
+            const input = chat.value.trim()
+
+            input != '' ? (
                 !function() {
-                    const time = new Date().toUTCString()
+                    user.status != 'offline' ?
+                        !function() {
+                            const time = new Date().toUTCString()
 
-                    // send data to server
-                    send_data(
-                        {
-                            type: 'message_to_friend',
-                            content: {
-                                who: user.data.id,
-                                to: user.friend.id,
-                                time,
-                                content: cipher.rsa.encrypt(input, user.friend.key)
-                            }
-                        }
-                    )
+                            // send data to server
+                            send_data(
+                                {
+                                    type: 'message_to_friend',
+                                    content: {
+                                        who: user.data.id,
+                                        to: user.friend.id,
+                                        time,
+                                        content: cipher.rsa.encrypt(input, user.friend.key)
+                                    }
+                                }
+                            )
 
-                    // write your message
-                    !function() {
-                        data.message.write(
-                            user.friend.id,
-                            {
-                                content: input,
-                                time,
-                                who_send: 'i'
-                            }
-                        )
-                    }()
-                    
-                    // render message
-                    !function() {
-                        renderMessage(
-                            {
-                                content: input,
-                                time,
-                                who_send: 'i'
-                            },
-                            'newMessage'
-                        )
-                    }()
+                            // write your message
+                            !function() {
+                                data.message.write(
+                                    user.friend.id,
+                                    {
+                                        content: input,
+                                        time,
+                                        who_send: 'i'
+                                    }
+                                )
+                            }()
 
-                    chat.value = ''
+                            // render message
+                            !function() {
+                                renderMessage(
+                                    {
+                                        content: input,
+                                        time,
+                                        who_send: 'i'
+                                    },
+                                    'newMessage'
+                                )
+                            }()
+
+                            chat.value = ''
+                        }()
+                        
+                    : notice('off_server')
                 }()
-                
-            : notice('off_server')
+            ) : notice('empty_message')
         }()
-    : notice('empty_message')
+    ) : notice('empty_adress')
 }
 
 // processing incoming messages from the server
@@ -530,7 +540,8 @@ const get_message = arr => {
                 )
             ) : (
                 notice('new_message'),
-                friends[from].red_point.set()
+                friends[from].red_point.set(),
+                data.red_point.set(from)
             )
         }
     )

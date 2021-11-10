@@ -27,6 +27,38 @@ let main = (a, b=[]) => {
     return data.friends
 }
 
+const red_point = {
+    open_file: () => {
+        return JSON.parse(
+            fs.readFileSync('./src/data/friend.json')
+        )
+    },
+    write_file: data => {
+        fs.writeFileSync(
+            './src/data/friend.json',
+            JSON.stringify(data, null, 2)
+        )
+    },
+    set: who => {
+        const data = red_point.open_file()
+        data.new_message[who] = true
+
+        red_point.write_file(data)
+    },
+    delete: who => {
+        const data = red_point.open_file()
+        delete data.new_message[who]
+        
+        red_point.write_file(data)
+    },
+    to_null: () => {
+        const data = red_point.open_file()
+        data.new_message = {}
+        
+        red_point.write_file(data)
+    }
+}
+
 // delete old info (key)
 let key_to_null = () => {
     fs.writeFile(
@@ -75,4 +107,9 @@ let message = {
     }
 }
 
-module.exports = {main, key_to_null, message}
+module.exports = {
+    main,
+    key_to_null,
+    message,
+    red_point
+}
