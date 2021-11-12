@@ -87,58 +87,56 @@ let auth = async (e, content, f) => {
     let people = await db.people().get_user(content.id)
     let type = 'auth'
 
-    people?
-        people.password == content.password ?
-            (
-                e.send(
-                    JSON.stringify(
-                        {
-                            type,
-                            result: 1,
-                            nick: people.nickname
-                        }
-                    )
-                ),
-                content.connect && !function() {
-                    db.people().update_status(content.id, 'online')
-                    clients[people.id] = e
+    people? (
+        people.password == content.password ? (
+            e.send(
+                JSON.stringify(
+                    {
+                        type,
+                        result: 1,
+                        nick: people.nickname
+                    }
+                )
+            ),
+            content.connect && !function() {
+                db.people().update_status(content.id, 'online')
+                clients[people.id] = e
 
-                    db.people().get_user(content.id).then(
-                        d => {
-                            d.changes_friends == 1 && !function() {
-                                send_friends(e, content.id)
-                                
-                                db.people().update_friends(content.id, 0)
-                            }()
-                            d.new_message == 1 && !function() {
-                                db.temp_mail.get(content.id).then(
-                                    data => {
-                                        e.send(
-                                            JSON.stringify(
-                                                {
-                                                    type: 'new_message',
-                                                    data
-                                                }
-                                            )
+                db.people().get_user(content.id).then(
+                    d => {
+                        d.changes_friends == 1 && !function() {
+                            send_friends(e, content.id)
+                            
+                            db.people().update_friends(content.id, 0)
+                        }()
+                        d.new_message == 1 && !function() {
+                            db.temp_mail.get(content.id).then(
+                                data => {
+                                    e.send(
+                                        JSON.stringify(
+                                            {
+                                                type: 'new_message',
+                                                data
+                                            }
                                         )
-                                    }
-                                )
-                                db.people().update_new_message(content.id, 0)
-                            }()
-                        }
-                    )
-                    
-                    e.on(
-                        'close',
-                        () => {
-                            db.people().update_status(people.id, 'offline')
-                            delete clients[people.id]
-                        }
-                    )
-                }()
-            )
-            : f(type)
-        : f(type)
+                                    )
+                                }
+                            )
+                            db.people().update_new_message(content.id, 0)
+                        }()
+                    }
+                )
+                
+                e.on(
+                    'close',
+                    () => {
+                        db.people().update_status(people.id, 'offline')
+                        delete clients[people.id]
+                    }
+                )
+            }()
+        ) : f(type)
+    ) : f(type)
 }
 let update_status = content => {
     db.people().update_status(content.id, content.status)
@@ -165,9 +163,7 @@ let do_friend = (e, content, f) => {
         'search': () => {
             db.people().get_user(content.to).then(
                 d => {
-                    !d?
-                        f('do_friends')
-                        :
+                    d? (
                         db.friends().write(content.from, content.to, 'waiting').then(
                             () => {
                                 db.friends().write(content.to, content.from, 'pending')
@@ -192,6 +188,7 @@ let do_friend = (e, content, f) => {
                         ).catch(
                             () => f('do_friends')
                         )
+                    ) : f('do_friends')
                 }
             )
         },
@@ -199,11 +196,7 @@ let do_friend = (e, content, f) => {
             db.friends().add_friend(content.from, content.to).then(
                 () => {
                     send_friends(e, content.from)
-
-                    clients[content.to]?
-                        send_friends(e, content.to)
-                        :
-                        db.people().update_friends(content.to, 1)
+                    clients[content.to]? send_friends(e, content.to) : db.people().update_friends(content.to, 1)
                 }
             )
         },
@@ -212,10 +205,7 @@ let do_friend = (e, content, f) => {
                 () => {
                     send_friends(e, content.from)
 
-                    clients[content.to]?
-                        send_friends(e, content.to)
-                        :
-                        db.people().update_friends(content.to, 1)
+                    clients[content.to]? send_friends(e, content.to) : db.people().update_friends(content.to, 1)
                 }
             )
         }
@@ -255,10 +245,7 @@ let generate_id = () => {
     let vowel = a => {
         let str = 'yuiiooaaeee'
     
-        a?
-            letter = 1
-            :
-            letter = 0
+        a? letter = 1 : letter = 0 // TODO u can remake this line
     
         let rand = Math.round(
             Math.random() * (str.length - 1)

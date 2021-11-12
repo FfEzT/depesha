@@ -30,12 +30,11 @@ let auth = (id, password, a=false) => {
 // send data to server
 // input Object (type: str, content: {})
 let send_data = data => {
-    user.status == 'offline' ?
-        web.notice('off_server')
-        :
+    user.status == 'offline' ? web.notice('off_server') : (
         ws.send(
             JSON.stringify(data)
         )
+    )
 }
 
 // info about user and his 'people'

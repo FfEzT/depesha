@@ -50,10 +50,7 @@ class Friend {
         this.has_new_message && this.red_point.set()
     }
     show_application = () => {
-        this.status == 'pending'?
-            this.show_pending()
-            :
-            this.show_waiting()
+        this.status == 'pending'? this.show_pending() : this.show_waiting()
 
         this.tab2.append(this.a)
         return

@@ -3,8 +3,7 @@ const wnd = require('electron').remote.getCurrentWindow()
 
 // window's btns
 const close_window = () => wnd.close()
-const full_window = () => wnd.isMaximized()?
-    wnd.unmaximize() : wnd.maximize()
+const full_window = () => wnd.isMaximized()? wnd.unmaximize() : wnd.maximize()
 const minimize_window = () => wnd.minimize()
 
 let friends = {}
@@ -14,8 +13,7 @@ let set_pos_for_bars = lr => {
     const el = document.getElementById(lr)
     const isOpen = el.classList.contains('focus')
 
-    isOpen?
-        el.classList.remove('focus') : el.classList.add('focus')
+    isOpen? el.classList.remove('focus') : el.classList.add('focus')
 }
 // checking whether the panel is fixed or not
 // in: str(leftBar || rightBar || down_panel)
@@ -78,10 +76,7 @@ let focus_blur = on => {
 // in: boolean(true/false)
 let focusBlur_right_bar = arg => {
     const el = document.getElementById('rightBar')
-    arg?
-        el.classList.add('focus')
-        :
-        el.classList.remove('focus')
+    arg? el.classList.add('focus') : el.classList.remove('focus')
     focus_blur(arg? 'focus':'blur')
 }
 
@@ -158,13 +153,12 @@ let notice = a => {
     const go_text = document.createElement('div')
     go_text.classList.add('text')
 
-    size?
-        go_text.style.fontSize = size : ''
+    size? go_text.style.fontSize = size : '' // TODO u cane remake this line
 
     go.prepend(go_text)
     go_text.innerHTML = text
 
-    // todo u can remake this part of the code
+    // TODO u can remake this part of the code
     document.getElementsByClassName('first')[0]? (
         document.getElementsByClassName('second')[0]? (
             document.getElementsByClassName('left')[0]? (
@@ -257,8 +251,7 @@ let f_search_friend = () => {
         return 0
     }
     
-    a.test(b)?
-        (
+    a.test(b)? (
             send_data(
                 {
                     type: 'do_friend',
@@ -270,8 +263,7 @@ let f_search_friend = () => {
                 }
             ),
             search_friend.value = ''
-        )
-        : notice('no_user')
+        ) : notice('no_user')
 }
 
 let load_friend = () => {
@@ -336,7 +328,7 @@ let chooseFriend = (str, id, key) => {
     document.getElementsByClassName('chat')[0].innerHTML = ''
 
     // load messages from file
-    !function() {
+    {
         user.friend.activeFriend = str
         user.friend.id = id
         user.friend.key = key
@@ -380,16 +372,16 @@ let chooseFriend = (str, id, key) => {
             }
             f()
         }
-    }()
+    }
 
     // change nickname in right panel
     document.getElementsByClassName('nick_text')[0].innerText = str
 
     // open panels
-    !function() {
+    {
         open_panels('rightBar')
         open_panels('down_panel')
-    }()
+    }
 
     // delete redPoint
     friends[id].red_point.delete()
@@ -457,7 +449,7 @@ let send_message = () => {
 
             input != '' ? (
                 !function() {
-                    user.status != 'offline' ?
+                    user.status != 'offline' ? (
                         !function() {
                             const time = new Date().toUTCString()
 
@@ -475,7 +467,7 @@ let send_message = () => {
                             )
 
                             // write your message
-                            !function() {
+                            {
                                 data.message.write(
                                     user.friend.id,
                                     {
@@ -484,10 +476,10 @@ let send_message = () => {
                                         who_send: 'i'
                                     }
                                 )
-                            }()
+                            }
 
                             // render message
-                            !function() {
+                            {
                                 renderMessage(
                                     {
                                         content: input,
@@ -496,12 +488,11 @@ let send_message = () => {
                                     },
                                     'newMessage'
                                 )
-                            }()
+                            }
 
                             chat.value = ''
                         }()
-                        
-                    : notice('off_server')
+                    ) : notice('off_server')
                 }()
             ) : notice('empty_message')
         }()

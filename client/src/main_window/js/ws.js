@@ -9,9 +9,7 @@ let main = () => {
     ws = new WebSocket('ws://localhost:5480') // todo change str
 
     ws.onopen = () => {
-        user.isConnection_closed?
-            window.location.reload()
-            :
+        !user.isConnection_closed? (
             !function() {
                 user.status = 'online'
                 trycatch()
@@ -26,35 +24,29 @@ let main = () => {
                         // like switch(){}
                         const bag = {
                             'auth': () => {
-                                a.result == '0' ?
-                                    (
-                                        // id, nickname, password = null, reload
-                                        user.data.id = '',
-                                        user.data.nickname = '',
-                                        user.data.password = '',
+                                a.result == '0' ? (
+                                    // id, nickname, password = null, reload
+                                    user.data.id = '',
+                                    user.data.nickname = '',
+                                    user.data.password = '',
+                                
+                                    fs.writeFileSync(
+                                        './src/data/user.json',
+                                        JSON.stringify(user.data)
+                                    ),
                                     
-                                        fs.writeFileSync(
-                                            './src/data/user.json',
-                                            JSON.stringify(user.data)
-                                        ),
-                                        
-                                        window.location.reload()
+                                    window.location.reload()
+                                ) : (
+                                    user.data.nickname = a.nick,
+                                    fs.writeFile(
+                                        './src/data/user.json',
+                                        JSON.stringify(user.data),
+                                        () => {}
                                     )
-                                    :
-                                    (
-                                        user.data.nickname = a.nick,
-                                        fs.writeFile(
-                                            './src/data/user.json',
-                                            JSON.stringify(user.data),
-                                            () => {}
-                                        )
-                                    )
+                                )
                             },
                             'do_friends': () => {
-                                a.result == '0' ?
-                                    web.notice('no_user')
-                                    :
-                                    web.notice('wait_for_confirmation')
+                                a.result == '0' ? web.notice('no_user') : web.notice('wait_for_confirmation')
                             },
                             'list_of_friends': () => {
                                 data.main('get_friends', a.data)
@@ -69,6 +61,7 @@ let main = () => {
                     auth(user.data.id, user.data.password, true)
                 )
             }()
+        ) : window.location.reload()
     }
     ws.onclose = () => {
         // reconnection every 10 sec

@@ -1,23 +1,21 @@
 let main = () => {
     web.notice('welcome')
 
-    user.isNewUser?
-        !function() {
-            require('../js/new_user')
-            setTimeout(
-                () => {
-                    web.notice('auth')
-                },
-                1500
-            )
-        }()
-        :
-        !function() {
-            // loading list of friends
-            web.load_friend()
-        }();
+    user.isNewUser? (
+        require('../js/new_user'),
+        setTimeout(
+            () => {
+                web.notice('auth')
+            },
+            1500
+        )
+    ) : (
+        // loading list of friends
+        web.load_friend()
+    )
 
-    !function() {
+    // load animation
+    {
         setTimeout(
             () => {
                 start.style.opacity = 0
@@ -30,7 +28,7 @@ let main = () => {
             },
             1000
         )
-    }()
+    }
 
     // final
     console.log('ready') // todo u can delete this line
