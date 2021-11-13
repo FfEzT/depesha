@@ -1,4 +1,4 @@
-let main = () => {
+const main = () => {
     web.notice('welcome')
 
     user.isNewUser? (

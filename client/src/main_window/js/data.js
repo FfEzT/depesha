@@ -1,7 +1,7 @@
 // this function manages data in the friend.json
 // input: str ('delete_data' || 'get_friends'), array(list of friends)
 // output: data.friends(array)
-let main = (a, b=[]) => {
+const main = (a, b=[]) => {
     // get data from friend.json
     // type: JSON
     let data = JSON.parse(
@@ -9,7 +9,7 @@ let main = (a, b=[]) => {
     )
     
     // like switch() {}
-    let bag = {
+    const bag = {
         'delete_data' : () => {
             data.friends = []
         },
@@ -60,7 +60,7 @@ const red_point = {
 }
 
 // delete old info (key)
-let key_to_null = () => {
+const key_to_null = () => {
     fs.writeFile(
         './src/data/private.key',
         '{}',
@@ -68,7 +68,7 @@ let key_to_null = () => {
     )
 }
 
-let message = {
+const message = {
     file: './src/data/message.json',
     // delete old info (messages)
     message_to_null: () => {

@@ -13,7 +13,7 @@ document.getElementsByClassName('right_panel')[0].remove()
 document.getElementsByClassName('down_panel')[0].remove()
 
 !function() {
-    let load_form_sign_up = () => {
+    const load_form_sign_up = () => {
         offline.remove()
     
         let grid = document.createElement('div'),
@@ -72,7 +72,7 @@ document.getElementsByClassName('down_panel')[0].remove()
                             border-radius: var(--border_round_2);\
                             cursor: pointer;'
         } 
-        let can_create = {
+        const can_create = {
             id: false,
             password: false
         }
@@ -106,8 +106,8 @@ document.getElementsByClassName('down_panel')[0].remove()
         password_.tabIndex = '-1'
     
         name.onblur = () => {
-            let a = /^[a-zA-Z0-9]{3,15}$/
-            let b = /^\d{3,15}$/
+            const a = /^[a-zA-Z0-9]{3,15}$/
+            const b = /^\d{3,15}$/
             let text = name.value
             
             !b.test(text)? 
@@ -290,7 +290,7 @@ document.getElementsByClassName('down_panel')[0].remove()
         }
         sign_in_.onclick = () => {
             // checking password
-            let a = /^\S{9,20}$/
+            const a = /^\S{9,20}$/
             a.test(password_.value)?
                 (
                     ws.onmessage = e => {
@@ -385,7 +385,7 @@ document.getElementsByClassName('down_panel')[0].remove()
             100
         );
     }
-    let checking_status = () => {
+    const checking_status = () => {
         if (user.status == 'online'){
             load_form_sign_up()
         }

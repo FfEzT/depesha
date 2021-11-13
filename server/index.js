@@ -10,13 +10,13 @@ const server = new ws.Server(
 )
 
 // list of connected clients
-let clients = {}
+const clients = {}
 
 // this f is called after the client connects to the server
-let connection_to_server = e => {
+const connection_to_server = e => {
     // send to client 'incorrect data'
     // input: str(values: auth || do_friends)
-    let notice_incorrect_data = type => {
+    const notice_incorrect_data = type => {
         e.send(
             JSON.stringify(
                 {
@@ -32,7 +32,7 @@ let connection_to_server = e => {
         data => {
             data = JSON.parse(data)
 
-            let cases = {
+            const cases = {
                 'sign_up': () => {
                     sign_up(e, data.content)
                 },
@@ -58,34 +58,31 @@ let connection_to_server = e => {
 }
 
 // for f:connection_to_server
-let sign_up = async (e, content) => {
-    let id = generate_id()
-    let check = await db.people().get_user(id)
+const sign_up = async (e, content) => {
+    const id = generate_id()
+    const check = await db.people().get_user(id)
 
-    check?
-        sign_up(e, content)
-        :
-        (
-            db.people().sign_up(id, content.nickname, content.password, content.public_key).then(
-                () => {
-                    e.send(
-                        JSON.stringify(
-                            {
-                                result: 1,
-                                id
-                            }
-                        )
+    check? sign_up(e, content) : (
+        db.people().sign_up(id, content.nickname, content.password, content.public_key).then(
+            () => {
+                e.send(
+                    JSON.stringify(
+                        {
+                            result: 1,
+                            id
+                        }
                     )
-                }
-            ),
-            db.friends().create_list(id)
-        )
+                )
+            }
+        ),
+        db.friends().create_list(id)
+    )
 }
-let auth = async (e, content, f) => {
+const auth = async (e, content, f) => {
     // data from DataBase
     // type: {object}
-    let people = await db.people().get_user(content.id)
-    let type = 'auth'
+    const people = await db.people().get_user(content.id)
+    const type = 'auth'
 
     people? (
         people.password == content.password ? (
@@ -138,12 +135,12 @@ let auth = async (e, content, f) => {
         ) : f(type)
     ) : f(type)
 }
-let update_status = content => {
+const update_status = content => {
     db.people().update_status(content.id, content.status)
 }
 // send list of friends to client
 // input: object(from WebSocket), str(id of client)
-let send_friends = (e, content) => {
+const send_friends = (e, content) => {
     db.friends().get_friends(content).then(
         data => {
             let a = JSON.stringify(
@@ -153,13 +150,13 @@ let send_friends = (e, content) => {
                 }
             )
 
-            let ws = clients[content] || e
+            const ws = clients[content] || e
             ws.send(a)
         }
     )
 }
-let do_friend = (e, content, f) => {
-    let bag = {
+const do_friend = (e, content, f) => {
+    const bag = {
         'search': () => {
             db.people().get_user(content.to).then(
                 d => {
@@ -215,7 +212,7 @@ let do_friend = (e, content, f) => {
 
 // send message to peoples
 // in: obj (from client)
-let send_message = data => {
+const send_message = data => {
     const man = clients[data.to]
 
     man? (
@@ -241,24 +238,24 @@ let send_message = data => {
 
 // generate future id for users
 // output str (lenght: 3-7)
-let generate_id = () => {
-    let vowel = a => {
-        let str = 'yuiiooaaeee'
+const generate_id = () => {
+    const vowel = a => {
+        const str = 'yuiiooaaeee'
     
         a? letter = 1 : letter = 0 // TODO u can remake this line
     
-        let rand = Math.round(
+        const rand = Math.round(
             Math.random() * (str.length - 1)
         )
     
         return str[rand]
     }
-    let consonant = () => {
-        let str = 'ttttnnnssshhrrddllccmmwwffggppbbvvkkxjqz'
+    const consonant = () => {
+        const str = 'ttttnnnssshhrrddllccmmwwffggppbbvvkkxjqz'
     
         letter = 2
     
-        let rand = Math.round(
+        const rand = Math.round(
             Math.random() * (str.length - 1)
         )
     
@@ -272,11 +269,11 @@ let generate_id = () => {
     
     for (let i = 0; i < value; i++) {
         if (!letter || letter == 0) {
-            let first_rand = Math.round(
+            const first_rand = Math.round(
                 Math.random()
             )
     
-            let bag = {
+            const bag = {
                 0: () => {
                     result += vowel(true)
                 },

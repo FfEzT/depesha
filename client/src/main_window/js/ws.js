@@ -1,5 +1,5 @@
-let main = () => {
-    let trycatch = () => {
+const main = () => {
+    const trycatch = () => {
         try {
             web.change_status()
         }

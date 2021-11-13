@@ -3,8 +3,8 @@ const sql = require('sqlite3').verbose()
 
 let db = new sql.Database('./data/main.sqlite')
 
-let people = () => {
-    let sign_up = (id, nickname, password, key) => {
+const people = () => {
+    const sign_up = (id, nickname, password, key) => {
         return new Promise(
             (resolve, reject) => {
                 db.run(
@@ -18,7 +18,7 @@ let people = () => {
             }
         )
     }
-    let get_user = id => {
+    const get_user = id => {
         return new Promise(
             resolve => {
                 db.get(
@@ -34,22 +34,22 @@ let people = () => {
 
     // change status of client
     // input: str(id of client), str(online || offline || idle)
-    let update_status = (who, status) => {
-        let str = `UPDATE main SET status = '${status}' WHERE id = '${who}'`
+    const update_status = (who, status) => {
+        const str = `UPDATE main SET status = '${status}' WHERE id = '${who}'`
         db.run(str)
     }
 
     // change status of client
     // input: str(id of client), int (0 || 1)
-    let update_friends = (who, status) => {
-        let str = `UPDATE main SET changes_friends = ${status} WHERE id = '${who}'`
+    const update_friends = (who, status) => {
+        const str = `UPDATE main SET changes_friends = ${status} WHERE id = '${who}'`
         db.run(str)
     }
 
     // change status of new_message
     // in: str (id of people), int (0 = there isn't new message, and 1 = there is new message)
-    let update_new_message = (who, status) => {
-        let str = `UPDATE main SET new_message = '${status}' WHERE id = '${who}'`
+    const update_new_message = (who, status) => {
+        const str = `UPDATE main SET new_message = '${status}' WHERE id = '${who}'`
         db.run(str)
     }
 
@@ -61,7 +61,7 @@ let people = () => {
         update_new_message
     }
 }
-let temp_mail = {
+const temp_mail = {
     // in: str (id of people)
     get: id => {
         return new Promise(
@@ -86,15 +86,15 @@ let temp_mail = {
         db.run(str)
     }
 }
-let friends = () => {
-    let create_list = id => {
-        let str = `CREATE TABLE ${id} (id TINYTEXT PRIMARY KEY, status TINYTEXT)`
+const friends = () => {
+    const create_list = id => {
+        const str = `CREATE TABLE ${id} (id TINYTEXT PRIMARY KEY, status TINYTEXT)`
         db.run(str)
     }
-    let get_friends = id => {
+    const get_friends = id => {
         return new Promise(
             resolve => {
-                let str = `SELECT ${id}.id, main.nickname, ${id}.status, main.key
+                const str = `SELECT ${id}.id, main.nickname, ${id}.status, main.key
                             FROM ${id}
                             JOIN main
                             ON ${id}.id = main.id
@@ -112,10 +112,10 @@ let friends = () => {
 
     // write to db new friend or update their status
     // input: str, str, str(values: friend || not_friend || pending || waiting), f (incorrect data), e(ws)
-    let write = (from, to, status) => {
+    const write = (from, to, status) => {
         return new Promise(
             (resolve, reject) => {
-                let str = `INSERT INTO ${from} VALUES (?, ?)`
+                const str = `INSERT INTO ${from} VALUES (?, ?)`
 
                 db.run(
                     str,
@@ -131,11 +131,11 @@ let friends = () => {
 
     // update status of friends to 'friend'
     // input: str, str
-    let add_friend = (whom, who) => {
+    const add_friend = (whom, who) => {
         return new Promise(
             resolve => {
-                let str_1 = `UPDATE ${whom} SET status = "friend" WHERE id = '${who}'`
-                let str_2 = `UPDATE ${who} SET status = "friend" WHERE id = '${whom}'`
+                const str_1 = `UPDATE ${whom} SET status = "friend" WHERE id = '${who}'`
+                const str_2 = `UPDATE ${who} SET status = "friend" WHERE id = '${whom}'`
 
                 db.run(str_1)
                 db.run(str_2)
@@ -147,7 +147,7 @@ let friends = () => {
 
     // delete people from list of friends
     // input: str, str
-    let delete_friend = (whom, who) => {
+    const delete_friend = (whom, who) => {
         return new Promise(
             resolve => {
                 let str_1 = `DELETE FROM ${whom} WHERE id = '${who}'`

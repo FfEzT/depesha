@@ -4,12 +4,12 @@ const cryptico = require('../js/cryptico')
 // hashing str
 // in: str
 // out: str
-let hashing = str => {
+const hashing = str => {
     let a = crypto.scryptSync(str, str, 32).toString('hex')
     return crypto.scryptSync(a, a, 32).toString('hex')
 }
 
-let rsa = {
+const rsa = {
     create_private: pass_phrase => {
         return cryptico.generateRSAKey(pass_phrase, 1024)
     },

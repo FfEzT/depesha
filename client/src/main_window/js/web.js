@@ -6,10 +6,10 @@ const close_window = () => wnd.close()
 const full_window = () => wnd.isMaximized()? wnd.unmaximize() : wnd.maximize()
 const minimize_window = () => wnd.minimize()
 
-let friends = {}
+const friends = {}
 
 // input: str(leftBar || rightBar || down_panel)
-let set_pos_for_bars = lr => {
+const set_pos_for_bars = lr => {
     const el = document.getElementById(lr)
     const isOpen = el.classList.contains('focus')
 
@@ -18,10 +18,10 @@ let set_pos_for_bars = lr => {
 // checking whether the panel is fixed or not
 // in: str(leftBar || rightBar || down_panel)
 // out: boolean (true || false)
-let check_pos_for_bars = str => {
+const check_pos_for_bars = str => {
     return document.getElementById(str).classList.contains('focus')
 }
-let roll_down_all = () => {
+const roll_down_all = () => {
     const lBar = document.getElementById('leftBar')
     const rBar = document.getElementById('rightBar')
     const dBar = document.getElementById('down_panel')
@@ -35,7 +35,7 @@ let roll_down_all = () => {
     dIsOpen && set_pos_for_bars('down_panel')
 }
 
-let hot_key = e => {
+const hot_key = e => {
     const a = {
         // arrow left
         37: () => {
@@ -62,7 +62,7 @@ let hot_key = e => {
 }
 
 // for serching
-let focus_blur = on => {
+const focus_blur = on => {
     const a = {
         'focus': () => {
             document.querySelector('body').setAttribute('onkeyup', '')
@@ -74,7 +74,7 @@ let focus_blur = on => {
     a[on] && a[on]()
 }
 // in: boolean(true/false)
-let focusBlur_right_bar = arg => {
+const focusBlur_right_bar = arg => {
     const el = document.getElementById('rightBar')
     arg? el.classList.add('focus') : el.classList.remove('focus')
     focus_blur(arg? 'focus':'blur')
@@ -82,7 +82,7 @@ let focusBlur_right_bar = arg => {
 
 // create notice in app (top-left)
 // input: str (there are values in var bag)
-let notice = a => {
+const notice = a => {
     const wow = document.getElementsByClassName('notice')[0]
     let text, size
 
@@ -191,7 +191,7 @@ let notice = a => {
     )
 }
 
-let change_status = () => {
+const change_status = () => {
     const object = document.getElementById('status')
     const text_of_object = document.getElementById('text_of_status')
 
@@ -212,7 +212,7 @@ let change_status = () => {
 
     a[user.status] && a[user.status]()
 }
-let change_status_from_profile = () => {
+const change_status_from_profile = () => {
     const a = {
         'online': () => {
             user.status = 'idle'
@@ -237,7 +237,7 @@ let change_status_from_profile = () => {
     )
 }
 
-let f_search_friend = () => {
+const f_search_friend = () => {
     const a = /^[a-zA-Z]{3,10}$/
     const b = search_friend.value.toLowerCase()
 
@@ -266,7 +266,7 @@ let f_search_friend = () => {
         ) : notice('no_user')
 }
 
-let load_friend = () => {
+const load_friend = () => {
     const Friend = require('../js/Friend')
     const list = data.red_point.open_file().new_message
 
@@ -287,7 +287,7 @@ let load_friend = () => {
 
 // send request to delete friend to server
 // input: str(id of friend, who we want to delete)
-let delete_friend = str => {
+const delete_friend = str => {
     send_data(
         {
             type: 'do_friend',
@@ -302,7 +302,7 @@ let delete_friend = str => {
 
 // send request to add friend to server
 // input: str(id of friend, who we want to add)
-let add_friend = str => {
+const add_friend = str => {
     send_data(
         {
             type: 'do_friend',
@@ -317,7 +317,7 @@ let add_friend = str => {
 
 // choose friend to chat with him
 // in: str(nickname of friend)
-let chooseFriend = (str, id, key) => {
+const chooseFriend = (str, id, key) => {
     // open panel
     // in: str(rightBar || down_panel)
     const open_panels = a => {
@@ -390,7 +390,7 @@ let chooseFriend = (str, id, key) => {
 }
 // show message to right panel
 // in: obj(content, time, who_send(i || friend)), str('newMessage' || 'load'), bool
-let renderMessage = (data, type, without_scroll) => {
+const renderMessage = (data, type, without_scroll) => {
     const a = document.getElementsByClassName('chat')[0]
     const b = document.createElement('div')
 
@@ -442,7 +442,7 @@ let renderMessage = (data, type, without_scroll) => {
     )
 }
 
-let send_message = () => {
+const send_message = () => {
     user.friend.id? (
         !function() {
             const input = chat.value.trim()

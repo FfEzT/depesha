@@ -14,7 +14,7 @@ connection.main()
 
 // send id and password for auth
 // in: str, str, bool
-let auth = (id, password, a=false) => {
+const auth = (id, password, a=false) => {
     send_data(
         {
             type: 'auth',
@@ -29,7 +29,7 @@ let auth = (id, password, a=false) => {
 
 // send data to server
 // input Object (type: str, content: {})
-let send_data = data => {
+const send_data = data => {
     user.status == 'offline' ? web.notice('off_server') : (
         ws.send(
             JSON.stringify(data)
@@ -38,7 +38,7 @@ let send_data = data => {
 }
 
 // info about user and his 'people'
-let user = {
+const user = {
     status: 'offline',
     isNewUser: false,
     isConnection_closed: false,
