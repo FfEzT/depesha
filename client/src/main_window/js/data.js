@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 // this function manages data in the friend.json
 // input: str ('delete_data' || 'get_friends'), array(list of friends)
 // output: data.friends(array)
@@ -22,9 +24,35 @@ const main = (a, b=[]) => {
     // write data to friend.json
     fs.writeFileSync(
         './src/data/friend.json',
-        JSON.stringify(data, null, 2) // todo before publishing remove last 2 arguments
+        JSON.stringify(data)  // todo before publishing remove last 2 arguments
     )
     return data.friends
+}
+
+const get_info = () => {
+    return JSON.parse(
+        fs.readFileSync('./src/data/user.json')
+    )
+}
+
+const write_user_data = () => {
+    fs.writeFileSync(
+        './src/data/user.json',
+        JSON.stringify(user.data)
+    )
+}
+
+const get_key = () => {
+    return fs.readFileSync('./src/data/private.key')
+}
+
+const write_key = key_to_write => {
+    fs.writeFileSync(
+        './src/data/private.key',
+        JSON.stringify(
+            key_to_write
+        )
+    )
 }
 
 const red_point = {
@@ -36,7 +64,7 @@ const red_point = {
     write_file: data => {
         fs.writeFileSync(
             './src/data/friend.json',
-            JSON.stringify(data, null, 2)
+            JSON.stringify(data)
         )
     },
     set: who => {
@@ -102,7 +130,7 @@ const message = {
 
         fs.writeFileSync(
             message.file,
-            JSON.stringify(data, null, 2) // todo before publishing remove last 2 arguments
+            JSON.stringify(data)
         )
     }
 }
@@ -111,5 +139,9 @@ module.exports = {
     main,
     key_to_null,
     message,
-    red_point
+    red_point,
+    get_info,
+    write_user_data,
+    get_key,
+    write_key
 }

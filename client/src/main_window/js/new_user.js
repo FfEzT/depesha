@@ -166,10 +166,7 @@ document.getElementsByClassName('down_panel')[0].remove()
                                 cipher.hashing(hash)
                             )
     
-                            fs.writeFileSync(
-                                './src/data/private.key',
-                                JSON.stringify(key)
-                            )
+                            data.write_key(key)
                             
                             ws.onmessage = e => {
                                 let a = JSON.parse(e.data)
@@ -180,11 +177,7 @@ document.getElementsByClassName('down_panel')[0].remove()
                                     user.data.nickname = name.value
                                     user.data.password = cipher.hashing(password.value)
                                 
-                                    fs.writeFile(
-                                        './src/data/user.json',
-                                        JSON.stringify(user.data),
-                                        () => {}
-                                    )
+                                    data.write_user_data()
                                     
                                     // show id
                                     let bg = document.createElement('div')
@@ -302,23 +295,13 @@ document.getElementsByClassName('down_panel')[0].remove()
                                     let key_to_write = cipher.rsa.create_private(
                                         cipher.hashing(hash)
                                     )
-    
                                     // write data about user (user.json)
                                     user.data.id = id.value
                                     user.data.nickname = b.nick
                                     user.data.password = hash
     
-                                    fs.writeFileSync(
-                                        './src/data/user.json',
-                                        JSON.stringify(user.data)
-                                    )
-    
-                                    fs.writeFileSync(
-                                        './src/data/private.key',
-                                        JSON.stringify(
-                                            key_to_write
-                                        )
-                                    )
+                                    data.write_user_data()
+                                    data.write_key(key_to_write)
     
                                     ws.onmessage = e => {
                                         let a = JSON.parse(e.data)

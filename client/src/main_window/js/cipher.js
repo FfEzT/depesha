@@ -22,8 +22,10 @@ const rsa = {
     decrypt: str => {
         return cryptico.decrypt(str, user.key).plaintext
     },
-    import_private: obj => {
-        return cryptico.RSAKey.parse(obj)
+    import_private: () => {
+        return cryptico.RSAKey.parse(
+            data.get_key()
+        )
     }
 }
 

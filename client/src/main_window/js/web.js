@@ -153,21 +153,22 @@ const notice = a => {
     const go_text = document.createElement('div')
     go_text.classList.add('text')
 
-    size? go_text.style.fontSize = size : '' // TODO u cane remake this line
+    size? go_text.style.fontSize = size : ''
 
     go.prepend(go_text)
     go_text.innerHTML = text
 
-    // TODO u can remake this part of the code
-    document.getElementsByClassName('first')[0]? (
-        document.getElementsByClassName('second')[0]? (
-            document.getElementsByClassName('left')[0]? (
+    if (document.getElementsByClassName('first')[0]) {
+        if (document.getElementsByClassName('second')[0]) {
+            if (document.getElementsByClassName('left')[0]) {
                 document.getElementsByClassName('left')[0].remove()
-            ):'',
+            }
+
             document.getElementsByClassName('second')[0].classList.add('left')
-        ):'',
+        }
+
         document.getElementsByClassName('first')[0].classList.replace('first', 'second')
-    ):'';
+    }
 
     wow.append(go)
 
@@ -335,36 +336,25 @@ const chooseFriend = (str, id, key) => {
 
         const messages = data.message.get(id)
         const win = document.getElementsByClassName('chat')[0]
+        win.onscroll = 0
 
         if (messages) {
             let index_of_messages = messages.length - 1
 
-            // todo you can optimize this code
             // send obj to render
-            // in: int
             const f = () => {
                 if (index_of_messages >= 0) {
                     if (win.scrollTop <= 300) {
                         renderMessage(messages[index_of_messages], 'load')
-                        setTimeout(
-                            () => {
-                                --index_of_messages
-                                f()
-                            },
-                            10 // todo u can change this value
-                        )
+                        --index_of_messages
+                        f()
                     }
                     else {
                         win.onscroll = () => {
                             if (win.scrollTop <= 300 && index_of_messages >= 0) {
                                 renderMessage(messages[index_of_messages], 'load', true)
-                                setTimeout(
-                                    () => {
-                                        --index_of_messages
-                                        f()
-                                    },
-                                    10 // todo u can change this value
-                                )
+                                --index_of_messages
+                                f()
                             }
                         }
                     }

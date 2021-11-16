@@ -30,19 +30,13 @@ const main = () => {
                                     user.data.nickname = '',
                                     user.data.password = '',
                                 
-                                    fs.writeFileSync(
-                                        './src/data/user.json',
-                                        JSON.stringify(user.data)
-                                    ),
+                                    data.write_user_data(),
                                     
                                     window.location.reload()
                                 ) : (
                                     user.data.nickname = a.nick,
-                                    fs.writeFile(
-                                        './src/data/user.json',
-                                        JSON.stringify(user.data),
-                                        () => {}
-                                    )
+                                    
+                                    data.write_user_data()
                                 )
                             },
                             'do_friends': () => {

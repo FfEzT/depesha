@@ -242,7 +242,8 @@ const generate_id = () => {
     const vowel = a => {
         const str = 'yuiiooaaeee'
     
-        a? letter = 1 : letter = 0 // TODO u can remake this line
+
+        letter = a? 1 : 0
     
         const rand = Math.round(
             Math.random() * (str.length - 1)
