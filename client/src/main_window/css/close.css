@@ -7,11 +7,11 @@
     position: absolute;
     left: 50vw;
     top: 50vh;
-    width: min(15vw,30vh);
-    height: 9vh;
-    background-image: url(../materials/picture/welcome.svg);
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
     transform: translate(-50%, -50%);
+    text-transform: uppercase;
     opacity: 0.3;
+    font-family: text;
+    color: var(--color_line);
+    font-size: min(2.6vw, 5vh);
+    user-select: none;
 }
