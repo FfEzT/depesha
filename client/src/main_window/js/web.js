@@ -419,14 +419,12 @@ const renderMessage = (data, type, without_scroll) => {
     !without_scroll && a.scrollTo(
         {
             top: a.scrollHeight
-            // behavior: 'smooth' // if use smooth-mode u can get a bug (loading messages)
         }
     )
 
     setTimeout(
         () => {
             b.style.opacity = 100
-            b.style.top = 0
         },
         10
     )

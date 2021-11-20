@@ -10,8 +10,7 @@
     border-radius: min(1.5vh, 0.7vw);
     background-color: var(--color_3_active);
     border-bottom: var(--color_line) 3px solid;
-    transition: top .25s cubic-bezier(0.42,0,0.58,1), opacity .25s cubic-bezier(0.42,0,0.58,1);
-    top: 1vh;
+    transition: opacity .25s cubic-bezier(0.42,0,0.58,1);
     opacity: 0;
 }
 .right_panel > .content > .chat > .block > .time {
