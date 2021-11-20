@@ -4,6 +4,12 @@ const sql = require('sqlite3').verbose()
 let db = new sql.Database('./data/main.sqlite')
 
 const people = () => {
+    /**
+     * @param {string} id 
+     * @param {string} nickname 
+     * @param {string} password 
+     * @param {string} key public key
+     */
     const sign_up = (id, nickname, password, key) => {
         return new Promise(
             (resolve, reject) => {
@@ -18,6 +24,9 @@ const people = () => {
             }
         )
     }
+    /**
+        @param {string} id 
+     */
     const get_user = id => {
         return new Promise(
             resolve => {
@@ -32,22 +41,31 @@ const people = () => {
         )
     }
 
-    // change status of client
-    // input: str(id of client), str(online || offline || idle)
+    /**
+     * change status of client
+     * @param {string} who id
+     * @param {string} status (online || offline || idle)
+     */
     const update_status = (who, status) => {
         const str = `UPDATE main SET status = '${status}' WHERE id = '${who}'`
         db.run(str)
     }
 
-    // change status of client
-    // input: str(id of client), int (0 || 1)
+    /**
+     * change status of client
+     * @param {string} who id
+     * @param {number} status (0 || 1)
+     */
     const update_friends = (who, status) => {
         const str = `UPDATE main SET changes_friends = ${status} WHERE id = '${who}'`
         db.run(str)
     }
 
-    // change status of new_message
-    // in: str (id of people), int (0 = there isn't new message, and 1 = there is new message)
+    /**
+     * change status of new_message
+     * @param {string} who 
+     * @param {number} status (0 = there isn't new message, and 1 = there is new message)
+     */
     const update_new_message = (who, status) => {
         const str = `UPDATE main SET new_message = '${status}' WHERE id = '${who}'`
         db.run(str)
@@ -62,7 +80,11 @@ const people = () => {
     }
 }
 const temp_mail = {
-    // in: str (id of people)
+    /**
+     * get data from db
+     * @param {string} id 
+     * @returns {Promise<JSON>}
+     */
     get: id => {
         return new Promise(
             resolve => {
@@ -79,18 +101,32 @@ const temp_mail = {
             }
         )
     },
-    // write data to db
-    // in: str, str, str, str
+    /**
+     * write data to db
+     * @param {string} id 
+     * @param {string} who id
+     * @param {string} time 
+     * @param {string} content message
+     */
     set: (id, who, time, content) => {
         const str = `INSERT INTO temp_message values ('${id}', '${who}', '${time}', '${content}')`
         db.run(str)
     }
 }
 const friends = () => {
+    /**
+     * creating table in database
+     * @param {string} id
+     */
     const create_list = id => {
         const str = `CREATE TABLE ${id} (id TINYTEXT PRIMARY KEY, status TINYTEXT)`
         db.run(str)
     }
+    /**
+     * get list of friends from table
+     * @param {string} id 
+     * @returns {Promise<JSON}
+     */
     const get_friends = id => {
         return new Promise(
             resolve => {
@@ -110,8 +146,13 @@ const friends = () => {
         )
     }
 
-    // write to db new friend or update their status
-    // input: str, str, str(values: friend || not_friend || pending || waiting), f (incorrect data), e(ws)
+    /**
+        write to db new friend or update their status
+        @param {string} from id
+        @param {string} to id
+        @param {string} status (values: friend || not_friend || pending || waiting)
+        @returns {Promise<void>}
+     */
     const write = (from, to, status) => {
         return new Promise(
             (resolve, reject) => {
@@ -129,8 +170,12 @@ const friends = () => {
         )
     }
 
-    // update status of friends to 'friend'
-    // input: str, str
+    /**
+     * update status of new_friend
+     * @param {string} whom id
+     * @param {string} who id
+     * @returns {Promise<void>}
+     */
     const add_friend = (whom, who) => {
         return new Promise(
             resolve => {
@@ -145,8 +190,12 @@ const friends = () => {
         )
     }
 
-    // delete people from list of friends
-    // input: str, str
+    /**
+     * delete people from list of friends
+     * @param {string} whom id
+     * @param {string} who id
+     * @returns {Promise<void>}
+     */
     const delete_friend = (whom, who) => {
         return new Promise(
             resolve => {

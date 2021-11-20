@@ -12,7 +12,10 @@ const server = new ws.Server(
 // list of connected clients
 const clients = {}
 
-// this f is called after the client connects to the server
+/**
+ * this f is called after the client connects to the server
+ * @param {JSON} e websocket
+ */
 const connection_to_server = e => {
     // send to client 'incorrect data'
     // input: str(values: auth || do_friends)
