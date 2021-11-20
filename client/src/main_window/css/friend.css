@@ -41,9 +41,6 @@
     padding: .25vw;
     text-decoration: none;
 }
-.el > .ell > .nickname:hover {
-    text-decoration: underline;
-}
 .el > .ell > .u:hover {
     text-decoration: none;
 }

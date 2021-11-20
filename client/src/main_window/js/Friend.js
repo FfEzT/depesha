@@ -34,7 +34,7 @@ class Friend {
                         <div class="red_point" style="transform: scale(0)"></div>
                     </div>
                 </div>
-                <div class="ell">
+                <div class="ell e">
                     <div class="center nickname" onclick="web.notice('off_work')">${this.nickname}</div>
                 </div>
                 <div class="ell e" onclick="web.notice('off_work')">
@@ -51,20 +51,18 @@ class Friend {
     }
     show_application = () => {
         this.status == 'pending'? this.show_pending() : this.show_waiting()
-
+        this.a.style.gridTemplateColumns = '0.5fr 10vw 2fr 4vw 4vw'
         this.tab2.append(this.a)
-        return
     }
     show_pending = () => {
-        this.a.style.gridTemplateColumns = '.5fr 1fr 2fr .25fr .25fr'
         this.a.innerHTML = `
             <div class="ell">
                 <div class="center picture"></div>
             </div>
-            <div class="ell e">
+            <div class="ell e" onclick="web.notice('off_work')">
                 <div class="center nickname u">${this.id}</div>
             </div>
-            <div class="ell">
+            <div class="ell e" onclick="web.notice('off_work')">
                 <div class="center nickname u">${this.nickname}</div>
             </div>
             <div class="ell e" onclick="web.add_friend('${this.id}')">
@@ -75,18 +73,17 @@ class Friend {
             </div>`
     }
     show_waiting = () => {
-        this.a.style.gridTemplateColumns = '.5fr 1fr 1fr .5fr'
         this.a.innerHTML = `
             <div class="ell">
                 <div class="center picture"></div>
             </div>
-            <div class="ell">
+            <div class="ell e" onclick="web.notice('off_work')">
                 <div class="center nickname u">${this.id}</div>
             </div>
-            <div class="ell">
+            <div class="ell e" onclick="web.notice('off_work')">
                 <div class="center nickname u">${this.nickname}</div>
             </div>
-            <div class="ell e" onclick="web.delete_friend('${this.id}')">
+            <div class="ell e" onclick="web.delete_friend('${this.id}')" style="grid-column: 4/6;">
                 <div class="button center delete"></div>
             </div>`
     }
