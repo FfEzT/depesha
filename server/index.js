@@ -63,10 +63,10 @@ const connection_to_server = e => {
 // for f:connection_to_server
 const sign_up = async (e, content) => {
     const id = generate_id()
-    const check = await db.people().get_user(id)
+    const check = await db.people.get_user(id)
 
     check? sign_up(e, content) : (
-        db.people().sign_up(id, content.nickname, content.password, content.public_key).then(
+        db.people.sign_up(id, content.nickname, content.password, content.public_key).then(
             () => {
                 e.send(
                     JSON.stringify(
@@ -78,13 +78,13 @@ const sign_up = async (e, content) => {
                 )
             }
         ),
-        db.friends().create_list(id)
+        db.friends.create_list(id)
     )
 }
 const auth = async (e, content, f) => {
     // data from DataBase
     // type: {object}
-    const people = await db.people().get_user(content.id)
+    const people = await db.people.get_user(content.id)
     const type = 'auth'
 
     people? (
@@ -99,15 +99,15 @@ const auth = async (e, content, f) => {
                 )
             ),
             content.connect && !function() {
-                db.people().update_status(content.id, 'online')
+                db.people.update_status(content.id, 'online')
                 clients[people.id] = e
 
-                db.people().get_user(content.id).then(
+                db.people.get_user(content.id).then(
                     d => {
                         d.changes_friends == 1 && !function() {
                             send_friends(e, content.id)
                             
-                            db.people().update_friends(content.id, 0)
+                            db.people.update_friends(content.id, 0)
                         }()
                         d.new_message == 1 && !function() {
                             db.temp_mail.get(content.id).then(
@@ -122,7 +122,7 @@ const auth = async (e, content, f) => {
                                     )
                                 }
                             )
-                            db.people().update_new_message(content.id, 0)
+                            db.people.update_new_message(content.id, 0)
                         }()
                     }
                 )
@@ -130,7 +130,7 @@ const auth = async (e, content, f) => {
                 e.on(
                     'close',
                     () => {
-                        db.people().update_status(people.id, 'offline')
+                        db.people.update_status(people.id, 'offline')
                         delete clients[people.id]
                     }
                 )
@@ -139,12 +139,12 @@ const auth = async (e, content, f) => {
     ) : f(type)
 }
 const update_status = content => {
-    db.people().update_status(content.id, content.status)
+    db.people.update_status(content.id, content.status)
 }
 // send list of friends to client
 // input: object(from WebSocket), str(id of client)
 const send_friends = (e, content) => {
-    db.friends().get_friends(content).then(
+    db.friends.get_friends(content).then(
         data => {
             let a = JSON.stringify(
                 {
@@ -161,19 +161,16 @@ const send_friends = (e, content) => {
 const do_friend = (e, content, f) => {
     const bag = {
         'search': () => {
-            db.people().get_user(content.to).then(
+            db.people.get_user(content.to).then(
                 d => {
                     d? (
-                        db.friends().write(content.from, content.to, 'waiting').then(
+                        db.friends.write(content.from, content.to, 'waiting').then(
                             () => {
-                                db.friends().write(content.to, content.from, 'pending')
+                                db.friends.write(content.to, content.from, 'pending')
 
                                 send_friends(e, content.from)
 
-                                clients[content.to]?
-                                    send_friends(e, content.to)
-                                    :
-                                    db.people().update_friends(content.to, 1)
+                                clients[content.to]? send_friends(e, content.to) : db.people.update_friends(content.to, 1)
 
                                 e.send(
                                     JSON.stringify(
@@ -193,19 +190,19 @@ const do_friend = (e, content, f) => {
             )
         },
         'add': () => {
-            db.friends().add_friend(content.from, content.to).then(
+            db.friends.add_friend(content.from, content.to).then(
                 () => {
                     send_friends(e, content.from)
-                    clients[content.to]? send_friends(e, content.to) : db.people().update_friends(content.to, 1)
+                    clients[content.to]? send_friends(e, content.to) : db.people.update_friends(content.to, 1)
                 }
             )
         },
         'delete': () => {
-            db.friends().delete_friend(content.from, content.to).then(
+            db.friends.delete_friend(content.from, content.to).then(
                 () => {
                     send_friends(e, content.from)
 
-                    clients[content.to]? send_friends(e, content.to) : db.people().update_friends(content.to, 1)
+                    clients[content.to]? send_friends(e, content.to) : db.people.update_friends(content.to, 1)
                 }
             )
         }
@@ -234,7 +231,7 @@ const send_message = data => {
             )
         )
     ) : (
-        db.people().update_new_message(data.to, 1),
+        db.people.update_new_message(data.to, 1),
         db.temp_mail.set(data.to, data.who, data.time, data.content)
     )
 }
