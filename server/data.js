@@ -2,17 +2,20 @@
 const sql = require('sqlite3').verbose()
 
 const people = {
-    db: new sql.Database('./data/main.sqlite'),
+    db: './data/main.sql',
     /**
-     * @param {string} id 
-     * @param {string} nickname 
-     * @param {string} password 
+     * @param {string} id
+     * @param {string} nickname
+     * @param {string} password
      * @param {string} key public key
      */
     sign_up: (id, nickname, password, key) => {
         return new Promise(
             (resolve, reject) => {
-                people.db.run(
+                // open database
+                const db = new sql.Database(people.db)
+
+                db.run(
                     'INSERT INTO main values (?, ?, ?, ?, "offline", 0, 0)',
                     [id, nickname, password, key],
                     err => {
@@ -20,6 +23,9 @@ const people = {
                         resolve()
                     }
                 )
+
+                // closing database
+                db.close()
             }
         )
     },
@@ -29,13 +35,19 @@ const people = {
     get_user: id => {
         return new Promise(
             resolve => {
-                people.db.get(
+                // open database
+                const db = new sql.Database(people.db)
+
+                db.get(
                     'SELECT * FROM main WHERE id = ?',
                     [id],
                     (err, data) => {
                         resolve(data)
                     }
                 )
+
+                // closing database
+                db.close()
             }
         )
     },
@@ -45,8 +57,14 @@ const people = {
      * @param {string} status (online || offline || idle)
      */
     update_status: (who, status) => {
+        // open database
+        const db = new sql.Database(people.db)
+        
         const str = `UPDATE main SET status = '${status}' WHERE id = '${who}'`
-        people.db.run(str)
+        db.run(str)
+
+        // closing database
+        db.close()
     },
     /**
      * change status of client
@@ -54,8 +72,14 @@ const people = {
      * @param {number} status (0 || 1)
      */
     update_friends: (who, status) => {
+        // open database
+        const db = new sql.Database(people.db)
+
         const str = `UPDATE main SET changes_friends = ${status} WHERE id = '${who}'`
-        people.db.run(str)
+        db.run(str)
+
+        // closing database
+        db.close()
     },
     /**
      * change status of new_message
@@ -63,19 +87,31 @@ const people = {
      * @param {number} status (0 = there isn't new message, and 1 = there is new message)
      */
     update_new_message: (who, status) => {
+        // open database
+        const db = new sql.Database(people.db)
+
         const str = `UPDATE main SET new_message = '${status}' WHERE id = '${who}'`
-        people.db.run(str)
+        db.run(str)
+
+        // closing database
+        db.close()
     }
 }
 const friends = {
-    db: new sql.Database('./data/main.sqlite'),
+    db: './data/main.sql',
     /**
      * creating table in database
      * @param {string} id
      */
     create_list: id => {
+        // open database
+        const db = new sql.Database(friends.db)
+
         const str = `CREATE TABLE ${id} (id TINYTEXT PRIMARY KEY, status TINYTEXT)`
-        friends.db.run(str)
+        db.run(str)
+
+        // closing database
+        db.close()
     },
     /**
      * get list of friends from table
@@ -85,17 +121,23 @@ const friends = {
     get_friends: id => {
         return new Promise(
             resolve => {
+                // open database
+                const db = new sql.Database(friends.db)
+
                 const str = `SELECT ${id}.id, main.nickname, ${id}.status, main.key
                             FROM ${id}
                             JOIN main
                             ON ${id}.id = main.id
                             ORDER BY ${id}.status, main.nickname`
-                friends.db.all(
+                db.all(
                     str,
                     (er, data) => {
                         resolve(data)
                     }
                 )
+                
+                // closing database
+                db.close()
             }
         )
     },
@@ -109,8 +151,11 @@ const friends = {
     write: (from, to, status) => {
         return new Promise(
             (resolve, reject) => {
+                // open database
+                const db = new sql.Database(friends.db)
+
                 const str = `INSERT INTO ${from} VALUES (?, ?)`
-                friends.db.run(
+                db.run(
                     str,
                     [to, status],
                     er => {
@@ -118,10 +163,12 @@ const friends = {
                         resolve()
                     }
                 )
+
+                // closing database
+                db.close()
             }
         )
     },
-
     /**
      * update status of new_friend
      * @param {string} whom id
@@ -131,13 +178,26 @@ const friends = {
     add_friend: (whom, who) => {
         return new Promise(
             resolve => {
+                // open database
+                const db = new sql.Database(friends.db)
+
                 const str_1 = `UPDATE ${whom} SET status = "friend" WHERE id = '${who}'`
                 const str_2 = `UPDATE ${who} SET status = "friend" WHERE id = '${whom}'`
 
-                friends.db.run(str_1)
-                friends.db.run(str_2)
+                db.serialize(
+                    () => {
+                        db.run(str_1)
+                        db.run(
+                            str_2,
+                            () => {
+                                resolve()
+                            }
+                        )
+                    }
+                )
 
-                resolve()
+                // closing database
+                db.close()
             }
         )
     },
@@ -150,18 +210,32 @@ const friends = {
     delete_friend: (whom, who) => {
         return new Promise(
             resolve => {
+                // open database
+                const db = new sql.Database(friends.db)
+
                 const str_1 = `DELETE FROM ${whom} WHERE id = '${who}'`
                 const str_2 = `DELETE FROM ${who} WHERE id = '${whom}'`
-                friends.db.run(str_1)
-                friends.db.run(str_2)
-                
-                resolve()
+
+                db.serialize(
+                    () => {
+                        db.run(str_1)
+                        db.run(
+                            str_2,
+                            () => {
+                                resolve()
+                            }
+                        )
+                    }
+                )
+
+                // closing database
+                db.close()
             }
         )
     }
 }
 const temp_mail = {
-    db: new sql.Database('./data/temp_mail.sqlite'),
+    db: './data/temp_mail.sql',
     /**
      * get data from db
      * @param {string} id 
@@ -170,16 +244,22 @@ const temp_mail = {
     get: id => {
         return new Promise(
             resolve => {
+                // open database
+                const db = new sql.Database(temp_mail.db)
+
                 const str = `SELECT who, time, content FROM temp_message WHERE id = '${id}'`
-                temp_mail.db.all(
+                db.all(
                     str,
                     (er, data) => {
-                        temp_mail.db.run(
-                            `DELETE FROM temp_message WHERE id = '${id}'`
-                        )
                         resolve(data)
                     }
                 )
+                db.run(
+                    `DELETE FROM temp_message WHERE id = '${id}'`
+                )
+
+                // closing database
+                db.close()
             }
         )
     },
@@ -191,15 +271,17 @@ const temp_mail = {
      * @param {string} content message
      */
     set: (id, who, time, content) => {
+        // open database
+        const db = new sql.Database(temp_mail.db)
+
         const str = `INSERT INTO temp_message values ('${id}', '${who}', '${time}', '${content}')`
-        temp_mail.db.run(str)
+        db.run(str)
+
+        // closing database
+        db.close()
     }
 }
 
-// todo delete
-// db.run(
-//    'DELETE FROM main'
-// )
 // db.run(
 //     'CREATE TABLE main (id TINYTEXT PRIMARY KEY, nickname TINYTEXT, password TINYTEXT, key TINYTEXT, status TINYTEXT, changes_friends TINYINT, new_message TYNYINT)'
 // )
