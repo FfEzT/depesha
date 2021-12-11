@@ -1,5 +1,6 @@
 module.exports.createWindow = () => {
-    const {BrowserWindow, screen} = require('electron')
+    const {BrowserWindow, screen, ipcMain} = require('electron')
+
     let win = new BrowserWindow(
         {
             title                  : 'Onchat',
@@ -30,5 +31,14 @@ module.exports.createWindow = () => {
     win.on(
         'closed',
         () => win = null
+    )
+
+    ipcMain.on(
+        'max_window',
+        () => win.isMaximized()? win.unmaximize() : win.maximize()
+    )
+    ipcMain.on(
+        'minimize_window',
+        () => win.minimize()
     )
 }
