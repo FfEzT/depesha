@@ -3,7 +3,7 @@ module.exports.createWindow = () => {
 
     let win = new BrowserWindow(
         {
-            title                  : 'Onchat',
+            title                  : 'depesha',
             width                  : 1280,
             height                 : 720,
             minWidth               : 940,
@@ -16,9 +16,9 @@ module.exports.createWindow = () => {
                 // devTools        : false, // todo activate this line
                 nodeIntegration    : true,
                 enableRemoteModule : true,
-                contextIsolation   : false, // <-- "require('electron').remote.getCurrentWindow()" didn't work without this line
+                contextIsolation   : false // <-- "require('electron')" in web.js didn't work without this line
             },
-            backgroundColor        : '#191729',
+            backgroundColor        : '#191729'
             // todo--> icon: "path"
         }
     )
