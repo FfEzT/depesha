@@ -7,6 +7,6 @@
     },
     "author": "FfEzT",
     "dependencies": {
-        "electron": "^13.1.9"
+        "electron": "^16.0.4"
     }
 }
