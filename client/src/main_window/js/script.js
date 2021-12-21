@@ -29,11 +29,14 @@ const auth = (id, password, a=false) => {
 // send data to server
 // input Object (type: str, content: {})
 const send_data = data => {
-    user.status == 'offline' ? web.notice('off_server') : (
+    if (user.status == 'offline') {
+        web.notice('off_server')
+    }
+    else {
         ws.send(
             JSON.stringify(data)
         )
-    )
+    }
 }
 
 // info about user and his 'people'

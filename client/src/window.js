@@ -13,15 +13,15 @@ module.exports.createWindow = () => {
             show                   : false,
             frame                  : false,
             webPreferences         : {
-                // devTools        : false, // todo activate this line
+                // devTools        : false, // todo activate this line before compiliere
                 nodeIntegration    : true,
-                enableRemoteModule : true,
                 contextIsolation   : false // <-- "require('electron')" in web.js didn't work without this line
             },
-            backgroundColor        : '#191729'
-            // todo--> icon: "path"
+            backgroundColor        : '#191729',
+            icon: "./src/main_window/materials/ico/depesha.ico"
         }
     )
+    
     win.loadFile('./src/main_window/html/index.html')
     win.once(
         'ready-to-show',

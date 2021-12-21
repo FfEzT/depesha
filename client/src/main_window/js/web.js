@@ -3,7 +3,7 @@ const {ipcRenderer} = require('electron')
 
 // window's btns
 const close_window = () => {
-    ipcRenderer.send("close_window")
+ipcRenderer.send("close_window")
 }
 const full_window = () => {
     ipcRenderer.send('max_window')
@@ -12,6 +12,7 @@ const minimize_window = () => {
     ipcRenderer.send("minimize_window")
 }
 
+// list of friend in down panel
 const friends = {}
 
 // input: str(leftBar || rightBar || down_panel)
