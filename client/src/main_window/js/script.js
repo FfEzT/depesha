@@ -28,8 +28,12 @@ let ws // WebSocket
 // WebSocket
 connection.main()
 
-// send id and password for auth
-// in: str, str, bool
+/**
+ * send id and password for auth
+ * @param {string} id
+ * @param {string} password
+ * @param {bool} a
+ */
 const auth = (id, password, a=false) => {
     send_data(
         {
@@ -43,8 +47,14 @@ const auth = (id, password, a=false) => {
     )
 }
 
-// send data to server
 // input Object (type: str, content: {})
+/**
+ * send data to server
+ * @param {{
+ * type: string,
+ * content: {}
+ * }} data 
+ */
 const send_data = data => {
     if (user.status == 'offline') {
         web.notice('off_server')
@@ -70,8 +80,12 @@ const user = {
 }
 
 // checking authorization of user
-user.data.id == "" || user.data.nickname == "" || user.data.password == "" ? (
-        user.isNewUser = true
-) : (
+if (user.data.id == ""
+    || user.data.nickname == ""
+    || user.data.password == ""
+) {
+    user.isNewUser = true
+}
+else{
     user.key = cipher.rsa.import_private()
-)
+}

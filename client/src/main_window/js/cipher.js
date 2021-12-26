@@ -15,16 +15,19 @@
  * along with Depesha.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+const BYTE_LENGTH = 1024
+
 const crypto = require('crypto')
 const cryptico = require('../js/cryptico')
 
 /**
     Hashing str
-    @param {string} str 
+    @param {string} str
     @returns {string}
 */
 const hashing = str => {
     const a = crypto.scryptSync(str, str, 32).toString('hex')
+
     return crypto.scryptSync(a, a, 32).toString('hex')
 }
 
@@ -35,7 +38,7 @@ const rsa = {
         @returns {cryptico.RSAKey}
     */
     create_private: pass_phrase => {
-        return cryptico.generateRSAKey(pass_phrase, 1024)
+        return cryptico.generateRSAKey(pass_phrase, BYTE_LENGTH)
     },
 
     /**
