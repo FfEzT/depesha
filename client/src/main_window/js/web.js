@@ -19,29 +19,27 @@
 const {ipcRenderer} = require('electron')
 
 // window's btns
-const close_window = () => {
-ipcRenderer.send("close_window")
-}
-const full_window = () => {
-    ipcRenderer.send('max_window')
-}
-const minimize_window = () => {
-    ipcRenderer.send("minimize_window")
-}
+const close_window = () => { ipcRenderer.send("close_window") }
+const full_window = () => { ipcRenderer.send('max_window') }
+const minimize_window = () => { ipcRenderer.send("minimize_window") }
 
 // list of friend in down panel
 const friends = {}
 
-// input: str(leftBar || rightBar || down_panel)
+/**
+ * @param {string} lr leftBar || rightBar || down_panel
+ */
 const set_pos_for_bars = lr => {
     const el = document.getElementById(lr)
     const isOpen = el.classList.contains('focus')
 
     isOpen? el.classList.remove('focus') : el.classList.add('focus')
 }
-// checking whether the panel is fixed or not
-// in: str(leftBar || rightBar || down_panel)
-// out: boolean (true || false)
+/**
+ * checking whether the panel is fixed or not
+ * @param {string} str leftBar || rightBar || down_panel
+ * @returns {bool}
+ */
 const check_pos_for_bars = str => {
     return document.getElementById(str).classList.contains('focus')
 }
@@ -60,116 +58,141 @@ const roll_down_all = () => {
 }
 
 const hot_key = e => {
-    const a = {
-        // arrow left
-        37: () => {
-                set_pos_for_bars('leftBar')
-        },
-        // arrow right
-        39: () => {
-                set_pos_for_bars('rightBar')
-        },
-        // arrow up
-        38: () => {
-                roll_down_all()
-        },
-        // arrow down
-        40: () => {
-            set_pos_for_bars('down_panel')
-        },
+    switch (a.keyCode) {
         // space
-        32: () => {
+        case 32:
             document.getElementById('rightBar').classList.contains('focus') && chat.focus()
-        }
+            break
+
+        // arrow left
+        case 37:
+            set_pos_for_bars('leftBar')
+            break
+
+        // arrow up
+        case 38:
+            roll_down_all()
+            break
+
+        // arrow right
+        case 39:
+            set_pos_for_bars('rightBar')
+            break
+
+        // arrow down
+        case 40:
+            set_pos_for_bars('down_panel')
+            break
     }
-    a[e.keyCode] && a[e.keyCode]()
 }
 
-// for serching
-const focus_blur = on => {
-    const a = {
-        'focus': () => {
+/**
+ * for serching
+ * @param {string} key focus||blur
+ */
+const focus_blur = key => {
+    switch (key) {
+        case 'focus':
             document.querySelector('body').setAttribute('onkeyup', '')
-        },
-        'blur': () => {
+            break
+            
+        case 'blur':
             document.querySelector('body').setAttribute('onkeyup', 'web.hot_key(event)')
-        }
+            break
     }
-    a[on] && a[on]()
 }
-// in: boolean(true/false)
+/**
+ * @param {bool} arg 
+ */
 const focusBlur_right_bar = arg => {
     const el = document.getElementById('rightBar')
+
     arg? el.classList.add('focus') : el.classList.remove('focus')
+
     focus_blur(arg? 'focus':'blur')
 }
 
-// create notice in app (top-left)
-// input: str (there are values in var bag)
+/**
+ * create notice in app (top-left)
+ * @param {string} a
+ */
 const notice = a => {
+    // it set time for removing notice
+    const DELAY = 5000
+
     const wow = document.getElementsByClassName('notice')[0]
     let text, size
 
-    // it set time for removing notice
-    // type: int (default: 5000)
-    const time = 5000
-
-    // for editting text and resize text
-    const bag = {
-        'off_work': () => {
+    // for editing and resizing text
+    switch (a) {
+        case 'off_work':
             text = 'В мире мало фиксиков, поэтому эта кнопка пока не работает'
-        },
-        'btn_more': () => {
+            break
+
+        case 'btn_more':
             text = 'В будущем эта кнопка спасет ваш компьютер...'
-        },
-        'welcome': () => {
+            break
+
+        case 'welcome':
             text = 'Привет ;)'
             size = 'min(1.5vw,3vh)'
-        },
-        'off_server': () => {
+            break
+
+        case 'off_server':
             text = 'Что-то не так... вы не подключены к серверу('
-        },
-        'sign_up_err': () => {
+            break
+
+        case 'sign_up_err':
             text = 'Пожалуйста, заполните поля как следует ;)'
             size = 'min(1vw, 1.7vh)'
-        },
-        'sign_in_name': () => {
+            break
+
+        case 'sign_in_name':
             text = 'Минимум 3 символа (на английском) и не только из цифр'
-        },
-        'sign_in_password': () => {
+            break
+
+        case 'sign_in_password':
             text = 'Пароль должен состоять минимум из 9 символов'
-        },
-        'auth': () => {
+            break
+
+        case 'auth':
             text = 'Вам нужно авторизоваться'
             size = 'min(1vw, 1.8vh)'
-        },
-        'auth_err': () => {
-            text = 'Хм, я не помню вас, возможно вы ввели неправильные данные'
-        },
-        'no_user': () => {
+            break
+
+        case 'auth_err':
+            text = 'Хм, я не помню вас, возможно, вы ввели неправильные данные'
+            break
+
+        case 'no_user':
             text = 'Я не нашел такого пользователя...('
             size = 'min(0.7vw, 1.3vh)'
-        },
-        'wait_for_confirmation': () => {
-            text = 'Я отправил запрос, ждите пока не примут заявку'
-        },
-        'it_is_u': () => {
+            break
+
+        case 'wait_for_confirmation':
+            text = 'Я отправил запрос, ждите, пока не примут заявку'
+            break
+
+        case 'it_is_u':
             text = 'Простите не узнал... это же вы...)'
-        },
-        'wait': () => {
+            break
+
+        case 'wait':
             text = 'Подождите, программа не зависла'
-        },
-        'empty_message': () => {
+            break
+
+        case 'empty_message':
             text = 'Зачем вы хотите отправить воздух?'
-        },
-        'empty_adress': () => {
+            break
+
+        case 'empty_adress':
             text = 'Кому выхотите это отправить?'
-        },
-        'new_message': () => {
+            break
+
+        case 'new_message':
             text = 'О, у вас новое сообщение!'
-        }
+            break
     }
-    bag[a] && bag[a]()
 
     const go = document.createElement('div')
     go.classList.add('message', 'close')
@@ -182,9 +205,9 @@ const notice = a => {
     go.prepend(go_text)
     go_text.innerHTML = text
 
-    if (document.getElementsByClassName('first')[0]) {
-        if (document.getElementsByClassName('second')[0]) {
-            if (document.getElementsByClassName('left')[0]) {
+    if ( document.getElementsByClassName('first')[0] ) {
+        if ( document.getElementsByClassName('second')[0] ) {
+            if ( document.getElementsByClassName('left')[0] ) {
                 document.getElementsByClassName('left')[0].remove()
             }
 
@@ -212,7 +235,7 @@ const notice = a => {
                 500
             ) 
         },
-        time
+        DELAY
     )
 }
 
@@ -220,22 +243,22 @@ const change_status = () => {
     const object = document.getElementById('status')
     const text_of_object = document.getElementById('text_of_status')
 
-    const a = {
-        'online': () => {
+    switch (user.status) {
+        case 'online':
             object.style.backgroundColor = '#35B8E7'
             text_of_object.innerText = 'online'
-        },
-        'offline': () => {
+            break
+        
+        case 'offline':
             object.style.backgroundColor = 'var(--color_text)'
             text_of_object.innerText = 'offline'
-        },
-        'idle': () => {
+            break
+
+        case 'idle':
             object.style.backgroundColor = '#F033AE'
             text_of_object.innerText = 'idle'
-        }
+            break
     }
-
-    a[user.status] && a[user.status]()
 }
 const change_status_from_profile = () => {
     const a = {
@@ -246,8 +269,15 @@ const change_status_from_profile = () => {
             user.status = 'online'
         }
     }
-    
-    a[user.status] && a[user.status]()
+    switch (user.status) {
+        case 'online':
+            user.status = 'idle'
+            break
+
+        case 'idle':
+            user.status = 'online'
+            break
+    }
 
     change_status()
 
@@ -276,19 +306,19 @@ const f_search_friend = () => {
         return 0
     }
     
-    a.test(b)? (
-            send_data(
-                {
-                    type: 'do_friend',
-                    content: {
-                        status: 'search',
-                        from: user.data.id,
-                        to: b
-                    }
+    if ( a.test(b) ) {
+        send_data(
+            {
+                type: 'do_friend',
+                content: {
+                    status: 'search',
+                    from: user.data.id,
+                    to: b
                 }
-            ),
-            search_friend.value = ''
-        ) : notice('no_user')
+            }
+        )
+        search_friend.value = ''}
+    else { notice('no_user') }
 }
 
 const load_friend = () => {
@@ -296,11 +326,11 @@ const load_friend = () => {
     const list = data.red_point.open_file().new_message
 
     let temp = [...document.getElementsByClassName('el')]
-    temp && !function() {
+    if (temp) {
         for (let i = 0; i < temp.length; ++i) {
             temp[i].remove()
         }
-    }()
+    }
 
     // type: array(list of friends)
     data.main().forEach(
@@ -310,8 +340,10 @@ const load_friend = () => {
     )
 }
 
-// send request to delete friend to server
-// input: str(id of friend, who we want to delete)
+/**
+ * send request to delete friend to server
+ * @param {string} str id of friend, who we want to delete
+ */
 const delete_friend = str => {
     send_data(
         {
@@ -325,8 +357,10 @@ const delete_friend = str => {
     )
 }
 
-// send request to add friend to server
-// input: str(id of friend, who we want to add)
+/**
+ * send request to add friend to server
+ * @param {string} str id of friend, who we want to add
+ */
 const add_friend = str => {
     send_data(
         {
@@ -340,11 +374,17 @@ const add_friend = str => {
     )
 }
 
-// choose friend to chat with him
-// in: str(nickname of friend)
+/**
+ * choose friend to chat with him
+ * @param {string} str nickname of friend
+ * @param {string} id id of friend
+ * @param {string} key key of friend
+ */
 const chooseFriend = (str, id, key) => {
-    // open panel
-    // in: str(rightBar || down_panel)
+    /**
+     * open panel
+     * @param {string} a rightBar || down_panel
+     */
     const open_panels = a => {
         !check_pos_for_bars(a) && set_pos_for_bars(a)
     }
@@ -402,8 +442,14 @@ const chooseFriend = (str, id, key) => {
     // delete redPoint in files
     data.red_point.delete(id)
 }
-// show message to right panel
-// in: obj(content, time, who_send(i || friend)), str('newMessage' || 'load'), bool
+/**
+ * show message in right panel
+ * @param {{
+ * content, time, who_send
+ * }} data 
+ * @param {string} type 'newMessage' || 'load'
+ * @param {bool} without_scroll
+ */
 const renderMessage = (data, type, without_scroll) => {
     const a = document.getElementsByClassName('chat')[0]
     const b = document.createElement('div')
@@ -455,60 +501,57 @@ const renderMessage = (data, type, without_scroll) => {
 }
 
 const send_message = () => {
-    user.friend.id? (
-        !function() {
-            const input = chat.value.trim()
+    if (user.friend.id) {
+        const input = chat.value.trim()
 
-            input != '' ? (
-                !function() {
-                    user.status != 'offline' ? (
-                        !function() {
-                            const time = new Date().toUTCString()
+        if (input != '') {
+            if (user.status != 'offline') {
+                const time = new Date().toUTCString()
 
-                            // send data to server
-                            send_data(
-                                {
-                                    type: 'message_to_friend',
-                                    content: {
-                                        who: user.data.id,
-                                        to: user.friend.id,
-                                        time,
-                                        content: cipher.rsa.encrypt(input, user.friend.key)
-                                    }
-                                }
-                            )
+                // send data to server
+                send_data(
+                    {
+                        type: 'message_to_friend',
+                        content: {
+                            who: user.data.id,
+                            to: user.friend.id,
+                            time,
+                            content: cipher.rsa.encrypt(input, user.friend.key)
+                        }
+                    }
+                )
 
-                            // write your message
-                            {
-                                data.message.write(
-                                    user.friend.id,
-                                    {
-                                        content: input,
-                                        time,
-                                        who_send: 'i'
-                                    }
-                                )
-                            }
+                // write your message
+                {
+                    data.message.write(
+                        user.friend.id,
+                        {
+                            content: input,
+                            time,
+                            who_send: 'i'
+                        }
+                    )
+                }
 
-                            // render message
-                            {
-                                renderMessage(
-                                    {
-                                        content: input,
-                                        time,
-                                        who_send: 'i'
-                                    },
-                                    'newMessage'
-                                )
-                            }
+                // render message
+                {
+                    renderMessage(
+                        {
+                            content: input,
+                            time,
+                            who_send: 'i'
+                        },
+                        'newMessage'
+                    )
+                }
 
-                            chat.value = ''
-                        }()
-                    ) : notice('off_server')
-                }()
-            ) : notice('empty_message')
-        }()
-    ) : notice('empty_adress')
+                chat.value = ''
+            }
+            else { notice('off_server') }
+        }
+        else { notice('empty_message') }
+    }
+    else { notice('empty_adress') }
 }
 
 // processing incoming messages from the server
@@ -536,16 +579,17 @@ const get_message = arr => {
                 1
             )
 
-            user.friend.id == from ? (
+            if (user.friend.id == from) {
                 renderMessage(
                     {content, time, who_send},
                     'newMessage'
                 )
-            ) : (
+            }
+            else {
                 notice('new_message'),
                 friends[from].red_point.set(),
                 data.red_point.set(from)
-            )
+            }
         }
     )
 }

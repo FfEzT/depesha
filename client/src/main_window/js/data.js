@@ -17,26 +17,26 @@
 
 const fs = require('fs')
 
-// this function manages data in the friend.json
-// input: str ('delete_data' || 'get_friends'), array(list of friends)
-// output: data.friends(array)
+/**
+ * this function manages data in the friend.json
+ * @param {string} a delete_data||get_friends
+ * @param {[]} b list of friends
+ * @returns {[friend]}
+ */
 const main = (a, b=[]) => {
-    // get data from friend.json
-    // type: JSON
     let data = JSON.parse(
         fs.readFileSync('./src/data/friend.json')
     )
-    
-    // like switch() {}
-    const bag = {
-        'delete_data' : () => {
+
+    switch (a) {
+        case 'delete_data':
             data.friends = []
-        },
-        'get_friends': b => {
+            break
+
+        case 'get_friends':
             data.friends = b
-        }
+            break
     }
-    bag[a] && bag[a](b)
 
     // write data to friend.json
     fs.writeFileSync(
@@ -104,7 +104,6 @@ const red_point = {
     }
 }
 
-// delete old info (key)
 const key_to_null = () => {
     fs.writeFile(
         './src/data/private.key',
@@ -115,7 +114,6 @@ const key_to_null = () => {
 
 const message = {
     file: './src/data/message.json',
-    // delete old info (messages)
     message_to_null: () => {
         fs.writeFile(
             './src/data/message.json',
@@ -123,15 +121,20 @@ const message = {
             () => {}
         )
     },
-    // in: str(id of friend)
-    // out: array(obj with message)
+    /**
+     * @param {str} id friend's id
+     * @returns {[{messages}]}
+     */
     get: id => {
         return JSON.parse(
             fs.readFileSync(message.file)
         )[id]
     },
-    // write obj with message to file
-    // in: str(id of friend), obj(content, time, who_send)
+    /**
+     * write obj with message to file
+     * @param {string} id friend's id
+     * @param {{content, time, who_send}} obj
+     */
     write: (id, obj) => {
         const friend = message.get(id)
 

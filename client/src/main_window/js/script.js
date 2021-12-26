@@ -26,7 +26,7 @@ const connection = require('../js/ws')
 let ws // WebSocket
 
 // WebSocket
-connection.main()
+connection.connect()
 
 /**
  * send id and password for auth

@@ -54,22 +54,27 @@ const connection_to_server = e => {
         data => {
             data = JSON.parse(data)
 
-            switch(data.type) {
+            switch (data.type) {
                 case "sign_up":
                     sign_up(e, data.content)
                     break
+
                 case "auth":
                     auth(e, data.content, notice_incorrect_data)
                     break
+
                 case "update_status":
                     update_status(data.content)
                     break
+
                 case "get_friends":
                     send_friends(e, data.content.id)
                     break
+
                 case "do_friend":
                     do_friend(e, data.content, notice_incorrect_data)
                     break
+
                 case "message_to_friend":
                     send_message(data.content)
                     break

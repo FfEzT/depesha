@@ -15,7 +15,13 @@
  * along with Depesha.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const main = () => {
+// time in ms
+const TIME_FOR_RECONNECT = 10000
+
+const connect = () => {
+    /**
+     * if u sign up there is a problem for change status in profile
+     */
     const trycatch = () => {
         try {
             web.change_status()
@@ -26,71 +32,74 @@ const main = () => {
     ws = new WebSocket('ws://localhost:5480') // todo change str
 
     ws.onopen = () => {
-        !user.isConnection_closed? (
-            !function() {
-                user.status = 'online'
-                trycatch()
+        if (!user.isConnection_closed) {
+            user.status = 'online'
+            trycatch()
 
-                // sign in
-                !user.isNewUser && (
-                    ws.onmessage = e => {
-                        // data from server
-                        // type: {Object}
-                        const a = JSON.parse(e.data)
-            
-                        // like switch(){}
-                        const bag = {
-                            'auth': () => {
-                                a.result == '0' ? (
-                                    // id, nickname, password = null, reload
-                                    user.data.id = '',
-                                    user.data.nickname = '',
-                                    user.data.password = '',
+            // sign in
+            if (!user.isNewUser) {
+                ws.onmessage = e => {
+                    /**
+                     * data from server
+                     * @type {{}}
+                     */
+                    const a = JSON.parse(e.data)
+
+                    switch (a.type) {
+                        case 'auth':
+                            if (a.result == '0') {
+                                user.data.id = '',
+                                user.data.nickname = '',
+                                user.data.password = '',
+                            
+                                data.write_user_data(),
                                 
-                                    data.write_user_data(),
-                                    
-                                    window.location.reload()
-                                ) : (
-                                    user.data.nickname = a.nick,
-                                    
-                                    data.write_user_data()
-                                )
-                            },
-                            'do_friends': () => {
-                                a.result == '0' ? web.notice('no_user') : web.notice('wait_for_confirmation')
-                            },
-                            'list_of_friends': () => {
-                                data.main('get_friends', a.data)
-                                web.load_friend()
-                            },
-                            'new_message': () => {
-                                web.get_message(a.data)
+                                window.location.reload()
                             }
-                        }
-                        bag[a.type] && bag[a.type]()
-                    },
-                    auth(user.data.id, user.data.password, true)
-                )
-            }()
-        ) : window.location.reload()
+                            else {
+                                user.data.nickname = a.nick
+
+                                data.write_user_data()
+                            }
+                            break
+
+                        case 'do_friends':
+                            a.result == '0' ? web.notice('no_user') : web.notice('wait_for_confirmation')
+                            break
+
+                        case 'list_of_friends':
+                            data.main('get_friends', a.data)
+                            web.load_friend()
+                            break
+
+                        case 'new_message':
+                            web.get_message(a.data)
+                            break
+                    }
+                }
+
+                auth(user.data.id, user.data.password, true)
+            }
+        }
+        else { window.location.reload() }
     }
     ws.onclose = () => {
-        // reconnection every 10 sec
+        // reconnection
         setTimeout(
             () => {
                 main()
             },
-            10000
-        );
+            TIME_FOR_RECONNECT
+        )
 
-        !user.isConnection_closed && !function() {
+        if (!user.isConnection_closed) {
             user.isConnection_closed = true
             web.notice('off_server')
             user.status = 'offline'
             
             trycatch()
-        }()
+        }
     }
 }
 
-module.exports = {main}
+module.exports = {connect}
