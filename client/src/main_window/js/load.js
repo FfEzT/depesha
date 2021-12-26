@@ -18,7 +18,7 @@
 const main = () => {
     web.notice('welcome')
 
-    user.isNewUser? (
+    if (user.isNewUser) {
         require('../js/new_user'),
         setTimeout(
             () => {
@@ -26,10 +26,12 @@ const main = () => {
             },
             1500
         )
-    ) : (
+    }
+    else {
         // loading list of friends
         web.load_friend()
-    )
+    }
+
 
     // load animation
     {
@@ -48,7 +50,7 @@ const main = () => {
     }
 
     // final
-    console.log('ready') // todo u can delete this line
+    console.log('ready')
 }
 
 module.exports = {main}

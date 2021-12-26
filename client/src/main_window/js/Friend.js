@@ -37,11 +37,9 @@ class Friend {
     checking_status = () => {
         if (this.status == 'friend') {
             this.show_friend()
-            return
         }
-        if (this.status == 'pending' || 'waiting') {
+        else if (this.status == 'pending' || 'waiting') {
             this.show_application()
-            return
         }
     }
     show_friend = () => {
@@ -68,6 +66,7 @@ class Friend {
     }
     show_application = () => {
         this.status == 'pending'? this.show_pending() : this.show_waiting()
+        
         this.a.style.gridTemplateColumns = '0.5fr 10vw 2fr 4vw 4vw'
         this.tab2.append(this.a)
     }
