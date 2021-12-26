@@ -58,7 +58,7 @@ const roll_down_all = () => {
 }
 
 const hot_key = e => {
-    switch (a.keyCode) {
+    switch (e.keyCode) {
         // space
         case 32:
             document.getElementById('rightBar').classList.contains('focus') && chat.focus()
