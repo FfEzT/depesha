@@ -20,17 +20,20 @@
     display: grid;
     grid-template-columns: .5fr 2fr repeat(3, .5fr);
 }
+
 .el > .ell {
     border: 1px solid var(--color_line);
     display: grid;
     border-radius: 10px;
 }
+
 .el > .ell > .center {
     width: min(3.8vw, 5.3vh);
     height: min(3.8vw, 5.3vh);
     border-radius: 50%;
     margin: auto;
 }
+
 .el > .ell > .picture {
     width: min(4vw, 5vh);
     height: min(4vw, 5vh);
@@ -38,6 +41,7 @@
     position: relative;
 
 }
+
 .el > .ell > .picture > .red_point {
     background-color: var(--color_4);
     position: absolute;
@@ -47,6 +51,7 @@
     height: min(1vw, 1.8vh);
     transition: transform .125s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
 .el > .ell > .nickname {
     user-select: none;
     border-radius: 0;
@@ -58,9 +63,11 @@
     padding: .25vw;
     text-decoration: none;
 }
+
 .el > .ell > .u:hover {
     text-decoration: none;
 }
+
 .el > .ell > .button {
     transform: scale(0.75);
     border-radius: 0;
@@ -69,32 +76,41 @@
     background-repeat: no-repeat;
     transition: transform .25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
 .el > .e {
     background-color: transparent;
 }
+
 .el > .e:hover {
     background-color: var(--color_3_hover);
 }
+
 .el > .e:active {
     background-color: var(--color_3);
 }
+
 .el > .e:hover > .button {
     transition: transform .5s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform: scale(1.05);
 }
+
 .el > .e:active > .button {
     transition: transform .125s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform: scale(.5);
 }
+
 .el > .ell > .call {
     background-image: url(../materials/picture/call.svg);
 }
+
 .el > .ell > .chat {
     background-image: url(../materials/picture/chat.svg);
 }
+
 .el > .ell > .delete {
     background-image: url(../materials/picture/delete.svg);
 }
+
 .el > .ell > .add_friend {
     background-image: url(../materials/picture/add_friend.svg);
 }

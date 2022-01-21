@@ -23,9 +23,11 @@
     height: 70vh;
     transition: left .4s cubic-bezier(0.5, 0, 0.15, 1);
 }
+
 .right_panel:hover, .right_panel.focus {
     left: 65vw;
 }
+
 .right_panel > .background {
     background-color: var(--color_line);
     position: absolute;
@@ -34,6 +36,7 @@
     height: 100%;
     box-shadow: -1vw 0vh 1vw 0.25vw var(--color_shadow);
 }
+
 .right_panel > .focus {
     position: absolute;
     left: 7vw;
@@ -41,6 +44,7 @@
     height: 60vh;
     background-color: var(--color_3);
 }
+
 .right_panel > .content {
     position: absolute;
     display: grid;
@@ -53,6 +57,7 @@
     width: 28vw;
     height: 60vh;
 }
+
 .right_panel > .content > .marginTop {margin-top: 2vh;}
 .right_panel > .content > .marginLeft {margin-left: 1vw;}
 .right_panel > .content > .marginRight {margin-right: 1vw;}
@@ -61,6 +66,7 @@
     grid-area: photo;
     border-radius: 50%;
 }
+
 .right_panel > .content > .nick {
     grid-area: nick;
     margin-left: 1vw;
@@ -68,6 +74,7 @@
     display: grid;
     align-content: center;
 }
+
 .right_panel > .content > .nick > .nick_text {
     display: inline;
     height: 100%;
@@ -77,9 +84,11 @@
     font-size: 4vh;
     user-select: none;
 }
+
 .right_panel > .content > .nick > .nick_text:hover {
     text-decoration: underline;
 }
+
 .right_panel > .content > .chat {
     background-color: var(--color_3_hover);
     border-radius: .5vw;
@@ -88,6 +97,7 @@
     grid-area: chat;
     overflow-y: scroll;
 }
+
 .right_panel > .input_text {
     position: absolute;
     display: grid;
@@ -100,6 +110,7 @@
     background-color: var(--color_3);
     border-radius: 15px;
 }
+
 .right_panel > .input_text > .text {
     padding-left: .7vw;
     box-sizing: border-box;
@@ -113,6 +124,7 @@
     color: var(--color_text);
     grid-area: text;
 }
+
 .right_panel > .input_text > .send {
     border: none;
     border-left: 1px var(--color_line) solid;
@@ -120,12 +132,15 @@
     border-radius: 15px;
     display: grid;
 }
+
 .right_panel > .input_text > .send:hover {
     background-color: var(--color_3_hover);
 }
+
 .right_panel > .input_text > .send:active {
     background-color: var(--color_3_active);
 }
+
 .right_panel > .input_text > .send > .send_btn {
     margin: auto;
     width: 3vh;
@@ -136,14 +151,17 @@
     background-size: 100%;
     transition: transform .25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
 .right_panel > .input_text > .send:hover > .send_btn {
     transition: transform .5s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform: scale(1.25);
 }
+
 .right_panel > .input_text > .send:active > .send_btn {
     transform: scale(.75);
     transition: transform .125s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
 .right_panel > .tab {
     position: absolute;
     height: 100%;

@@ -110,6 +110,7 @@ const sign_up = async (e, content) => {
         db.friends.create_list(id)
     }
 }
+
 /**
  * @param {WebSocket} e for response
  * @param {{}} content info about user
@@ -179,6 +180,7 @@ const auth = async (e, content, f) => {
         f(type)
     }
 }
+
 /**
  * online || ofline
  * @param {{}} content
@@ -186,6 +188,7 @@ const auth = async (e, content, f) => {
 const update_status = content => {
     db.people.update_status(content.id, content.status)
 }
+
 /**
  * send list of friends to client
  * @param {WebSocket} e
@@ -206,6 +209,7 @@ const send_friends = (e, content) => {
         }
     )
 }
+
 /**
  * @param {WebSocket} e
  * @param {{}} content

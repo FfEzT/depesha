@@ -30,6 +30,7 @@
     transition: opacity .25s cubic-bezier(0.42,0,0.58,1);
     opacity: 0;
 }
+
 .right_panel > .content > .chat > .block > .time {
     font-family: text;
     color: var(--color_text);
@@ -41,11 +42,13 @@
         9px
     );
 }
+
 .right_panel > .content > .chat > .block > .from {
     border-radius: var(--border_round_2) 0 0 var(--border_round_2);
     grid-area: from;
     transition: background-color .5s cubic-bezier(0.42,0,0.58,1);
 }
+
 .right_panel > .content > .chat > .block > .message {
     white-space: pre-line;
     word-break: break-all;

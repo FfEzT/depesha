@@ -33,8 +33,7 @@ const main = () => {
     }
 
 
-    // load animation
-    {
+    load_animation: {
         setTimeout(
             () => {
                 start.style.opacity = 0

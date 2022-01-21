@@ -35,6 +35,7 @@ const set_pos_for_bars = lr => {
 
     isOpen? el.classList.remove('focus') : el.classList.add('focus')
 }
+
 /**
  * checking whether the panel is fixed or not
  * @param {string} str leftBar || rightBar || down_panel
@@ -101,6 +102,7 @@ const focus_blur = key => {
             break
     }
 }
+
 /**
  * @param {bool} arg 
  */
@@ -260,6 +262,7 @@ const change_status = () => {
             break
     }
 }
+
 const change_status_from_profile = () => {
     const a = {
         'online': () => {
@@ -392,8 +395,7 @@ const chooseFriend = (str, id, key) => {
     // delete old list
     document.getElementsByClassName('chat')[0].innerHTML = ''
 
-    // load messages from file
-    {
+    load_messages_from_file: {
         user.friend.activeFriend = str
         user.friend.id = id
         user.friend.key = key
@@ -431,8 +433,7 @@ const chooseFriend = (str, id, key) => {
     // change nickname in right panel
     document.getElementsByClassName('nick_text')[0].innerText = str
 
-    // open panels
-    {
+    open_panels: {
         open_panels('rightBar')
         open_panels('down_panel')
     }

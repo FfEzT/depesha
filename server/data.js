@@ -114,6 +114,7 @@ const people = {
         db.close()
     }
 }
+
 const friends = {
     db: './data/main.sql',
     /**
@@ -251,6 +252,7 @@ const friends = {
         )
     }
 }
+
 const temp_mail = {
     db: './data/temp_mail.sql',
     /**
@@ -299,7 +301,7 @@ const temp_mail = {
     }
 }
 
-// templates for database
+// ! templates for database
 // db.run(
 //     'CREATE TABLE main (id TINYTEXT PRIMARY KEY, nickname TINYTEXT, password TINYTEXT, key TINYTEXT, status TINYTEXT, changes_friends TINYINT, new_message TYNYINT)'
 // )

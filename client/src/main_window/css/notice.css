@@ -21,6 +21,7 @@
     width: 14vw;
     height: 14vh;
 }
+
 .notice > .message {
     border-top: 1px var(--color_line) solid;
     overflow: hidden;
@@ -36,23 +37,29 @@
     user-select: none;
     transition: background-color .25s cubic-bezier(0.42,0,0.58,1), top .25s cubic-bezier(0.42,0,0.58,1), left .5s cubic-bezier(.65,-.25,.2,1), opacity .25s cubic-bezier(0.42,0,0.58,1);
 }
+
 .notice > .message:hover {
     background-color: var(--color_3_active);
 }
+
 .notice > .message.close {
     opacity: 0;
     top: -7vh;
 }
+
 .notice > .message.first {
     top: 0;
 }
+
 .notice > .message.second {
     top: 7vh;
 }
+
 .notice > .message.left {
     opacity: 0;
     left: -14vw;
 }
+
 .notice > .message > .text {
     color: var(--color_text);
     font-size: min(.75vw, 1.5vh);
