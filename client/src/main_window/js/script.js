@@ -22,49 +22,11 @@ const data = require('../js/data')
 const load = require('../js/load')
 const web = require('../js/web')
 const cipher = require('../js/cipher')
-const connection = require('../js/ws')
+const server = require('../js/ws')
 let ws // WebSocket
 
 // WebSocket
-connection.connect()
-
-/**
- * send id and password for auth
- * @param {string} id
- * @param {string} password
- * @param {bool} a
- */
-const auth = (id, password, a=false) => {
-    send_data(
-        {
-            type: 'auth',
-            content: {
-                connect: a,
-                id,
-                password
-            }
-        }
-    )
-}
-
-// input Object (type: str, content: {})
-/**
- * send data to server
- * @param {{
- * type: string,
- * content: {}
- * }} data 
- */
-const send_data = data => {
-    if (user.status == 'offline') {
-        web.notice('off_server')
-    }
-    else {
-        ws.send(
-            JSON.stringify(data)
-        )
-    }
-}
+server.connect()
 
 // info about user and his 'people'
 const user = {

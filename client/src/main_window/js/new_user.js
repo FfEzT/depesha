@@ -285,7 +285,7 @@ const load_form_sign_up = () => {
                         }
                     }
 
-                    send_data(
+                    server.send_data(
                         {
                             type: 'sign_up',
                             content: {
@@ -331,7 +331,7 @@ const load_form_sign_up = () => {
                                 window.location.reload()
                             }
 
-                            send_data(
+                            server.send_data(
                                 {
                                     type: 'get_friends',
                                     content: {
@@ -348,7 +348,7 @@ const load_form_sign_up = () => {
                     web.notice('auth_err')
                 }
             }
-            auth(
+            server.auth(
                 id.value,
                 cipher.hashing(password_.value)
             )

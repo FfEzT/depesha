@@ -102,4 +102,41 @@ const connect = () => {
     }
 }
 
-module.exports = {connect}
+/**
+ * send data to server
+ * @param {{
+ * type: string,
+ * content: {}
+ * }} data 
+ */
+const send_data = data => {
+    if (user.status == 'offline') {
+        web.notice('off_server')
+    }
+    else {
+        ws.send(
+            JSON.stringify(data)
+        )
+    }
+}
+
+/**
+ * send id and password for auth
+ * @param {string} id
+ * @param {string} password
+ * @param {bool} a
+ */
+ const auth = (id, password, a=false) => {
+    send_data(
+        {
+            type: 'auth',
+            content: {
+                connect: a,
+                id,
+                password
+            }
+        }
+    )
+}
+
+module.exports = {connect, auth, send_data}

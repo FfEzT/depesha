@@ -284,7 +284,7 @@ const change_status_from_profile = () => {
 
     change_status()
 
-    send_data(
+    server.send_data(
         {
             type: 'update_status',
             content: {
@@ -310,7 +310,7 @@ const f_search_friend = () => {
     }
     
     if ( a.test(b) ) {
-        send_data(
+        server.send_data(
             {
                 type: 'do_friend',
                 content: {
@@ -348,7 +348,7 @@ const load_friend = () => {
  * @param {string} str id of friend, who we want to delete
  */
 const delete_friend = str => {
-    send_data(
+    server.send_data(
         {
             type: 'do_friend',
             content: {
@@ -365,7 +365,7 @@ const delete_friend = str => {
  * @param {string} str id of friend, who we want to add
  */
 const add_friend = str => {
-    send_data(
+    server.send_data(
         {
             type: 'do_friend',
             content: {
@@ -510,7 +510,7 @@ const send_message = () => {
                 const time = new Date().toUTCString()
 
                 // send data to server
-                send_data(
+                server.send_data(
                     {
                         type: 'message_to_friend',
                         content: {
