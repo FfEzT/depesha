@@ -38,7 +38,7 @@ const user = {
     name: '',
     call_to: undefined,
     stream: undefined,
-    peer: new RTCPeerConnection( {iceServers} )
+    peer: new RTCPeerConnection( {iceServers} ) || webkitRTCPeerConnection( {iceServers} ) || mozRTCPeerConnection( {iceServers} )
 }
 
 let channel
@@ -59,7 +59,7 @@ const init = async () => {
     )
 
     channel = await user.peer.createDataChannel('main')
-    channel.onopen = () => {send('calling', user.name); console.warn('Сервер: "ну сообщения выводятся"')}
+    channel.onopen = () => send('calling', user.name)
     channel.onmessage = e => console.log(e.data)
 
     user.peer.ondatachannel = event => {
