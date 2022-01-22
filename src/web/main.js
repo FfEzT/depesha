@@ -48,11 +48,11 @@ const init = async () => {
         {
             video: true,
             audio: {
-                sampleRate: 48000,
-                sampleSize: 16,
-                channelCount: 1,
-                noiseSuppression: false,
-                echoCancellation: false,
+                // sampleRate: 48000,
+                // sampleSize: 16,
+                // channelCount: 1,
+                // noiseSuppression: false,
+                // echoCancellation: false,
                 autoGainControl: false
             }
         }
@@ -60,7 +60,9 @@ const init = async () => {
 
     channel = await user.peer.createDataChannel('main')
     channel.onopen = () => {
-        console.warn('Открыто')
+        console.warn('Открыто') // TODO delete
+        console.warn('Открыто') // TODO delete
+        console.warn('Открыто') // TODO delete
         send('calling', user.name)
     }
     channel.onmessage = e => console.log(e.data)
@@ -81,13 +83,15 @@ const init = async () => {
     }
 
     element.localVideo.srcObject = user.stream
-    // user.peer.ontrack = e => {
-    //     delete_list()
-    //     element.remoteVideo.srcObject = e.streams[0]
-    // }
-    // for (const track of user.stream.getTracks() ) {
-    //     user.peer.addTrack(track, user.stream)
-    // }
+    user.peer.ontrack = e => {
+        console.warn('Открыл track') // TODO delete
+        delete_list()
+        element.remoteVideo.srcObject = e.streams[0]
+    }
+    for (const track of user.stream.getTracks() ) {
+        console.warn('Отправил track') // TODO delete
+        user.peer.addTrack(track, user.stream)
+    }
 }
 init()
 
@@ -105,6 +109,7 @@ const change_status = str => {
 }
 
 const send = (type, data) => {
+    console.warn('Отправил: ', type) // TODO delete
     ws.send(
         JSON.stringify(
             {type, data}
@@ -177,6 +182,8 @@ ws.onopen = () => {
 }
 ws.onmessage = e => {
     const a = JSON.parse(e.data)
+
+    console.warn('С сервера: ', a.type) // TODO delete
 
     switch (a.type) {
         case 'auth':
