@@ -59,7 +59,10 @@ const init = async () => {
     )
 
     channel = await user.peer.createDataChannel('main')
-    channel.onopen = () => send('calling', user.name)
+    channel.onopen = () => {
+        console.warn('Открыто')
+        send('calling', user.name)
+    }
     channel.onmessage = e => console.log(e.data)
 
     user.peer.ondatachannel = event => {
@@ -78,13 +81,13 @@ const init = async () => {
     }
 
     element.localVideo.srcObject = user.stream
-    user.peer.ontrack = e => {
-        delete_list()
-        element.remoteVideo.srcObject = e.streams[0]
-    }
-    for (const track of user.stream.getTracks() ) {
-        user.peer.addTrack(track, user.stream)
-    }
+    // user.peer.ontrack = e => {
+    //     delete_list()
+    //     element.remoteVideo.srcObject = e.streams[0]
+    // }
+    // for (const track of user.stream.getTracks() ) {
+    //     user.peer.addTrack(track, user.stream)
+    // }
 }
 init()
 
