@@ -158,7 +158,7 @@ const call = async id => {
 }
 
 const offer = async data => {
-    await user.peer.setRemoteDescription(data)
+    await user.peer.setRemoteDescription( new RTCSessionDescription(data) )
     const answer = await user.peer.createAnswer()
 
     await user.peer.setLocalDescription(answer)
@@ -173,7 +173,7 @@ const offer = async data => {
 }
 
 const answer = async data => {
-    await user.peer.setRemoteDescription(data)
+    await user.peer.setRemoteDescription( new RTCSessionDescription(data) )
 }
 
 ws.onopen = () => {
@@ -196,7 +196,7 @@ ws.onmessage = e => {
 
         case 'new_ice':
             user.call_to = a.data.from
-            user.peer.addIceCandidate(a.data.data)
+            user.peer.addIceCandidate( new RTCIceCandidate(a.data.data) )
             break
 
         case 'new_offer':
