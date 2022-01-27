@@ -194,12 +194,7 @@ const create_list = list => {
 const call = async id => {
     user.call_to = id
 
-    const offer = await user.peer.createOffer(
-        {
-            offerToReceiveAudio: true,
-            offerToReceiveVideo: true
-        }
-    )
+    const offer = await user.peer.createOffer()
     await user.peer.setLocalDescription(offer)
     send(
         'offer',
@@ -213,12 +208,7 @@ const call = async id => {
 
 const offer = async data => {
     await user.peer.setRemoteDescription( new RTCSessionDescription(data) )
-    const answer = await user.peer.createAnswer(
-        {
-            offerToReceiveAudio: true,
-            offerToReceiveVideo: true
-        }
-    )
+    const answer = await user.peer.createAnswer()
 
     await user.peer.setLocalDescription(answer)
 
