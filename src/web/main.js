@@ -91,19 +91,19 @@ const user = {
 let channel
 
 const init = async () => {
-    user.stream = await navigator.mediaDevices.getUserMedia(
-        {
-            video: true,
-            audio: {
-                // sampleRate: 44100,
-                // sampleSize: 16,
-                // channelCount: 1,
-                // noiseSuppression: false,
-                // echoCancellation: false,
-                autoGainControl: false
-            },
-        }
-    )
+    // user.stream = await navigator.mediaDevices.getUserMedia(
+    //     {
+    //         video: true,
+    //         audio: {
+    //             // sampleRate: 44100,
+    //             // sampleSize: 16,
+    //             // channelCount: 1,
+    //             // noiseSuppression: false,
+    //             // echoCancellation: false,
+    //             autoGainControl: false
+    //         },
+    //     }
+    // )
 
     channel = await user.peer.createDataChannel('main')
     channel.onopen = () => {
