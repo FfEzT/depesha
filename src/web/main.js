@@ -130,14 +130,18 @@ const init = async () => {
     }
 
     user.peer.onicecandidate = e => {
-        e.candidate && send(
-           'ice',
-            {
-                from: user.name,
-                data: e.candidate,
-                to: user.call_to
-            }
-        )
+        console.log(e.candidate)
+        if (e.candidate) {
+            send(
+                'ice',
+                {
+                    from: user.name,
+                    data: e.candidate,
+                    to: user.call_to
+                }
+            )
+            user.peer.onicecandidate = 0
+        }
     }
 
     element.localVideo.srcObject = user.stream
@@ -195,14 +199,19 @@ const call = async id => {
     user.call_to = id
 
     const offer = await user.peer.createOffer()
-    await user.peer.setLocalDescription(offer)
-    send(
-        'offer',
-        {
-            from: user.name,
-            to: user.call_to,
-            offer
-        }
+    setTimeout(
+        () => {
+            await user.peer.setLocalDescription(offer)
+            send(
+                'offer',
+                {
+                    from: user.name,
+                    to: user.call_to,
+                    offer
+                }
+            )
+        },
+        10000
     )
 }
 
