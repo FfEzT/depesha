@@ -130,7 +130,6 @@ const init = async () => {
     }
 
     user.peer.onicecandidate = e => {
-        console.log(e.candidate)
         if (e.candidate) {
             send(
                 'ice',
@@ -140,7 +139,7 @@ const init = async () => {
                     to: user.call_to
                 }
             )
-            user.peer.onicecandidate = 0
+            user.peer.onicecandidate = null
         }
     }
 
