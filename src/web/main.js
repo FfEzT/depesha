@@ -200,18 +200,13 @@ const call = async id => {
 
     const offer = await user.peer.createOffer()
     await user.peer.setLocalDescription(offer)
-    setTimeout(
-        async () => {
-            send(
-                'offer',
-                {
-                    from: user.name,
-                    to: user.call_to,
-                    offer
-                }
-            )
-        },
-        10000
+    send(
+        'offer',
+        {
+            from: user.name,
+            to: user.call_to,
+            offer
+        }
     )
 }
 
