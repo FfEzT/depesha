@@ -118,6 +118,16 @@ const init = async () => {
         channel = event.channel
     }
 
+    user.peer.ontrack = e => {
+        console.warn('Открыл track') // TODO delete
+        delete_list()
+        element.remoteVideo.srcObject = e.streams[0]
+    }
+    for (const track of user.stream.getTracks() ) {
+        console.warn('Отправил track') // TODO delete
+        user.peer.addTrack(track, user.stream)
+    }
+
     user.peer.onicecandidate = e => {
         e.candidate && send(
            'ice',
@@ -130,15 +140,6 @@ const init = async () => {
     }
 
     element.localVideo.srcObject = user.stream
-    user.peer.ontrack = e => {
-        console.warn('Открыл track') // TODO delete
-        delete_list()
-        element.remoteVideo.srcObject = e.streams[0]
-    }
-    for (const track of user.stream.getTracks() ) {
-        console.warn('Отправил track') // TODO delete
-        user.peer.addTrack(track, user.stream)
-    }
 }
 init()
 
