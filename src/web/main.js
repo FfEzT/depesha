@@ -91,20 +91,19 @@ const user = {
 let channel
 
 const init = async () => {
-    // TODO active
-    // user.stream = await navigator.mediaDevices.getUserMedia(
-    //     {
-    //         video: true,
-    //         audio: {
-    //             // sampleRate: 44100,
-    //             // sampleSize: 16,
-    //             // channelCount: 1,
-    //             // noiseSuppression: false,
-    //             // echoCancellation: false,
-    //             autoGainControl: false
-    //         },
-    //     }
-    // )
+    user.stream = await navigator.mediaDevices.getUserMedia(
+        {
+            video: true,
+            audio: {
+                // sampleRate: 44100,
+                // sampleSize: 16,
+                // channelCount: 1,
+                // noiseSuppression: false,
+                // echoCancellation: false,
+                autoGainControl: false
+            },
+        }
+    )
 
     channel = await user.peer.createDataChannel('main')
     channel.onopen = () => {
@@ -124,11 +123,11 @@ const init = async () => {
         delete_list()
         element.remoteVideo.srcObject = e.streams[0]
     }
-    // TODO active
-    // for (const track of user.stream.getTracks() ) {
-    //     console.warn('Отправил track') // TODO delete
-    //     user.peer.addTrack(track, user.stream)
-    // }
+
+    for (const track of user.stream.getTracks() ) {
+        console.warn('Отправил track') // TODO delete
+        user.peer.addTrack(track, user.stream)
+    }
 
     user.peer.onicecandidate = e => {
         e.candidate && send(
