@@ -91,6 +91,7 @@ const user = {
 let channel
 
 const init = async () => {
+    // TODO active
     // user.stream = await navigator.mediaDevices.getUserMedia(
     //     {
     //         video: true,
@@ -123,6 +124,7 @@ const init = async () => {
         delete_list()
         element.remoteVideo.srcObject = e.streams[0]
     }
+    // TODO active
     // for (const track of user.stream.getTracks() ) {
     //     console.warn('Отправил track') // TODO delete
     //     user.peer.addTrack(track, user.stream)
