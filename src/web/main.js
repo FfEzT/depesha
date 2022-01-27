@@ -85,7 +85,7 @@ const user = {
     name: '',
     call_to: undefined,
     stream: undefined,
-    peer: new RTCPeerConnection( {iceServers} ) || webkitRTCPeerConnection( {iceServers} ) || mozRTCPeerConnection( {iceServers} )
+    peer: new RTCPeerConnection( {iceServers} )
 }
 
 let channel
@@ -95,13 +95,13 @@ const init = async () => {
         {
             video: true,
             audio: {
-                // sampleRate: 48000,
+                // sampleRate: 44100,
                 // sampleSize: 16,
                 // channelCount: 1,
                 // noiseSuppression: false,
                 // echoCancellation: false,
                 autoGainControl: false
-            }
+            },
         }
     )
 
