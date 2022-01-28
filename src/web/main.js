@@ -95,11 +95,11 @@ const init = async () => {
         {
             video: true,
             audio: {
-                // sampleRate: 44100,
-                // sampleSize: 16,
-                // channelCount: 1,
-                // noiseSuppression: false,
-                // echoCancellation: false,
+                sampleRate: 44100,
+                sampleSize: 16,
+                channelCount: 1,
+                noiseSuppression: true,
+                echoCancellation: true,
                 autoGainControl: false
             }
         }
