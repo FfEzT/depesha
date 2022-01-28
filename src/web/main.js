@@ -1,4 +1,4 @@
-let ws = new WebSocket('wss://webrtcffezt.herokuapp')
+let ws = new WebSocket('wss://webrtcffezt.herokuapp.com')
 
 const iceServers = [
     {
