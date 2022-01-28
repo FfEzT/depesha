@@ -1,0 +1,59 @@
+*, *::after, *::before {
+    padding: 0;
+    font-family: text;
+    color: var(--color_1);
+    font-size: min(1.8vw, 3vh);
+}
+
+:root {
+    --color_1: #D3DEDC;
+    --color_2: #92A9BD;
+    --color_3: #7C99AC;
+    --color_4: #FFEFEF;
+}
+
+@font-face {
+    font-family: text;
+    src: url(Nunito-ExtraLight.ttf)
+}
+
+body {
+    background-color: var(--color_3);
+}
+
+div {
+    margin: 10px;
+    user-select: none;
+}
+
+input, button {
+    background-color: var(--color_2);
+    border: 1px var(--color_4) solid;
+    border-radius: 5px;
+    padding: 5px;
+    outline: none;
+}
+
+input {
+    width: 25%;
+}
+
+button:active {
+    transform: scale(1.05);
+}
+
+video {
+    width: 25vw;
+}
+
+.offline {
+    color: var(--color_1);
+}
+
+.online {
+    color: var(--color_4);
+}
+
+.hide {
+    color: var(--color_2);
+}

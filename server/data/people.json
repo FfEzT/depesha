@@ -1,9 +1,0 @@
-{
-    "***id": {
-        "***name": "",
-        "password": "",
-        "date_of_last_online": "",
-        "status": "*** online/offline/idle",
-        "friends": ["***id", "***id"]
-    }
-}

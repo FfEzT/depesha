@@ -1,0 +1,12 @@
+{
+  "name": "test_webrtc",
+  "version": "1.0.0",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js"
+  },
+  "author": "FfEzT",
+  "dependencies": {
+    "ws": "^8.4.2"
+  }
+}
