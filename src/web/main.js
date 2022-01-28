@@ -93,7 +93,7 @@ let channel
 const init = async () => {
     user.stream = await navigator.mediaDevices.getUserMedia(
         {
-            video: true,
+            // TODO video: true,
             audio: {
                 sampleRate: 44100,
                 sampleSize: 16,
@@ -144,8 +144,8 @@ const init = async () => {
                 user.peer.onicecandidate = null
             }
     }
-    pc.oniceconnectionstatechange = e => { console.info(user.peer.iceConnectionState, e) }
-        
+    user.peer.oniceconnectionstatechange = e => { console.info(user.peer.iceConnectionState, e) }
+
     element.localVideo.srcObject = user.stream
 }
 init()
