@@ -1,4 +1,4 @@
-let ws = new WebSocket('wss://webrtcffezt.herokuapp.com/')
+let ws = new WebSocket('wss://webrtcffezt.herokuapp.com')
 
 const iceServers = [
     {
@@ -118,6 +118,8 @@ const init = async () => {
         channel = event.channel
     }
 
+    
+    element.localVideo.srcObject = user.stream
     user.peer.ontrack = e => {
         console.warn('Открыл track') // TODO delete
         delete_list()
@@ -128,20 +130,21 @@ const init = async () => {
         console.warn('Отправил track') // TODO delete
         user.peer.addTrack(track, user.stream)
     }
-
+    
     user.peer.onicecandidate = e => {
         if (e.candidate) {
             send(
-                'ice',
-                {
-                    from: user.name,
-                    data: e.candidate,
-                    to: user.call_to
-                }
-            )
+                    'ice',
+                    {
+                        from: user.name,
+                        data: e.candidate,
+                        to: user.call_to
+                    }
+                )
             user.peer.onicecandidate = null
         }
     }
+    user.peer.oniceconnectionstatechange = e => { console.info(user.peer.iceConnectionState, e) }
 
     element.localVideo.srcObject = user.stream
 }
