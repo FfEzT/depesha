@@ -23,9 +23,10 @@ const load = require('../js/load')
 const web = require('../js/web')
 const cipher = require('../js/cipher')
 const server = require('../js/ws')
-let ws // WebSocket
+const name_parser = require('../js/name_parser')
 
 // WebSocket
+let ws = {}
 server.connect()
 
 // info about user and his 'people'
@@ -34,7 +35,7 @@ const user = {
     isNewUser: false,
     isConnection_closed: false,
     friend: {
-        activeFriend: undefined,
+        nickname: undefined,
         id: undefined,
         key: undefined
     },
@@ -42,12 +43,10 @@ const user = {
 }
 
 // checking authorization of user
-if (user.data.id == ""
-    || user.data.nickname == ""
-    || user.data.password == ""
+if (user.data.id == '' ||
+    user.data.nickname == '' ||
+    user.data.password == ''
 ) {
     user.isNewUser = true
 }
-else{
-    user.key = cipher.rsa.import_private()
-}
+else user.key = cipher.rsa.import_private()

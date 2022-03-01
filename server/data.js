@@ -19,294 +19,308 @@
 const sql = require('sqlite3').verbose()
 
 const people = {
-    db: './data/main.sql',
     /**
-     * @param {string} id
+     * @param {function} callback
+     */
+    db: callback => {
+        // open database
+        const db = new sql.Database('./data/main.sql')
+
+        callback(db)
+
+        // closing database
+        db.close()
+    },
+    /**
      * @param {string} nickname
+     * @param {number} id
      * @param {string} password
      * @param {string} key public key
+     * @returns {Promise<void>}
      */
-    sign_up: (id, nickname, password, key) => {
+    sign_up: (nickname, id, password, key) => {
         return new Promise(
             (resolve, reject) => {
-                // open database
-                const db = new sql.Database(people.db)
-
-                db.run(
-                    'INSERT INTO main values (?, ?, ?, ?, "offline", 0, 0)',
-                    [id, nickname, password, key],
-                    err => {
-                        err && reject()
-                        resolve()
+                people.db(
+                    db => {
+                        db.run(
+                            'INSERT INTO main values (?, ?, ?, ?, "offline", 0, 0)',
+                            [nickname, id, password, key],
+                            err => {
+                                err && reject()
+                                resolve()
+                            }
+                        )
                     }
                 )
-
-                // closing database
-                db.close()
             }
         )
     },
     /**
-        @param {string} id
+        @param {string} nickname
+        @param {number} id
+        @returns {object} list of people
      */
-    get_user: id => {
+    get_user: (nickname, id) => {
         return new Promise(
             resolve => {
-                // open database
-                const db = new sql.Database(people.db)
-
-                db.get(
-                    'SELECT * FROM main WHERE id = ?',
-                    [id],
-                    (err, data) => {
-                        resolve(data)
+                people.db(
+                    db => {
+                        db.get(
+                            'SELECT * FROM main WHERE nickname = ? AND id = ?',
+                            [nickname, id],
+                            (err, data) => resolve(data)
+                        )
                     }
                 )
-
-                // closing database
-                db.close()
+            }
+        )
+    },
+    /**
+     * @param {string} nickname
+     * @returns {Promise<object>}
+     */
+    get_last_user: nickname => {
+        return new Promise(
+            resolve => {
+                people.db(
+                    db => {
+                        db.get(
+                            'SELECT id FROM main WHERE nickname = ? ORDER BY id DESC',
+                            [nickname],
+                            (err, data) => resolve(data)
+                        )
+                    }
+                )
             }
         )
     },
     /**
      * change status of client
-     * @param {string} who id
+     * @param {string} nickname
+     * @param {number} id
      * @param {string} status (online || offline || idle)
      */
-    update_status: (who, status) => {
-        // open database
-        const db = new sql.Database(people.db)
-        
-        const str = `UPDATE main SET status = '${status}' WHERE id = '${who}'`
-        db.run(str)
-
-        // closing database
-        db.close()
+    update_status: (nickname, id, status) => {
+        people.db(
+            db => {
+                const str = `UPDATE main SET status = '${status}' WHERE nickname = '${nickname}' AND id = ${id}`
+                db.run(str)
+            }
+        )
     },
     /**
      * change status of client
-     * @param {string} who id
-     * @param {number} status (0 || 1)
+     * @param {string} nickname
+     * @param {string} id
+     * @param {number} status (0 = there isn't new friends, and 1 = there is new message)
      */
-    update_friends: (who, status) => {
-        // open database
-        const db = new sql.Database(people.db)
-
-        const str = `UPDATE main SET changes_friends = ${status} WHERE id = '${who}'`
-        db.run(str)
-
-        // closing database
-        db.close()
+    update_friends: (nickname, id, status) => {
+        people.db(
+            db => {
+                const str = `UPDATE main SET changes_friends = ${status} WHERE nickname = '${nickname}' AND id = ${id}`
+                db.run(str)
+            }
+        )
     },
     /**
      * change status of new_message
-     * @param {string} who 
+     * @param {string} nickname
+     * @param {number} id
      * @param {number} status (0 = there isn't new message, and 1 = there is new message)
      */
-    update_new_message: (who, status) => {
-        // open database
-        const db = new sql.Database(people.db)
-
-        const str = `UPDATE main SET new_message = '${status}' WHERE id = '${who}'`
-        db.run(str)
-
-        // closing database
-        db.close()
+    update_new_message: (nickname, id, status) => {
+        people.db(
+            db => {
+                const str = `UPDATE main SET new_message = ${status} WHERE nickname = '${nickname}' AND id = ${id}`
+                db.run(str)
+            }
+        )
     }
 }
 
 const friends = {
-    db: './data/main.sql',
     /**
-     * creating table in database
-     * @param {string} id
+     * @param {function} callback
      */
-    create_list: id => {
+    db: callback => {
         // open database
-        const db = new sql.Database(friends.db)
+        const db = new sql.Database('./data/main.sql')
 
-        const str = `CREATE TABLE ${id} (id TINYTEXT PRIMARY KEY, status TINYTEXT)`
-        db.run(str)
+        callback(db)
 
         // closing database
         db.close()
     },
     /**
-     * get list of friends from table
-     * @param {string} id 
-     * @returns {Promise<JSON>}
+     * creating table in database
+     * @param {string} id nickname#1234
      */
-    get_friends: id => {
-        return new Promise(
-            resolve => {
-                // open database
-                const db = new sql.Database(friends.db)
-
-                const str = `SELECT ${id}.id, main.nickname, ${id}.status, main.key
-                            FROM ${id}
-                            JOIN main
-                            ON ${id}.id = main.id
-                            ORDER BY ${id}.status, main.nickname`
-                db.all(
-                    str,
-                    (er, data) => {
-                        resolve(data)
-                    }
-                )
-                
-                // closing database
-                db.close()
+    create_list: id => {
+        friends.db(
+            db => {
+                const str = `CREATE TABLE ${id} (nickname TINYTEXT, id TINYINT, status TINYTEXT)`
+                db.run(str)
             }
         )
     },
     /**
      * write to db new friend or update their status
-     * @param {string} from id
-     * @param {string} to id
-     * @param {string} status (values: friend || not_friend || pending || waiting)
+     * @param {string} table nickname#1234
+     * @param {string} nickname
+     * @param {number} id
+     * @param {string} status (values: friend || pending || waiting)
      * @returns {Promise<void>}
      */
-    write: (from, to, status) => {
+    write: (table, nickname, id, status) => {
         return new Promise(
             (resolve, reject) => {
-                // open database
-                const db = new sql.Database(friends.db)
-
-                const str = `INSERT INTO ${from} VALUES (?, ?)`
-                db.run(
-                    str,
-                    [to, status],
-                    er => {
-                        er && reject()
-                        resolve()
+                friends.db(
+                    db => {
+                        const str = `INSERT INTO ${table} VALUES ('${nickname}', ${id}, '${status}')`
+                        db.run(
+                            str,
+                            er => {
+                                er && reject()
+                                resolve()
+                            }
+                        )
                     }
                 )
-
-                // closing database
-                db.close()
             }
         )
     },
     /**
      * update status of new_friend
-     * @param {string} whom id
-     * @param {string} who id
+     * @param {string} table nickname#1234
+     * @param {string} nickname
+     * @param {number} id
      * @returns {Promise<void>}
      */
-    add_friend: (whom, who) => {
+    add_friend: (table, nickname, id) => {
         return new Promise(
             resolve => {
-                // open database
-                const db = new sql.Database(friends.db)
+                friends.db(
+                    db => {
+                        const str = `UPDATE ${table} SET status = "friend" WHERE nickname = '${nickname}' AND id = ${id}`
 
-                const str_1 = `UPDATE ${whom} SET status = "friend" WHERE id = '${who}'`
-                const str_2 = `UPDATE ${who} SET status = "friend" WHERE id = '${whom}'`
-
-                db.serialize(
-                    () => {
-                        db.run(str_1)
                         db.run(
-                            str_2,
-                            () => {
-                                resolve()
-                            }
+                            str,
+                            () => resolve()
                         )
                     }
                 )
-
-                // closing database
-                db.close()
             }
         )
     },
     /**
      * delete people from list of friends
-     * @param {string} whom id
-     * @param {string} who id
+     * @param {string} table id nickname#1234
+     * @param {string} nickname
+     * @param {number} id
      * @returns {Promise<void>}
      */
-    delete_friend: (whom, who) => {
+    delete_friend: (table, nickname, id) => {
         return new Promise(
             resolve => {
-                // open database
-                const db = new sql.Database(friends.db)
+                friends.db(
+                    db => {
+                        const str = `DELETE FROM ${table} WHERE nickname = '${nickname}' AND id = ${id}`
 
-                const str_1 = `DELETE FROM ${whom} WHERE id = '${who}'`
-                const str_2 = `DELETE FROM ${who} WHERE id = '${whom}'`
-
-                db.serialize(
-                    () => {
-                        db.run(str_1)
                         db.run(
-                            str_2,
-                            () => {
-                                resolve()
-                            }
+                            str,
+                            () => resolve()
                         )
                     }
                 )
+            }
+        )
+    },
+    /**
+     * get list of friends from table
+     * @param {string} id title of table (nickname#1234)
+     * @returns {Promise<JSON>}
+     */
+    get_friends: id => {
+        return new Promise(
+            resolve => {
+                friends.db(
+                    db => {
+                        const str = `SELECT ${id}.id, ${id}.nickname, ${id}.status, main.key
+                            FROM ${id}
+                            JOIN main
+                            ON ${id}.nickname = main.nickname AND ${id}.id = main.id
+                            ORDER BY ${id}.status, main.nickname`
 
-                // closing database
-                db.close()
+                        db.all(
+                            str,
+                            (er, data) => resolve(data)
+                        )
+                    }
+                )
             }
         )
     }
 }
 
 const temp_mail = {
-    db: './data/temp_mail.sql',
+    db: callback => {
+        // open database
+        const db = new sql.Database('./data/temp_mail.sql')
+
+        callback(db)
+
+        // closing database
+        db.close()
+    },
     /**
-     * get data from db
-     * @param {string} id 
+     * get and delete data from db
+     * @param {string} recipient nickname#1234
      * @returns {Promise<JSON>}
      */
-    get: id => {
+    get: recipient => {
         return new Promise(
             resolve => {
-                // open database
-                const db = new sql.Database(temp_mail.db)
-
-                const str = `SELECT who, time, content FROM temp_message WHERE id = '${id}'`
-                db.all(
-                    str,
-                    (er, data) => {
-                        resolve(data)
+                temp_mail.db(
+                    db => {
+                        const str = `SELECT sender, time, content FROM temp_message WHERE recipient = '${recipient}'`
+                        db.all(
+                            str,
+                            (er, data) => resolve(data)
+                        )
+                        db.run(
+                            `DELETE FROM temp_message WHERE recipient = '${recipient}'`
+                        )
                     }
                 )
-                db.run(
-                    `DELETE FROM temp_message WHERE id = '${id}'`
-                )
-
-                // closing database
-                db.close()
             }
         )
     },
     /**
      * write data to db
-     * @param {string} id 
-     * @param {string} who id
-     * @param {string} time 
+     * @param {string} recipient id nickname#1234
+     * @param {string} sender id nickname#1234
+     * @param {string} time
      * @param {string} content message
      */
-    set: (id, who, time, content) => {
-        // open database
-        const db = new sql.Database(temp_mail.db)
-
-        const str = `INSERT INTO temp_message values ('${id}', '${who}', '${time}', '${content}')`
-        db.run(str)
-
-        // closing database
-        db.close()
+    set: (recipient, sender, time, content) => {
+        temp_mail.db(
+            db => {
+                const str = `INSERT INTO temp_message values ('${recipient}', '${sender}', '${time}', '${content}')`
+                db.run(str)
+            }
+        )
     }
 }
 
 // ! templates for database
+// const db = new sql.Database('./data/main.sql')
 // db.run(
-//     'CREATE TABLE main (id TINYTEXT PRIMARY KEY, nickname TINYTEXT, password TINYTEXT, key TINYTEXT, status TINYTEXT, changes_friends TINYINT, new_message TYNYINT)'
-// )
+//         'CREATE TABLE main (nickname TINYTEXT, id TINYINT, password TINYTEXT, key TINYTEXT, status TINYTEXT, changes_friends TINYINT, new_message TINYINT)'
+//     )
+// const db = new sql.Database('./data/temp_mail.sql')
 // db.run(
-//     'CREATE TABLE temp_message (id TINYTEXT, who TINYTEXT, time TINYTEXT, content TEXT)'
+//     'CREATE TABLE temp_message (recipient TINYTEXT, sender TINYTEXT, time TINYTEXT, content TEXT)'
 // )
 
 module.exports = {people, temp_mail, friends}

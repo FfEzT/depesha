@@ -19,9 +19,9 @@
 const {ipcRenderer} = require('electron')
 
 // window's btns
-const close_window = () => { ipcRenderer.send("close_window") }
-const full_window = () => { ipcRenderer.send('max_window') }
-const minimize_window = () => { ipcRenderer.send("minimize_window") }
+const close_window = () => ipcRenderer.send("close_window")
+const full_window = () => ipcRenderer.send('max_window')
+const minimize_window = () => ipcRenderer.send("minimize_window")
 
 // list of friend in down panel
 const friends = {}
@@ -48,7 +48,7 @@ const roll_down_all = () => {
     const lBar = document.getElementById('leftBar')
     const rBar = document.getElementById('rightBar')
     const dBar = document.getElementById('down_panel')
-    
+
     const lIsOpen = lBar.classList.contains('focus')
     const rIsOpen = rBar.classList.contains('focus')
     const dIsOpen = dBar.classList.contains('focus')
@@ -96,7 +96,7 @@ const focus_blur = key => {
         case 'focus':
             document.querySelector('body').setAttribute('onkeyup', '')
             break
-            
+
         case 'blur':
             document.querySelector('body').setAttribute('onkeyup', 'web.hot_key(event)')
             break
@@ -104,7 +104,7 @@ const focus_blur = key => {
 }
 
 /**
- * @param {bool} arg 
+ * @param {bool} arg
  */
 const focusBlur_right_bar = arg => {
     const el = document.getElementById('rightBar')
@@ -150,7 +150,7 @@ const notice = a => {
             break
 
         case 'sign_in_name':
-            text = 'Минимум 3 символа (на английском) и не только из цифр'
+            text = 'Ник должен состоять из 4-15 символов (на английском) и не только из цифр'
             break
 
         case 'sign_in_password':
@@ -180,7 +180,7 @@ const notice = a => {
             break
 
         case 'wait':
-            text = 'Подождите, программа не зависла'
+            text = 'Секундочку...'
             break
 
         case 'empty_message':
@@ -194,6 +194,10 @@ const notice = a => {
         case 'new_message':
             text = 'О, у вас новое сообщение!'
             break
+
+        case 'id_err':
+            text = 'Пример правильного id: hello#1234'
+            break
     }
 
     const go = document.createElement('div')
@@ -202,7 +206,7 @@ const notice = a => {
     const go_text = document.createElement('div')
     go_text.classList.add('text')
 
-    size? go_text.style.fontSize = size : ''
+    if (size) go_text.style.fontSize = size
 
     go.prepend(go_text)
     go_text.innerHTML = text
@@ -222,20 +226,16 @@ const notice = a => {
     wow.append(go)
 
     setTimeout(
-        () => {
-            go.classList.replace('close', 'first')
-        },
+        () => go.classList.replace('close', 'first'),
         50
     )
     setTimeout(
         () => {
             go.classList.add('left')
             setTimeout(
-                () => {
-                    go.remove()
-                },
+                () => go.remove(),
                 500
-            ) 
+            )
         },
         DELAY
     )
@@ -250,7 +250,7 @@ const change_status = () => {
             object.style.backgroundColor = '#35B8E7'
             text_of_object.innerText = 'online'
             break
-        
+
         case 'offline':
             object.style.backgroundColor = 'var(--color_text)'
             text_of_object.innerText = 'offline'
@@ -264,14 +264,6 @@ const change_status = () => {
 }
 
 const change_status_from_profile = () => {
-    const a = {
-        'online': () => {
-            user.status = 'idle'
-        },
-        'idle': () => {
-            user.status = 'online'
-        }
-    }
     switch (user.status) {
         case 'online':
             user.status = 'idle'
@@ -289,6 +281,7 @@ const change_status_from_profile = () => {
             type: 'update_status',
             content: {
                 id: user.data.id,
+                nickname: user.data.nickname,
                 status: user.status
             }
         }
@@ -296,39 +289,45 @@ const change_status_from_profile = () => {
 }
 
 const f_search_friend = () => {
-    const a = /^[a-zA-Z]{3,10}$/
+    const a = /^[a-zA-Z0-9]{4,15}#\d{1,4}$/
     const b = search_friend.value.toLowerCase()
 
-    if (b == user.data.id) {
+    if (b == user.data.nickname + '#' + user.data.id) {
         notice('no_user')
         setTimeout(
             () => notice('it_is_u'),
             1500
         )
         search_friend.value = ''
-        return 0
     }
-    
-    if ( a.test(b) ) {
+    else if ( a.test(b) ) {
+        const {nickname: friend_nickname, id: friend_id} = name_parser.parse(b)
         server.send_data(
             {
                 type: 'do_friend',
                 content: {
                     status: 'search',
-                    from: user.data.id,
-                    to: b
+                    sender_nickname: user.data.nickname,
+                    sender_id: user.data.id,
+                    friend_nickname,
+                    friend_id
                 }
             }
         )
-        search_friend.value = ''}
-    else { notice('no_user') }
+        search_friend.value = ''
+    }
+    else notice('no_user')
 }
 
 const load_friend = () => {
     const Friend = require('../js/Friend')
-    const list = data.red_point.open_file().new_message
 
-    let temp = [...document.getElementsByClassName('el')]
+    const list = data.red_point.open_file()
+
+    // TODO remake
+    // TODO may be just clear all tabs with innerHTML = '' 
+    // TODO selector '.down_panel > .body > .bg > .contents'
+    const temp = [...document.getElementsByClassName('el')]
     if (temp) {
         for (let i = 0; i < temp.length; ++i) {
             temp[i].remove()
@@ -336,42 +335,57 @@ const load_friend = () => {
     }
 
     // type: array(list of friends)
+    // TODO remake to FOR constuction
     data.main().forEach(
         value => {
-            friends[value.id] = new Friend(value.id, value.nickname, value.status, value.key, list[value.id])
+            // TODO delete from list if u delete friend (request or friend)
+            // TODO delete friends[nickname + '#' + id]
+            friends[value.nickname + '#' + value.id] = new Friend(
+                value.nickname,
+                value.id,
+                value.status,
+                value.key,
+                list[value.nickname + '#' + value.id]
+            )
         }
     )
 }
 
 /**
  * send request to delete friend to server
- * @param {string} str id of friend, who we want to delete
+ * @param {string} friend_nickname nickname
+ * @param {number} friend_id id
  */
-const delete_friend = str => {
+const delete_friend = (friend_nickname, friend_id) => {
     server.send_data(
         {
             type: 'do_friend',
             content: {
                 status: 'delete',
-                from: user.data.id,
-                to: str
+                sender_nickname: user.data.nickname,
+                sender_id: user.data.id,
+                friend_nickname,
+                friend_id
             }
         }
     )
 }
 
 /**
- * send request to add friend to server
- * @param {string} str id of friend, who we want to add
+ * send request to server to add friend
+ * @param {string} friend_nickname nickname
+ * @param {number} friend_id id
  */
-const add_friend = str => {
+const add_friend = (friend_nickname, friend_id) => {
     server.send_data(
         {
             type: 'do_friend',
             content: {
                 status: 'add',
-                from: user.data.id,
-                to: str
+                sender_nickname: user.data.nickname,
+                sender_id: user.data.id,
+                friend_nickname,
+                friend_id
             }
         }
     )
@@ -379,28 +393,26 @@ const add_friend = str => {
 
 /**
  * choose friend to chat with him
- * @param {string} str nickname of friend
- * @param {string} id id of friend
- * @param {string} key key of friend
+ * @param {string} nickname nickname of friend
+ * @param {number} id id of friend
+ * @param {string} key RSA key of friend
  */
-const chooseFriend = (str, id, key) => {
+const chooseFriend = (nickname, id, key) => {
     /**
      * open panel
      * @param {string} a rightBar || down_panel
      */
-    const open_panels = a => {
-        !check_pos_for_bars(a) && set_pos_for_bars(a)
-    }
+    const open_panels = a => !check_pos_for_bars(a) && set_pos_for_bars(a)
 
     // delete old list
     document.getElementsByClassName('chat')[0].innerHTML = ''
 
     load_messages_from_file: {
-        user.friend.activeFriend = str
+        user.friend.nickname = nickname
         user.friend.id = id
         user.friend.key = key
 
-        const messages = data.message.get(id)
+        const messages = data.message.get(nickname + '#' + id)
         const win = document.getElementsByClassName('chat')[0]
         win.onscroll = 0
 
@@ -408,20 +420,21 @@ const chooseFriend = (str, id, key) => {
             let index_of_messages = messages.length - 1
 
             // send obj to render
+            // TODO remake
             const f = () => {
                 if (index_of_messages >= 0) {
                     if (win.scrollTop <= 300) {
+                        // TODO remake
                         renderMessage(messages[index_of_messages], 'load')
                         --index_of_messages
                         f()
                     }
-                    else {
-                        win.onscroll = () => {
-                            if (win.scrollTop <= 300 && index_of_messages >= 0) {
-                                renderMessage(messages[index_of_messages], 'load', true)
-                                --index_of_messages
-                                f()
-                            }
+                    else win.onscroll = () => {
+                        if (win.scrollTop <= 300 && index_of_messages >= 0) {
+                            // TODO remake
+                            renderMessage(messages[index_of_messages], 'load', true)
+                            --index_of_messages
+                            f()
                         }
                     }
                 }
@@ -431,7 +444,7 @@ const chooseFriend = (str, id, key) => {
     }
 
     // change nickname in right panel
-    document.getElementsByClassName('nick_text')[0].innerText = str
+    document.getElementsByClassName('nick_text')[0].innerText = nickname + '#' + id
 
     open_panels: {
         open_panels('rightBar')
@@ -439,15 +452,14 @@ const chooseFriend = (str, id, key) => {
     }
 
     // delete redPoint
-    friends[id].red_point.delete()
+
+    friends[nickname + '#' + id].red_point.delete()
     // delete redPoint in files
-    data.red_point.delete(id)
+    data.red_point.delete(nickname + '#' + id)
 }
 /**
  * show message in right panel
- * @param {{
- * content, time, who_send
- * }} data 
+ * @param {{content, time, who_send}} data
  * @param {string} type 'newMessage' || 'load'
  * @param {bool} without_scroll
  */
@@ -473,19 +485,13 @@ const renderMessage = (data, type, without_scroll) => {
 
     if (data.who_send == 'i') {
         setTimeout(
-            () => {
-                b.children[1].style.backgroundColor = 'var(--color_text)'
-            },
+            () => b.children[1].style.backgroundColor = 'var(--color_text)',
             10
         )
     }
 
-    if (type == 'newMessage') {
-        a.append(b)
-    }
-    else if (type == 'load') {
-        a.prepend(b)
-    }
+    if (type == 'newMessage') a.append(b)
+    else if (type == 'load') a.prepend(b)
 
     !without_scroll && a.scrollTo(
         {
@@ -494,15 +500,14 @@ const renderMessage = (data, type, without_scroll) => {
     )
 
     setTimeout(
-        () => {
-            b.style.opacity = 100
-        },
+        () => b.style.opacity = 100,
         10
     )
 }
 
 const send_message = () => {
-    if (user.friend.id) {
+    if (user.friend.nickname && user.friend.id && user.friend.key) {
+        // TODO delete all   (alt + 255)
         const input = chat.value.trim()
 
         if (input != '') {
@@ -514,8 +519,10 @@ const send_message = () => {
                     {
                         type: 'message_to_friend',
                         content: {
-                            who: user.data.id,
-                            to: user.friend.id,
+                            sender_nickname: user.data.nickname,
+                            sender_id: user.data.id,
+                            friend_nickname: user.friend.nickname,
+                            friend_id: user.friend.id,
                             time,
                             content: cipher.rsa.encrypt(input, user.friend.key)
                         }
@@ -523,45 +530,50 @@ const send_message = () => {
                 )
 
                 // write your message
-                {
-                    data.message.write(
-                        user.friend.id,
-                        {
-                            content: input,
-                            time,
-                            who_send: 'i'
-                        }
-                    )
-                }
+                data.message.write(
+                    user.friend.nickname + '#' + user.friend.id,
+                    {
+                        content: input,
+                        time,
+                        who_send: 'i'
+                    }
+                )
 
                 // render message
-                {
-                    renderMessage(
-                        {
-                            content: input,
-                            time,
-                            who_send: 'i'
-                        },
-                        'newMessage'
-                    )
-                }
+                renderMessage(
+                    {
+                        content: input,
+                        time,
+                        who_send: 'i'
+                    },
+                    'newMessage'
+                )
 
                 chat.value = ''
             }
-            else { notice('off_server') }
+            else notice('off_server')
         }
-        else { notice('empty_message') }
+        else notice('empty_message')
     }
-    else { notice('empty_adress') }
+    else notice('empty_adress')
 }
 
-// processing incoming messages from the server
-// in: arr of obj (messages)
+/**
+ * processing incoming messages from the server
+ * @param {{
+ *  sender, time, content
+ * }
+ * } arr
+ */
 const get_message = arr => {
+    // TODO remake for
     arr.forEach(
         el => {
-            // who, time, content
-            const from = el.who
+            const {
+                nickname: sender_nickname,
+                id: sender_id
+            } = name_parser.parse(el.sender)
+
             const content = cipher.rsa.decrypt(el.content)
             const time = el.time
             const who_send = 'friend'
@@ -569,7 +581,7 @@ const get_message = arr => {
             setTimeout(
                 () => {
                     data.message.write(
-                        from,
+                        sender_nickname + '#' + sender_id,
                         {
                             content,
                             time,
@@ -580,16 +592,16 @@ const get_message = arr => {
                 1
             )
 
-            if (user.friend.id == from) {
+            if (user.friend.nickname == sender_nickname && user.friend.id == sender_id) {
                 renderMessage(
                     {content, time, who_send},
                     'newMessage'
                 )
             }
             else {
-                notice('new_message'),
-                friends[from].red_point.set(),
-                data.red_point.set(from)
+                notice('new_message')
+                friends[sender_nickname + '#' + sender_id].red_point.set()
+                data.red_point.set(sender_nickname + '#' + sender_id)
             }
         }
     )

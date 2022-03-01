@@ -16,7 +16,7 @@
 */
 
 :root {
-    --color_1: #191729;
+    --color_1: #130F26;
     --color_2: #413C69; /* main */
     --color_3: #343055;
     --color_3_hover: #2F2B4D;
@@ -28,7 +28,6 @@
     --color_text: #709FB0; /* main */
     --color_tab: #523C69;
     --color_important: #2B0000;
-    --color_shadow: #0d0c14;
     --placeholder_text: #2C2847;
     --border_round_1: min(10vw, 19vh); /*180px*/
     --border_round_2: min(1.3vw, 2.3vh) /*25px*/

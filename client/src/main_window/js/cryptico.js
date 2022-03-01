@@ -1941,7 +1941,6 @@ function rng_get_byte() {
     rng_pptr = 0;
     //rng_pool = null;
   }
-  // TODO: allow reseeding after first request
   return rng_state.next();
 }
 
@@ -2033,7 +2032,7 @@ function byte2Hex(b)
 function pkcs1pad2(s, n)
 {
     if (n < s.length + 11)
-    { // TODO: fix for utf-8
+    {
         //alert("Message too long for RSA (n=" + n + ", l=" + s.length + ")");
         //return null;
         throw "Message too long for RSA (n=" + n + ", l=" + s.length + ")";
@@ -2266,7 +2265,6 @@ function RSAGenerate(B, E)
 function RSADoPrivate(x)
 {
     if (this.p == null || this.q == null) return x.modPow(this.d, this.n);
-    // TODO: re-calculate any missing CRT params
     var xp = x.mod(this.p).modPow(this.dmp1, this.p);
     var xq = x.mod(this.q).modPow(this.dmq1, this.q);
     while (xp.compareTo(xq) < 0)

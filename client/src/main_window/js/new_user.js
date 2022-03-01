@@ -44,7 +44,7 @@ const load_form_sign_up = () => {
         password_ = document.createElement('input'),
         back = document.createElement('div'),
         sign_in_ = document.createElement('div')
-        
+
     let style = {
             grid: "position: absolute;\
                         display: grid;\
@@ -88,7 +88,8 @@ const load_form_sign_up = () => {
                         display: grid;\
                         border-radius: var(--border_round_2);\
                         cursor: pointer;'
-    } 
+    }
+
     const can_create = {
         id: false,
         password: false
@@ -99,7 +100,7 @@ const load_form_sign_up = () => {
     password.style = password_.style = style.password
     sign_in.style  = back.style      = style.text
     sign_up.style  = sign_in_.style  = style.btn
-    
+
     grid_.style.opacity = '0'
     grid.style.opacity = '0'
 
@@ -123,8 +124,8 @@ const load_form_sign_up = () => {
     password_.tabIndex = '-1'
 
     name.onblur = () => {
-        const a = /^[a-zA-Z0-9]{3,15}$/
-        const b = /^\d{3,15}$/
+        const a = /^[a-zA-Z0-9]{4,15}$/
+        const b = /^\d+$/
         let text = name.value
 
         if ( !b.test(text) ) {
@@ -158,7 +159,7 @@ const load_form_sign_up = () => {
         grid.style.opacity = '0'
         grid_.style.opacity = '100'
 
-        grid.style.transform = 'translate(-150%, -50%)' 
+        grid.style.transform = 'translate(-150%, -50%)'
         grid_.style.transform = 'translate(-50%, -50%)'
 
         name.tabIndex = '-1'
@@ -172,7 +173,7 @@ const load_form_sign_up = () => {
 
         grid.style.transform = 'translate(-50%, -50%)'
         grid_.style.transform = 'translate(50%, -50%)'
-        
+
         name.tabIndex = '1'
         password.tabIndex = '2'
         id.tabIndex = '-1'
@@ -182,24 +183,17 @@ const load_form_sign_up = () => {
         if (can_create.name && can_create.password) {
             setTimeout(
                 () => {
-                    let hash = cipher.hashing(password.value)
-                    let key = cipher.rsa.create_private(
+                    const hash = cipher.hashing(password.value)
+                    const key = cipher.rsa.create_private(
                         cipher.hashing(hash)
                     )
 
                     data.write_key(key)
-                    
+
                     ws.onmessage = e => {
                         let a = JSON.parse(e.data)
 
-                        if (a.result == 1) {
-                            // write data about user (user.json)
-                            user.data.id = a.id
-                            user.data.nickname = name.value
-                            user.data.password = cipher.hashing(password.value)
-                        
-                            data.write_user_data()
-                            
+                        if (a.type == 'new_user') {
                             // show id
                             let bg = document.createElement('div')
 
@@ -207,13 +201,12 @@ const load_form_sign_up = () => {
                             background-color: var(--color_1); opacity: 0;\
                             transition: opacity .5s cubic-bezier(0.16, 1, 0.3, 1);'
                             main.append(bg)
+
                             setTimeout(
-                                () => {
-                                    bg.style.opacity = '100'
-                                },
+                                () => bg.style.opacity = '100',
                                 10
                             )
-                            
+
                             let grid_info_id = document.createElement('div')
                             grid_info_id.style = "position: absolute;\
                                                 display: grid;\
@@ -226,7 +219,7 @@ const load_form_sign_up = () => {
                                                 transition: opacity 1s cubic-bezier(0.42,0,0.58,1);\
                                                 grid-template-rows: repeat(3, 1fr);"
                             main.append(grid_info_id)
-                            
+
                             setTimeout(
                                 () => {
                                     bg.remove()
@@ -236,30 +229,26 @@ const load_form_sign_up = () => {
                                 },
                                 500
                             )
-                            
+
                             let info_text = document.createElement('div')
                             info_text.style = 'width: 100%;\
                                             height: 55%;\
                                             margin: auto;\
                                             color: var(--color_text);\
                                             font-family: text;\
-                                            font-size: min(2.5vw, 4vh);\
                                             padding: 0 5%;\
                                             user-select: none;\
                                             border-bottom: 1px solid rgb(74, 71, 163);'
-                            info_text.innerText = 'Ваш id:'
-                            
+
                             let info_id = document.createElement('div')
                             info_id.style = 'width: 100%;\
                                             height: 55%;\
                                             margin: auto;\
                                             color: var(--color_text);\
                                             font-family: text;\
-                                            font-size: min(2.5vw, 4vh);\
                                             padding: 0 5%;\
                                             border-bottom: 1px solid rgb(74, 71, 163);'
-                            info_id.innerText = a.id
-                            
+
                             let info_btn = document.createElement('div')
                             info_btn.style = 'width: 40%;\
                                             display: grid;\
@@ -273,16 +262,36 @@ const load_form_sign_up = () => {
                                                 font-size: min(2.5vw, 4vh);\
                                                 color: var(--color_text);\
                                                 user-select: none">ok</div>'
-                            
-                            
+
+                            info_btn.onclick = () => window.location.reload()
+
+                            if (a.content.result == 1) {
+                                // write data about user (user.json)
+                                user.data.id = a.content.id
+                                user.data.nickname = name.value
+                                user.data.password = cipher.hashing(password.value)
+                                data.write_user_data()
+
+                                info_text.style.fontSize = info_id.style.fontSize = 'min(2.5vw, 4vh)'
+
+                                info_text.innerText = 'Ваш id:'
+                                info_id.innerText = user.data.nickname + '#' + a.content.id
+                            }
+                            else {
+                                info_text.style.fontSize = 'min(1.3vw, 2.4vh)'
+                                info_id.style.fontSize = 'min(1.3vw, 2.4vh)'
+
+                                info_id.style.userSelect = 'none'
+
+                                info_text.innerText = 'Такой nickname уже заняли'
+                                info_id.innerText = 'Попробуйте другой'
+                            }
+
                             grid_info_id.append(info_text)
                             grid_info_id.append(info_id)
                             grid_info_id.append(info_btn)
-                            
-                            info_btn.onclick = () => {
-                                window.location.reload()
-                            }
                         }
+                        else window.location.reload()
                     }
 
                     server.send_data(
@@ -300,62 +309,74 @@ const load_form_sign_up = () => {
             )
             web.notice('wait')
         }
-        else { web.notice('sign_up_err') }
+        else web.notice('sign_up_err')
     }
     sign_in_.onclick = () => {
         // checking password
         const a = /^\S{9,20}$/
+        const b = /^[a-zA-Z0-9]{4,15}#\d{1,4}$/
 
         if ( a.test(password_.value) ) {
-            ws.onmessage = e => {
-                let b = JSON.parse(e.data)
-                if (b.result == '1') {
-                    setTimeout(
-                        () => {
-                            let hash = cipher.hashing(password_.value)
-                            let key_to_write = cipher.rsa.create_private(
-                                cipher.hashing(hash)
-                            )
-                            // write data about user (user.json)
-                            user.data.id = id.value
-                            user.data.nickname = b.nick
-                            user.data.password = hash
+            if ( b.test(id.value) ) {
+                const {nickname: user_nickname, id: user_id} = name_parser.parse(id.value)
 
-                            data.write_user_data()
-                            data.write_key(key_to_write)
+                ws.onmessage = e => {
+                    let b = JSON.parse(e.data)
 
-                            ws.onmessage = e => {
-                                let a = JSON.parse(e.data)
-                                data.main('get_friends', a.data)
-                            
-                                window.location.reload()
-                            }
+                    if (b.type == 'auth') {
+                        if (b.content.result == '1') {
+                            setTimeout(
+                                () => {
+                                    const hash = cipher.hashing(password_.value)
+                                    const key_to_write = cipher.rsa.create_private(
+                                        cipher.hashing(hash)
+                                    )
 
-                            server.send_data(
-                                {
-                                    type: 'get_friends',
-                                    content: {
-                                        id: user.data.id
+                                    // write data about user (user.json)
+                                    user.data.id = id.value
+                                    user.data.nickname = b.content.nick
+                                    user.data.password = hash
+
+                                    data.write_user_data()
+                                    data.write_key(key_to_write)
+
+                                    ws.onmessage = e => {
+                                        const a = JSON.parse(e.data)
+                                        data.main('set_friends', a.content)
+
+                                        window.location.reload()
                                     }
-                                }
+
+                                    server.send_data(
+                                        {
+                                            type: 'get_friends',
+                                            content: {
+                                                nickname: user.data.nickname,
+                                                id: user.data.id
+                                            }
+                                        }
+                                    )
+                                },
+                                300
                             )
-                        },
-                        300
-                    )
-                    web.notice('wait')
+                            web.notice('wait')
+                        }
+                        else web.notice('auth_err')
+                    }
+                    else window.location.reload()
                 }
-                else if (b.result == '0') {
-                    web.notice('auth_err')
-                }
+
+                server.auth(
+                    user_id,
+                    user_nickname,
+                    cipher.hashing(password_.value)
+                )
             }
-            server.auth(
-                id.value,
-                cipher.hashing(password_.value)
-            )
+            else web.notice('id_err')
         }
-        else { web.notice('sign_up_err') }
+        else web.notice('sign_in_password')
     }
-    
+
     password.type = password_.type = 'password'
 
     sign_in.innerText = 'Есть аккаунт'
@@ -403,7 +424,7 @@ const checking_status = () => {
 }
 
 let offline = document.createElement('div')
-offline.style = 
+offline.style =
     'position: absolute;\
     left: 0vw;\
     top: 0vh;\
@@ -425,9 +446,15 @@ offline.innerHTML = '<div\
                     </div>'
 
 main.append(offline)
-
+console.log(offline.style)
 const el = document.getElementById('offline')
-el.style.opacity = '100'
-el.style.transform = 'scale(1)'
+
+setTimeout(
+    () => {
+        el.style.opacity = '100'
+        el.style.transform = 'scale(1)'
+    },
+    100
+)
 
 checking_status()

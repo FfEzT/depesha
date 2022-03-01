@@ -19,30 +19,33 @@ const fs = require('fs')
 
 /**
  * this function manages data in the friend.json
- * @param {string} a delete_data||get_friends
- * @param {[]} b list of friends
+ * @param {string} a delete_data || get_friends
+ * @param {} b list of friends
  * @returns {[friend]}
  */
 const main = (a, b=[]) => {
-    let data = JSON.parse(
+    const data = JSON.parse(
         fs.readFileSync('./src/data/friend.json')
     )
 
-    switch (a) {
-        case 'delete_data':
-            data.friends = []
-            break
+    if (a) {
+        switch (a) {
+            case 'delete_data':
+                data.friends = []
+                break
 
-        case 'get_friends':
-            data.friends = b
-            break
+            case 'set_friends':
+                data.friends = b
+                break
+        }
+
+        // write data to friend.json
+        fs.writeFileSync(
+            './src/data/friend.json',
+            JSON.stringify(data)
+        )
     }
 
-    // write data to friend.json
-    fs.writeFileSync(
-        './src/data/friend.json',
-        JSON.stringify(data)  // todo before publishing remove last 2 arguments
-    )
     return data.friends
 }
 
@@ -72,6 +75,14 @@ const write_key = key_to_write => {
     )
 }
 
+const key_to_null = () => {
+    fs.writeFile(
+        './src/data/private.key',
+        '{}',
+        () => {}
+    )
+}
+
 const red_point = {
     open_file: () => {
         return JSON.parse(
@@ -84,32 +95,34 @@ const red_point = {
             JSON.stringify(data)
         )
     },
-    set: who => {
+    /**
+     * write info about new_message in file
+     * @param {string} nickname nickname#1234
+     */
+    set: nickname => {
         const data = red_point.open_file()
-        data.new_message[who] = true
+        data.new_message[nickname] = true
 
         red_point.write_file(data)
     },
-    delete: who => {
+    /**
+     * delete info about new_message in file
+     * @param {string} nickname nickname#1234
+     */
+    delete: nickname => {
         const data = red_point.open_file()
-        delete data.new_message[who]
-        
+        delete data.new_message[nickname]
+
         red_point.write_file(data)
     },
+    /**
+     * default (space) info about new_message in file
+     */
     to_null: () => {
         const data = red_point.open_file()
-        data.new_message = {}
-        
+        data = {}
         red_point.write_file(data)
     }
-}
-
-const key_to_null = () => {
-    fs.writeFile(
-        './src/data/private.key',
-        '{}',
-        () => {}
-    )
 }
 
 const message = {
@@ -122,7 +135,7 @@ const message = {
         )
     },
     /**
-     * @param {str} id friend's id
+     * @param {str} id nickname#1234
      * @returns {[{messages}]}
      */
     get: id => {
@@ -132,19 +145,13 @@ const message = {
     },
     /**
      * write obj with message to file
-     * @param {string} id friend's id
+     * @param {string} id nickname#1234
      * @param {{content, time, who_send}} obj
      */
     write: (id, obj) => {
-        const friend = message.get(id)
+        const data = JSON.parse( fs.readFileSync(message.file) )
 
-        let data = JSON.parse(
-            fs.readFileSync(message.file)
-        )
-
-        if (!friend) {
-            data[id] = []
-        }
+        !message.get(id) && (data[id] = [])
 
         data[id].push(obj)
 

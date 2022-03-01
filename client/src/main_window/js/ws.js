@@ -47,48 +47,52 @@ const connect = () => {
 
                     switch (a.type) {
                         case 'auth':
-                            if (a.result == '0') {
+                            if (a.content.result == 0) {
                                 user.data.id = '',
                                 user.data.nickname = '',
                                 user.data.password = '',
-                            
+
                                 data.write_user_data(),
-                                
+
                                 window.location.reload()
                             }
                             else {
-                                user.data.nickname = a.nick
-
-                                data.write_user_data()
+                                if (user.data.nickname != a.content.nick) {
+                                    user.data.nickname = a.content.nick
+                                    data.write_user_data()
+                                }
                             }
                             break
 
                         case 'do_friends':
-                            a.result == '0' ? web.notice('no_user') : web.notice('wait_for_confirmation')
+                            a.content.result == 1 ? web.notice('wait_for_confirmation') : web.notice('no_user')
                             break
 
                         case 'list_of_friends':
-                            data.main('get_friends', a.data)
+                            data.main('set_friends', a.content)
                             web.load_friend()
                             break
 
                         case 'new_message':
-                            web.get_message(a.data)
+                            web.get_message(a.content)
                             break
                     }
                 }
 
-                auth(user.data.id, user.data.password, true)
+                auth(
+                    user.data.nickname,
+                    user.data.id,
+                    user.data.password,
+                    true
+                )
             }
         }
-        else { window.location.reload() }
+        else window.location.reload()
     }
     ws.onclose = () => {
         // reconnection
         setTimeout(
-            () => {
-                main()
-            },
+            () => connect(),
             TIME_FOR_RECONNECT
         )
 
@@ -96,7 +100,7 @@ const connect = () => {
             user.isConnection_closed = true
             web.notice('off_server')
             user.status = 'offline'
-            
+
             trycatch()
         }
     }
@@ -104,35 +108,28 @@ const connect = () => {
 
 /**
  * send data to server
- * @param {{
- * type: string,
- * content: {}
- * }} data 
+ * @param {{type: string,content: {}}} data
  */
 const send_data = data => {
-    if (user.status == 'offline') {
-        web.notice('off_server')
-    }
-    else {
-        ws.send(
-            JSON.stringify(data)
-        )
-    }
+    if (user.status == 'offline') web.notice('off_server')
+    else ws.send( JSON.stringify(data) )
 }
 
 /**
  * send id and password for auth
- * @param {string} id
+ * @param {string} id nickname
+ * @param {number} nickname
  * @param {string} password
- * @param {bool} a
+ * @param {bool} final_identification
  */
- const auth = (id, password, a=false) => {
+const auth = (id, nickname, password, final_identification=false) => {
     send_data(
         {
             type: 'auth',
             content: {
-                connect: a,
+                connect: final_identification,
                 id,
+                nickname,
                 password
             }
         }

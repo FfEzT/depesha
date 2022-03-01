@@ -40,7 +40,6 @@ const rsa = {
     create_private: pass_phrase => {
         return cryptico.generateRSAKey(pass_phrase, BYTE_LENGTH)
     },
-
     /**
         Create public key
         @param {string} private_key

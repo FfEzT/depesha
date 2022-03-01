@@ -19,31 +19,22 @@ const main = () => {
     web.notice('welcome')
 
     if (user.isNewUser) {
-        require('../js/new_user'),
+        require('../js/new_user')
         setTimeout(
-            () => {
-                web.notice('auth')
-            },
+            () => web.notice('auth'),
             1500
         )
     }
-    else {
-        // loading list of friends
-        web.load_friend()
-    }
+    else web.load_friend()
 
 
     load_animation: {
         setTimeout(
-            () => {
-                start.style.opacity = 0
-            },
+            () => start.style.opacity = 0,
             10
         )
         setTimeout(
-            () => {
-                start.remove()
-            },
+            () => start.remove(),
             1000
         )
     }

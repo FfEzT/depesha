@@ -106,7 +106,7 @@
     transition: opacity .5s cubic-bezier(0.42,0,0.58,1), left 1s cubic-bezier(0.85, 0, 0.15, 1);
 }
 
-.down_panel > .body > .bg #f1:checked ~ .content_for_f1 {
+.down_panel > .body > .bg > #f1:checked ~ .content_for_f1 {
     opacity: 100;
     left: 0;
 }
