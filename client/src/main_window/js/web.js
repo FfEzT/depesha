@@ -278,13 +278,11 @@ const change_status_from_profile = () => {
     change_status()
 
     server.send_data(
+        'update_status',
         {
-            type: 'update_status',
-            content: {
-                id: user.data.id,
-                nickname: user.data.nickname,
-                status: user.status
-            }
+            id: user.data.id,
+            nickname: user.data.nickname,
+            status: user.status
         }
     )
 }
@@ -303,16 +301,15 @@ const f_search_friend = () => {
     }
     else if ( a.test(b) ) {
         const {nickname: friend_nickname, id: friend_id} = name_parser.parse(b)
+        
         server.send_data(
+            'do_friend',
             {
-                type: 'do_friend',
-                content: {
-                    status: 'search',
-                    sender_nickname: user.data.nickname,
-                    sender_id: user.data.id,
-                    friend_nickname,
-                    friend_id
-                }
+                status: 'search',
+                sender_nickname: user.data.nickname,
+                sender_id: user.data.id,
+                friend_nickname,
+                friend_id
             }
         )
         search_friend.value = ''
@@ -359,15 +356,13 @@ const load_friend = () => {
  */
 const delete_friend = (friend_nickname, friend_id) => {
     server.send_data(
+        'do_friend',
         {
-            type: 'do_friend',
-            content: {
-                status: 'delete',
-                sender_nickname: user.data.nickname,
-                sender_id: user.data.id,
-                friend_nickname,
-                friend_id
-            }
+            status: 'delete',
+            sender_nickname: user.data.nickname,
+            sender_id: user.data.id,
+            friend_nickname,
+            friend_id
         }
     )
 }
@@ -379,15 +374,13 @@ const delete_friend = (friend_nickname, friend_id) => {
  */
 const add_friend = (friend_nickname, friend_id) => {
     server.send_data(
+        'do_friend',
         {
-            type: 'do_friend',
-            content: {
-                status: 'add',
-                sender_nickname: user.data.nickname,
-                sender_id: user.data.id,
-                friend_nickname,
-                friend_id
-            }
+            status: 'add',
+            sender_nickname: user.data.nickname,
+            sender_id: user.data.id,
+            friend_nickname,
+            friend_id
         }
     )
 }
@@ -517,16 +510,14 @@ const send_message = () => {
 
                 // send data to server
                 server.send_data(
+                    'message_to_friend',
                     {
-                        type: 'message_to_friend',
-                        content: {
-                            sender_nickname: user.data.nickname,
-                            sender_id: user.data.id,
-                            friend_nickname: user.friend.nickname,
-                            friend_id: user.friend.id,
-                            time,
-                            content: cipher.rsa.encrypt(input, user.friend.key)
-                        }
+                        sender_nickname: user.data.nickname,
+                        sender_id: user.data.id,
+                        friend_nickname: user.friend.nickname,
+                        friend_id: user.friend.id,
+                        time,
+                        content: cipher.rsa.encrypt(input, user.friend.key)
                     }
                 )
 
