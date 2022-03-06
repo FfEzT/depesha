@@ -66,9 +66,9 @@ const people = {
             resolve => {
                 people.db(
                     db => {
+                        const str = `SELECT * FROM main WHERE nickname = '${nickname}' AND id = ${id}`
                         db.get(
-                            'SELECT * FROM main WHERE nickname = ? AND id = ?',
-                            [nickname, id],
+                            str,
                             (err, data) => resolve(data)
                         )
                     }
@@ -159,7 +159,7 @@ const friends = {
     create_list: id => {
         friends.db(
             db => {
-                const str = `CREATE TABLE ${id} (nickname TINYTEXT, id TINYINT, status TINYTEXT)`
+                const str = `CREATE TABLE '${id}' (nickname TINYTEXT, id TINYINT, status TINYTEXT)`
                 db.run(str)
             }
         )
@@ -177,7 +177,7 @@ const friends = {
             (resolve, reject) => {
                 friends.db(
                     db => {
-                        const str = `INSERT INTO ${table} VALUES ('${nickname}', ${id}, '${status}')`
+                        const str = `INSERT INTO '${table}' VALUES ('${nickname}', ${id}, '${status}')`
                         db.run(
                             str,
                             er => {
@@ -202,7 +202,7 @@ const friends = {
             resolve => {
                 friends.db(
                     db => {
-                        const str = `UPDATE ${table} SET status = "friend" WHERE nickname = '${nickname}' AND id = ${id}`
+                        const str = `UPDATE '${table}' SET status = "friend" WHERE nickname = '${nickname}' AND id = ${id}`
 
                         db.run(
                             str,
@@ -225,7 +225,7 @@ const friends = {
             resolve => {
                 friends.db(
                     db => {
-                        const str = `DELETE FROM ${table} WHERE nickname = '${nickname}' AND id = ${id}`
+                        const str = `DELETE FROM '${table}' WHERE nickname = '${nickname}' AND id = ${id}`
 
                         db.run(
                             str,
@@ -247,7 +247,7 @@ const friends = {
                 friends.db(
                     db => {
                         const str = `SELECT ${id}.id, ${id}.nickname, ${id}.status, main.key
-                            FROM ${id}
+                            FROM '${id}'
                             JOIN main
                             ON ${id}.nickname = main.nickname AND ${id}.id = main.id
                             ORDER BY ${id}.status, main.nickname`

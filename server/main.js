@@ -83,7 +83,7 @@ const connection_to_server = e => {
                     break
 
                 case 'get_friends':
-                    send_friends(data.content.nickname + '#' + data.content.id)
+                    send_friends(data.content.nickname, data.content.id, e)
                     break
 
                 case 'do_friend':
@@ -104,7 +104,6 @@ const connection_to_server = e => {
  */
 const sign_up = async (e, content) => {
     const id = await ididentifier.generate_id(content.nickname)
-
     if (id < 1000) {
         db.people.sign_up(content.nickname, id, content.password, content.public_key).then(
             () => {
@@ -159,7 +158,7 @@ const auth = async (e, content, f) => {
 
             send_new_friends_and_messages: {
                 if (people.changes_friends == 1) {
-                    send_friends(content.nickname + '#' + content.id)
+                    send_friends(content.nickname, content.id)
 
                     db.people.update_friends(content.nickname, content.id, 0)
                 }
@@ -180,13 +179,16 @@ const auth = async (e, content, f) => {
 
 /**
  * send list of friends to client
- * @param {string} id nickname#1234
+ * @param {string} nickname
+ * @param {number} id
+ * @param {WebSocket} e
  */
-const send_friends = async id => {
+const send_friends = async (nickname, id, e=undefined) => {
+    const name = nickname + '#' + id
     send(
-        clients[id],
+        e || clients[name],
         'list_of_friends',
-        await db.friends.get_friends(id)
+        await db.friends.get_friends(name)
     )
 }
 
@@ -201,13 +203,12 @@ const do_friend = (e, content, f) => {
      * @param {number} id
      */
     const update_friend_list_client = (nickname, id) => {
-        const name = nickname + '#' + id
-
-        if ( clients[name] ) {
-            send_friends(name)
-        }
+        if ( clients[nickname + '#' + id] ) send_friends(nickname, id)
         else db.people.update_friends(nickname, id, 1)
     }
+
+    const sender = content.sender_nickname + '#' + content.sender_id
+    const friend = content.friend_nickname + '#' + content.friend_id
 
     switch (content.status) {
         case 'search':
@@ -215,27 +216,27 @@ const do_friend = (e, content, f) => {
                 user => {
                     if (user) {
                         db.friends.write(
-                            content.sender_nickname + '#' + content.sender_id,
+                            sender,
                             content.friend_nickname,
                             content.friend_id,
                             'waiting'
                         )
                         .then(
-                            () => {
-                                db.friends.write(
-                                    content.friend_nickname + '#' + content.friend_id,
+                            async () => {
+                                await db.friends.write(
+                                    friend,
                                     content.sender_nickname,
                                     content.sender_id,
                                     'pending'
                                 )
 
-                                send_friends(content.sender_nickname + '#' + content.sender_id)
+                                send_friends(content.sender_nickname, content.sender_id)
                                 update_friend_list_client(content.friend_nickname, content.friend_id)
 
                                 send(
                                     e,
                                     'do_friends',
-                                    {result: 0}
+                                    {result: 1}
                                 )
                             }
                         )
@@ -248,20 +249,20 @@ const do_friend = (e, content, f) => {
 
         case 'add':
             db.friends.add_friend(
-                content.sender_nickname + '#' + content.sender_id,
+                sender,
                 content.friend_nickname,
                 content.friend_id
             )
             .then(
                 () => {
                     db.friends.add_friend(
-                        content.friend_nickname + '#' + content.friend_id,
+                        friend,
                         content.sender_nickname,
                         content.sender_id,
                     )
                     .then(
                         () => {
-                            send_friends(content.sender_nickname + '#' + content.sender_id)
+                            send_friends(content.sender_nickname, content.sender_id)
                             update_friend_list_client(content.friend_nickname, content.friend_id)
                         }
                     )
@@ -271,20 +272,20 @@ const do_friend = (e, content, f) => {
 
         case 'delete':
             db.friends.delete_friend(
-                content.sender_nickname + '#' + content.sender_id,
+                sender,
                 content.friend_nickname,
                 content.friend_id
             )
             .then(
                 () => {
                     db.friends.delete_friend(
-                        content.friend_nickname + '#' + content.friend_id,
+                        friend,
                         content.sender_nickname,
                         content.sender_id
                     )
                     .then(
                         () => {
-                            send_friends(content.sender_nickname + '#' + content.sender_id)
+                            send_friends(content.sender_nickname, content.sender_id)
                             update_friend_list_client(content.friend_nickname, content.friend_id)
                         }
                     )
@@ -305,7 +306,7 @@ const send_message = data => {
 
     if (man) {
         send(
-            men,
+            man,
             'new_message',
             [
                 {

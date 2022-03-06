@@ -113,7 +113,7 @@ const load_form_sign_up = () => {
     password.placeholder = password_.placeholder ='password'
 
     name.maxLength = '15'
-    id.maxLength = '7'
+    id.maxLength = '20'
     password.maxLength = password_.maxLength = '20'
 
     name.spellcheck = id.spellcheck = false
@@ -184,9 +184,7 @@ const load_form_sign_up = () => {
             setTimeout(
                 () => {
                     const hash = cipher.hashing(password.value)
-                    const key = cipher.rsa.create_private(
-                        cipher.hashing(hash)
-                    )
+                    const key = cipher.rsa.create_private( cipher.hashing(hash) )
 
                     data.write_key(key)
 
@@ -333,8 +331,8 @@ const load_form_sign_up = () => {
                                     )
 
                                     // write data about user (user.json)
-                                    user.data.id = id.value
-                                    user.data.nickname = b.content.nick
+                                    user.data.nickname = user_nickname
+                                    user.data.id = user_id
                                     user.data.password = hash
 
                                     data.write_user_data()
@@ -367,8 +365,8 @@ const load_form_sign_up = () => {
                 }
 
                 server.auth(
-                    user_id,
                     user_nickname,
+                    user_id,
                     cipher.hashing(password_.value)
                 )
             }
@@ -446,7 +444,6 @@ offline.innerHTML = '<div\
                     </div>'
 
 main.append(offline)
-console.log(offline.style)
 const el = document.getElementById('offline')
 
 setTimeout(

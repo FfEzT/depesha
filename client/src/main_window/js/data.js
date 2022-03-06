@@ -18,7 +18,7 @@
 const fs = require('fs')
 
 /**
- * this function manages data in the friend.json
+ * manage data in the friend.json
  * @param {string} a delete_data || get_friends
  * @param {} b list of friends
  * @returns {[friend]}
@@ -119,8 +119,8 @@ const red_point = {
      * default (space) info about new_message in file
      */
     to_null: () => {
-        const data = red_point.open_file()
-        data = {}
+        let data = red_point.open_file()
+        data.new_message = {}
         red_point.write_file(data)
     }
 }
@@ -149,7 +149,7 @@ const message = {
      * @param {{content, time, who_send}} obj
      */
     write: (id, obj) => {
-        const data = JSON.parse( fs.readFileSync(message.file) )
+        let data = JSON.parse( fs.readFileSync(message.file) )
 
         !message.get(id) && (data[id] = [])
 

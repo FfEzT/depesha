@@ -181,6 +181,7 @@ const notice = a => {
 
         case 'wait':
             text = 'Секундочку...'
+            size = 'min(1.5vw,3vh)'
             break
 
         case 'empty_message':

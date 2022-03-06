@@ -122,15 +122,15 @@ const send_data = data => {
  * @param {string} password
  * @param {bool} final_identification
  */
-const auth = (id, nickname, password, final_identification=false) => {
+const auth = (nickname, id, password, final_identification=false) => {
     send_data(
         {
             type: 'auth',
             content: {
-                connect: final_identification,
-                id,
                 nickname,
-                password
+                id,
+                password,
+                connect: final_identification
             }
         }
     )
