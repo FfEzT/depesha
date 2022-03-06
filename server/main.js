@@ -301,8 +301,9 @@ const do_friend = (e, content, f) => {
  */
 const send_message = data => {
     const sender = data.sender_nickname + '#' + data.sender_id
+    const friend = data.friend_nickname + '#' + data.friend_id
 
-    const man = clients[data.friend_nickname + '#' + data.friend_id]
+    const man = clients[friend]
 
     if (man) {
         send(
@@ -324,8 +325,8 @@ const send_message = data => {
             1
         )
         db.temp_mail.set(
-            data.friend_nickname + '#' + data.friend_id,
-            data.sender_nickname + '#' + data.sender_id,
+            friend,
+            sender,
             data.time,
             data.content
         )
