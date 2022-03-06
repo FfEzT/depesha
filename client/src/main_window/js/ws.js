@@ -104,18 +104,16 @@ const connect = () => {
 
 /**
  * send data to server
- * @param {{
- * type: string,
- * content: {}
- * }} data 
+ * @param {string} type
+ * @param {{}} content
  */
-const send_data = data => {
+const send_data = (type, content) => {
     if (user.status == 'offline') {
         web.notice('off_server')
     }
     else {
         ws.send(
-            JSON.stringify(data)
+            JSON.stringify( {type, content} )
         )
     }
 }
@@ -128,14 +126,13 @@ const send_data = data => {
  */
  const auth = (id, password, a=false) => {
     send_data(
+        'auth',
         {
-            type: 'auth',
-            content: {
-                connect: a,
-                id,
-                password
-            }
+            connect: a,
+            id,
+            password
         }
+
     )
 }
 

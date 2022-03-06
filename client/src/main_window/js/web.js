@@ -285,12 +285,10 @@ const change_status_from_profile = () => {
     change_status()
 
     server.send_data(
+        'update_status',
         {
-            type: 'update_status',
-            content: {
-                id: user.data.id,
-                status: user.status
-            }
+            id: user.data.id,
+            status: user.status
         }
     )
 }
@@ -311,13 +309,11 @@ const f_search_friend = () => {
     
     if ( a.test(b) ) {
         server.send_data(
+            'do_friend',
             {
-                type: 'do_friend',
-                content: {
-                    status: 'search',
-                    from: user.data.id,
-                    to: b
-                }
+                status: 'search',
+                from: user.data.id,
+                to: b
             }
         )
         search_friend.value = ''}
@@ -349,14 +345,13 @@ const load_friend = () => {
  */
 const delete_friend = str => {
     server.send_data(
+        'do_friend',
         {
-            type: 'do_friend',
-            content: {
-                status: 'delete',
-                from: user.data.id,
-                to: str
-            }
+            status: 'delete',
+            from: user.data.id,
+            to: str
         }
+
     )
 }
 
@@ -366,13 +361,11 @@ const delete_friend = str => {
  */
 const add_friend = str => {
     server.send_data(
+        'do_friend',
         {
-            type: 'do_friend',
-            content: {
-                status: 'add',
-                from: user.data.id,
-                to: str
-            }
+            status: 'add',
+            from: user.data.id,
+            to: str
         }
     )
 }
@@ -511,14 +504,12 @@ const send_message = () => {
 
                 // send data to server
                 server.send_data(
+                    'message_to_friend',
                     {
-                        type: 'message_to_friend',
-                        content: {
-                            who: user.data.id,
-                            to: user.friend.id,
-                            time,
-                            content: cipher.rsa.encrypt(input, user.friend.key)
-                        }
+                        who: user.data.id,
+                        to: user.friend.id,
+                        time,
+                        content: cipher.rsa.encrypt(input, user.friend.key)
                     }
                 )
 

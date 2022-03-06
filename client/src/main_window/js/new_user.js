@@ -286,13 +286,11 @@ const load_form_sign_up = () => {
                     }
 
                     server.send_data(
+                        'sign_up',
                         {
-                            type: 'sign_up',
-                            content: {
-                                nickname: name.value,
-                                password: hash,
-                                public_key: cipher.rsa.create_public(key)
-                            }
+                            nickname: name.value,
+                            password: hash,
+                            public_key: cipher.rsa.create_public(key)
                         }
                     )
                 },
@@ -332,11 +330,9 @@ const load_form_sign_up = () => {
                             }
 
                             server.send_data(
+                                'get_friends',
                                 {
-                                    type: 'get_friends',
-                                    content: {
-                                        id: user.data.id
-                                    }
+                                    id: user.data.id
                                 }
                             )
                         },
