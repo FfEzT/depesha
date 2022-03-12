@@ -248,7 +248,7 @@ const change_status = () => {
 
     switch (user.status) {
         case 'online':
-            object.style.backgroundColor = '#35B8E7'
+            object.style.backgroundColor = '#32ADD9'
             text_of_object.innerText = 'online'
             break
 
@@ -258,7 +258,7 @@ const change_status = () => {
             break
 
         case 'idle':
-            object.style.backgroundColor = '#F033AE'
+            object.style.backgroundColor = '#D92E9D'
             text_of_object.innerText = 'idle'
             break
     }

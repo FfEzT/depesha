@@ -30,11 +30,11 @@
 
             <link rel="stylesheet" type="text/css" href="../css/program_btn.css">
             <div class="program_btn">
-                <div class="win_btn button_close" id="button_close" onclick="web.close_window()"></div>
-                <div class="win_btn button_full" onclick="web.full_window()"></div>
                 <div class="win_btn button_hide" onclick="web.minimize_window()"></div>
-                <div class="line_1"></div>
-                <div class="line_2"></div>
+                <div class="line"></div>
+                <div class="win_btn button_full" onclick="web.full_window()"></div>
+                <div class="line"></div>
+                <div class="win_btn button_close" id="button_close" onclick="web.close_window()"></div>
             </div>
 
             <link rel="stylesheet" type="text/css" href="../css/close.css">
@@ -48,32 +48,19 @@
             <link rel="stylesheet" type="text/css" href="../css/up_panel.css">
             <div class="up_panel">
                 <div class="container_search">
-                    <div class="search">
-                        <input type="text" class="text" id="search_friend" placeholder="id" maxlength="20" tabindex="1" onfocus="web.focus_blur('focus')" onblur="web.focus_blur('blur')">
-                        <div class="line"></div>
-                        <div class="btn_search" onclick="web.f_search_friend()">
-                            <div class="picture_btn_search"></div>
-                        </div>
+                    <input type="text" class="text" id="search_friend" placeholder="id" maxlength="20" tabindex="1" onfocus="web.focus_blur('focus')" onblur="web.focus_blur('blur')">
+                    <div class="line"></div>
+                    <div class="btn_search" onclick="web.f_search_friend()">
+                        <div class="picture_btn_search"></div>
                     </div>
                 </div>
-                <div class="btn" onclick="web.notice('off_work')" style="grid-column: 4/5;">
+                <div class="btn" onclick="web.notice('off_work')">
                     <div class="btn_piq mail"></div>
                 </div>
-                <div class="btn" onclick="web.notice('btn_more')" style="grid-column: 5/6;">
+                <div class="btn" onclick="web.notice('btn_more')">
                     <div class="btn_piq more"></div>
                 </div>
-                <div class="btn" onclick="web.notice('btn_more')" style="grid-column: 7/8;">
-                    <div class="btn_piq more"></div>
-                </div>
-                <div class="btn" onclick="web.notice('btn_more')" style="grid-column: 8/9;">
-                    <div class="btn_piq more"></div>
-                </div>
-                <div class="btn" onclick="web.notice('btn_more')" style="grid-column: 9/10;">
-                    <div class="btn_piq more"></div>
-                </div>
-                <div class="btn" onclick="web.notice('off_work')" style="grid-column: 10/11;">
-                    <div class="btn_piq settings"></div>
-                </div>
+                <!-- TODO remake -->
                 <div class="profile">
                     <div class="status" id="status" onclick="web.change_status_from_profile()">
                         <div class="text" id="text_of_status">offline</div>
@@ -81,6 +68,18 @@
                     <div class="container_for_photo">
                         <div class="photo" onclick="web.notice('btn_more')"></div>
                     </div>
+                </div>
+                <div class="btn" onclick="web.notice('btn_more')" style="grid-column: 7/8;">
+                    <div class="btn_piq more"></div>
+                </div>
+                <div class="btn" onclick="web.notice('btn_more')">
+                    <div class="btn_piq more"></div>
+                </div>
+                <div class="btn" onclick="web.notice('btn_more')">
+                    <div class="btn_piq more"></div>
+                </div>
+                <div class="btn" onclick="web.notice('off_work')">
+                    <div class="btn_piq settings"></div>
                 </div>
             </div>
 

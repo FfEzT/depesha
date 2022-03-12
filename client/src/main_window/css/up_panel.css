@@ -23,50 +23,46 @@
     height: 7vh;
     min-height: 30px;
     display: grid;
-    grid-template-columns: .5fr repeat(9, 1fr) .5fr;
+    grid-template-columns: 7vh repeat(9, 1fr) 7vh;
     grid-template-rows: 7vh;
     justify-items: center;
     align-items: center;
     background-color: var(--color_2);
-    border-radius: 0 0 var(--border_round_1) var(--border_round_1);
+    border-radius: 0 0 7vh 7vh;
 }
 
 .up_panel > .container_search {
     display: grid;
     grid-column: 2/4;
-    width: 100%;
-    height: 100%;
-}
-
-.up_panel > .container_search > .search {
-    margin: auto;
     width: 75%;
     height: 75%;
     display: grid;
-    grid-template-columns: auto 1px min(4vw, 5.25vh);
+    /* TODO remake */
+    border-radius: 250px;
+    overflow: hidden;
+    grid-template-columns: auto 1px min(2.9vw, 5vh);
 }
 
-.up_panel > .container_search > .search > .text {
+.up_panel > .container_search > .text {
     width: 100%;
     height: 100%;
     color: var(--color_text);
     font-size: min(2vw,3vh);
     background-color: var(--color_3);
     text-transform: lowercase;
-    border-radius: 250px 0 0 250px;
+    /* TODO remake */
     padding-left: 1vw;
 }
 
-.up_panel > .container_search > .search > .line {
+.up_panel > .container_search > .line {
     width: 100%;
     height: 100%;
     background-color: var(--color_line);
 }
-
-.up_panel > .container_search > .search > .btn_search {
+/* TODO на этом остановился + поменяй цвета */
+.up_panel > .container_search > .btn_search {
     width: 100%;
     height: 100%;
-    border-radius: 0 250px 250px 0;
     background-color: var(--color_3);
     display: grid;
     align-items: center;
@@ -74,15 +70,15 @@
     transition: background-color .1s cubic-bezier(0.42,0,0.58,1);
 }
 
-.up_panel > .container_search > .search > .btn_search:hover {
+.up_panel > .container_search > .btn_search:hover {
     background-color: var(--color_3_hover);
 }
 
-.up_panel > .container_search > .search > .btn_search:active {
+.up_panel > .container_search > .btn_search:active {
     background-color: var(--color_3_active);
 }
 
-.up_panel > .container_search > .search > .btn_search > .picture_btn_search {
+.up_panel > .container_search > .btn_search > .picture_btn_search {
     position: relative;
     border-radius: 25%;
     left: -.25vh;
@@ -94,11 +90,11 @@
     transition: transform .25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.up_panel > .container_search > .search > .btn_search:hover > .picture_btn_search {
+.up_panel > .container_search > .btn_search:hover > .picture_btn_search {
     transform: scale(1.25);
 }
 
-.up_panel > .container_search > .search > .btn_search:active > .picture_btn_search {
+.up_panel > .container_search > .btn_search:active > .picture_btn_search {
     transition: transform .1s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform: scale(.75);
 }

@@ -16,6 +16,8 @@
 */
 
 .program_btn {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr 1px 1fr ;
     position: absolute;
     left: 90vw;
     top: 0;
@@ -23,14 +25,13 @@
     height: 3vh;
     min-height: 20px;
     background-color: var(--color_2);
-    border-radius: 0 0 0 var(--border_round_2);
+    border-radius: 0 0 0 min(3vh, 20px);
 }
 
 .program_btn > .win_btn {
     transition: background-color .5s cubic-bezier(0.42,0,0.58,1);
     background-size: 100% 100%;
     background-position: center;
-    position: absolute;
     z-index: 2;
 }
 
@@ -45,51 +46,25 @@
 }
 
 .program_btn > .button_close {
-    top: 0;
-    height: 100%;
-    left: 6.566666666666667vw;
-    width: 3.4vw;
     background-image: url(../materials/picture/close_win.svg);
     background-color: var(--color_2);
     background-repeat: no-repeat;
 }
 
 .program_btn > .button_full {
-    top: 0;
-    height: 100%;
-    left: 3.333333333333333vw;
-    width: 3.233333333333333vw;
     background-image: url(../materials/picture/full_win.svg);
     background-color: var(--color_2);
     background-repeat: no-repeat;
 }
 
 .program_btn > .button_hide {
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 3.233333333333333vw;
     background-color: var(--color_2);
-    border-radius: 0 0 0 var(--border_round_2);
+    border-radius: 0 0 0 min(3vh, 20px);
     background-image: url(../materials/picture/roll_down.svg);
     background-repeat: no-repeat;
 }
 
-.program_btn > .line_1 {
-    position: absolute;
-    top: 0;
-    left: 3.233333333333333vw;
-    width: 0.1vw;
-    height: 100%;
+.program_btn > .line {
     background-color: var(--color_line);
 }
 
-.program_btn > .line_2 {
-    position: absolute;
-    z-index: 2;
-    top: 0;
-    left: 6.566666666666667vw;
-    width: 0.1vw;
-    height: 100%;
-    background-color: var(--color_line);
-}
