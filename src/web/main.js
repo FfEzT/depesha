@@ -93,7 +93,7 @@ let channel
 const init = async () => {
     user.stream = await navigator.mediaDevices.getUserMedia(
         {
-            video: true,
+            // video: true,
             audio: {
                 // sampleRate: 44100,
                 // sampleSize: 16,
