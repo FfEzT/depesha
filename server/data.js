@@ -246,12 +246,11 @@ const friends = {
             resolve => {
                 friends.db(
                     db => {
-                        const str = `SELECT ${id}.id, ${id}.nickname, ${id}.status, main.key
+                        const str = `SELECT '${id}'.id, '${id}'.nickname, '${id}'.status, main.key
                             FROM '${id}'
                             JOIN main
-                            ON ${id}.nickname = main.nickname AND ${id}.id = main.id
-                            ORDER BY ${id}.status, main.nickname`
-
+                            ON '${id}'.nickname = main.nickname AND '${id}'.id = main.id
+                            ORDER BY '${id}'.status, main.nickname`
                         db.all(
                             str,
                             (er, data) => resolve(data)

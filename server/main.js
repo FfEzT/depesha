@@ -230,7 +230,7 @@ const do_friend = (e, content, f) => {
                                     'pending'
                                 )
 
-                                send_friends(content.sender_nickname, content.sender_id)
+                                send_friends(content.sender_nickname, content.sender_id, e)
                                 update_friend_list_client(content.friend_nickname, content.friend_id)
 
                                 send(
@@ -262,7 +262,7 @@ const do_friend = (e, content, f) => {
                     )
                     .then(
                         () => {
-                            send_friends(content.sender_nickname, content.sender_id)
+                            send_friends(content.sender_nickname, content.sender_id, e)
                             update_friend_list_client(content.friend_nickname, content.friend_id)
                         }
                     )
@@ -285,7 +285,7 @@ const do_friend = (e, content, f) => {
                     )
                     .then(
                         () => {
-                            send_friends(content.sender_nickname, content.sender_id)
+                            send_friends(content.sender_nickname, content.sender_id, e)
                             update_friend_list_client(content.friend_nickname, content.friend_id)
                         }
                     )

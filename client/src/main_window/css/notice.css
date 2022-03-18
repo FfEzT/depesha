@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Depesha.  If not, see <https://www.gnu.org/licenses/>.
 */
-/* TODO remake */
+
 .notice {
     position: absolute;
     z-index: 2;
@@ -23,7 +23,7 @@
 }
 
 .notice > .message {
-    border-top: 1px var(--color_line) solid;
+    border-top: 1px var(--color_4) solid;
     overflow: hidden;
     display: grid;
     left: 0;
@@ -32,14 +32,15 @@
     height: 7vh;
     min-height: 15px;
     border-radius: 10px;
-    background-color: var(--color_tab);
+    background-color: var(--color_1);
     opacity: 100;
     user-select: none;
+    /* TODO position -> transform */
     transition: background-color .25s cubic-bezier(0.42,0,0.58,1), top .25s cubic-bezier(0.42,0,0.58,1), left .5s cubic-bezier(.65,-.25,.2,1), opacity .25s cubic-bezier(0.42,0,0.58,1);
 }
 
 .notice > .message:hover {
-    background-color: var(--color_3_active);
+    background-color: var(--color_3);
 }
 
 .notice > .message.close {
@@ -61,7 +62,7 @@
 }
 
 .notice > .message > .text {
-    color: var(--color_text);
+    color: var(--color_2);
     font-size: min(.75vw, 1.5vh);
     font-family: text;
     padding: 10px;

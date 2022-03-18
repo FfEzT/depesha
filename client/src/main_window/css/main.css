@@ -16,23 +16,18 @@
 */
 
 :root {
-    /* TODO remake */
-    --color_1: #130F26;
-    --color_2: #413C69; /* main */
-    --color_3: #343055;
-    --color_3_hover: #2F2B4D;
-    --color_3_active: #2A2745;
-    --color_4: #A7C5EB; /* main */
-    --color_btn: #4A47A3;
-    --color_shadow: #11101C;
-    --color_drag: #373359;
-    --color_line: #26233E;
-    --color_text: #709FB0; /* main */
-    --color_tab: #523C69;
-    --color_important: #2B0000;
+    --color_1: #3F3A66;
+    --color_2: #6996A6;
+    --color_3: #2F2B4C;
+    --color_4: #26233E;
+    --color_5: #373259;
+    --color_scroll: #130F26;
+    --color_bg: #171526;
+    --color_btn: #454399;
+    --color_tab: #64497F;
+    --color_important: #260000;
+    --color_shadow: #0D0C14;
     --placeholder_text: #2C2847;
-    --border_round_1: min(10vw, 19vh); /*180px*/
-    --border_round_2: min(1.3vw, 2.3vh) /*25px*/
 }
 @font-face {
     font-family: text;
@@ -46,14 +41,16 @@
 
 *::-webkit-scrollbar {
     width: .5vw;
-    background-color: var(--color_1);
-    border-radius: var(--border_round_1);
+    background-color: var(--color_scroll);
+    /* TODO radius */
+    border-radius: 10px;
 }
 
 *::-webkit-scrollbar-thumb {
-    border: 1px var(--color_1) solid;
+    border: 1px var(--color_scroll) solid;
     background-color: var(--color_tab);
-    border-radius: var(--border_round_2);
+    /* TODO radius */
+    border-radius: 10px;
 }
 
 input {
@@ -73,7 +70,7 @@ body #background {
     width: 100vw;
     height: 100vh;
     z-index: -5;
-    background-color: var(--color_1);
+    background-color: var(--color_bg);
     overflow: hidden;
 }
 
@@ -83,7 +80,7 @@ body #background {
     height: 100vh;
     left: 0;
     top: 0;
-    background-color: var(--color_1);
+    background-color: var(--color_bg);
     opacity: 100;
     transition: opacity .75s cubic-bezier(0.42,0,0.58,1);
 }
@@ -95,6 +92,6 @@ body #background {
     width: 70vw;
     height: 2vh;
     z-index: 100;
-    background-color: var(--color_drag);
+    background-color: var(--color_3);
     -webkit-app-region: drag;
 }

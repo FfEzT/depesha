@@ -63,7 +63,7 @@ const load_form_sign_up = () => {
                         background: none;\
                         border-bottom: 1px #4A47A3 solid;\
                         margin: min(1vw, 2vh);\
-                        color: var(--color_text);\
+                        color: var(--color_2);\
                         font-family: \'text\';\
                         padding: 0 5%;\
                         font-size: min(2.5vw, 4vh);',
@@ -71,7 +71,7 @@ const load_form_sign_up = () => {
                         background: none;\
                         border-bottom: 1px #4A47A3 solid;\
                         margin: min(1vw, 2vh);\
-                        color: var(--color_text);\
+                        color: var(--color_2);\
                         font-family: \'text\';\
                         padding: 0 5%;\
                         font-size: min(2.5vw, 4vh);',
@@ -80,13 +80,13 @@ const load_form_sign_up = () => {
                         cursor: pointer;\
                         font-family: text;\
                         font-size: min(1vw, 2vh);\
-                        color: var(--color_text);\
+                        color: var(--color_2);\
                         user-select: none;',
             btn: 'grid-area: sign_up;\
                         background-color: var(--color_btn);\
                         margin: 10%;\
                         display: grid;\
-                        border-radius: var(--border_round_2);\
+                        border-radius: 100vw;\
                         cursor: pointer;'
     }
 
@@ -196,7 +196,7 @@ const load_form_sign_up = () => {
                             let bg = document.createElement('div')
 
                             bg.style = 'position: absolute; width: 100vw; height: 100vh;\
-                            background-color: var(--color_1); opacity: 0;\
+                            background-color: var(--color_bg); opacity: 0;\
                             transition: opacity .5s cubic-bezier(0.16, 1, 0.3, 1);'
                             main.append(bg)
 
@@ -232,7 +232,7 @@ const load_form_sign_up = () => {
                             info_text.style = 'width: 100%;\
                                             height: 55%;\
                                             margin: auto;\
-                                            color: var(--color_text);\
+                                            color: var(--color_2);\
                                             font-family: text;\
                                             padding: 0 5%;\
                                             user-select: none;\
@@ -242,7 +242,7 @@ const load_form_sign_up = () => {
                             info_id.style = 'width: 100%;\
                                             height: 55%;\
                                             margin: auto;\
-                                            color: var(--color_text);\
+                                            color: var(--color_2);\
                                             font-family: text;\
                                             padding: 0 5%;\
                                             border-bottom: 1px solid rgb(74, 71, 163);'
@@ -253,12 +253,12 @@ const load_form_sign_up = () => {
                                             height:56%;\
                                             margin: auto;\
                                             background-color: var(--color_btn);\
-                                            border-radius: var(--border_round_2);\
+                                            border-radius: 100vw;\
                                             cursor: pointer;'
                             info_btn.innerHTML = '<div style="margin:auto;\
                                                 font-family: text;\
                                                 font-size: min(2.5vw, 4vh);\
-                                                color: var(--color_text);\
+                                                color: var(--color_2);\
                                                 user-select: none">ok</div>'
 
                             info_btn.onclick = () => window.location.reload()
@@ -378,14 +378,14 @@ const load_form_sign_up = () => {
 
     sign_up.innerHTML = '<div\
                         style="margin: auto;\
-                            color: var(--color_text);\
+                            color: var(--color_2);\
                             font-size: min(1.3vw, 2.2vh);\
                             font-family: text;\
                             user-select: none">\
                         Создать аккаунт</div>'
     sign_in_.innerHTML = '<div\
                         style="margin: auto;\
-                            color: var(--color_text);\
+                            color: var(--color_2);\
                             font-size: min(1.3vw, 2.2vh);\
                             font-family: text;\
                             user-select: none">\
@@ -431,7 +431,7 @@ offline.innerHTML = '<div\
                         style="margin: auto;\
                         font-size: min(8vw, 15vh);\
                         font-family: text;\
-                        color: var(--color_text);\
+                        color: var(--color_2);\
                         opacity: 0; transform: scale(0);\
                         transition: opacity 1s cubic-bezier(0.42,0,0.58,1),\
                         transform 1s cubic-bezier(0.34,1.56,0.64,1);\

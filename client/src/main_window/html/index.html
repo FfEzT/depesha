@@ -60,13 +60,12 @@
                 <div class="btn" onclick="web.notice('btn_more')">
                     <div class="btn_piq more"></div>
                 </div>
-                <!-- TODO remake -->
                 <div class="profile">
                     <div class="status" id="status" onclick="web.change_status_from_profile()">
                         <div class="text" id="text_of_status">offline</div>
                     </div>
-                    <div class="container_for_photo">
-                        <div class="photo" onclick="web.notice('btn_more')"></div>
+                    <div class="container_for_photo" onclick="web.notice('btn_more')">
+                        <div class="photo"></div>
                     </div>
                 </div>
                 <div class="btn" onclick="web.notice('btn_more')" style="grid-column: 7/8;">
@@ -85,52 +84,59 @@
 
             <link rel="stylesheet" type="text/css" href="../css/left_panel.css">
             <div class="left_panel" id="leftBar">
-                <div class="background"></div>
-                <div class="tab" onclick="web.set_pos_for_bars('leftBar')"></div>
-                <div class="content" onclick="web.set_pos_for_bars('leftBar')"></div>
-                <div class="window"></div>
-                <div class="bar_for_btn"></div>
-                <div class="btns">
-                    <input hidden type="checkbox"  id="microphone">
-                    <input hidden type="checkbox"  id="earphone">
-                    <label for="microphone" class="container">
-                        <div class="btn mic" onclick="web.notice('off_work')"></div>
-                    </label>
-                    <label class="container">
-                        <div class="btn bye" onclick="web.notice('off_work')"></div>
-                    </label>
-                    <label for="earphone" class="container">
-                        <div class="btn headphone" onclick="web.notice('off_work')"></div>
-                    </label>
+                <div class="background">
+                    <div class="content" onclick="web.set_pos_for_bars('leftBar')">
+                        <div class="window" onclick="event.stopPropagation()"></div>
+                    </div>
+                    <div class="down">
+                        <div class="bar_for_btn"></div>
+                        <div class="btns">
+                            <input hidden type="checkbox"  id="microphone">
+                            <input hidden type="checkbox"  id="earphone">
+                            <label for="microphone" class="container">
+                                <div class="btn mic" onclick="web.notice('off_work')"></div>
+                            </label>
+                            <label class="container">
+                                <div class="btn bye" onclick="web.notice('off_work')"></div>
+                            </label>
+                            <label for="earphone" class="container">
+                                <div class="btn headphone" onclick="web.notice('off_work')"></div>
+                            </label>
+                        </div>
+                    </div>
                 </div>
+                <div class="tab" onclick="web.set_pos_for_bars('leftBar')"></div>
             </div>
 
             <link rel="stylesheet" type="text/css" href="../css/right_panel.css">
             <div class="right_panel" id="rightBar">
-                <div class="background"></div>
-                <div class="focus"></div>
-                <div class="content">
-                    <div class="marginLeft marginTop photo"></div>
-                    <div class="marginRight marginTop nick" onclick="web.set_pos_for_bars('rightBar')">
-                        <div class="nick_text" ondblclick="web.notice('off_work')">NickName</div>
-                    </div>
-
-                    <link rel="stylesheet" type="text/css" href="../css/chat.css">
-                    <div class="marginLeft marginTop chat"></div>
-                </div>
-                <div class="input_text">
-                    <textarea id="chat" class="text" tabindex="-1" placeholder="Text..." maxlength="1500" onfocus="web.focusBlur_right_bar(true)" onblur="web.focusBlur_right_bar(false)"></textarea>
-                    <div class="send" onclick="web.send_message()">
-                        <div class="send_btn"></div>
-                    </div>
-                </div>
                 <div class="tab" onclick="web.set_pos_for_bars('rightBar')"></div>
+                <div class="background">
+                    <div class="focus" onclick="web.set_pos_for_bars('rightBar')">
+                        <div class="content" onclick="event.stopPropagation()">
+                            <div class="photo"></div>
+                            <div class="nick" onclick="web.set_pos_for_bars('rightBar')">
+                                <div class="nick_text" ondblclick="web.notice('off_work')">NickName</div>
+                            </div>
+
+                            <link rel="stylesheet" type="text/css" href="../css/chat.css">
+                            <div class="chat"></div>
+                        </div>
+                    </div>
+                    <div class="input_text">
+                        <textarea id="chat" class="text" tabindex="-1" placeholder="Text..." maxlength="1500" onfocus="web.focusBlur_right_bar(true)" onblur="web.focusBlur_right_bar(false)"></textarea>
+                        <div class="send" onclick="web.send_message()">
+                            <div class="send_btn"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <link rel="stylesheet" type="text/css" href="../css/down_panel.css">
             <div id="down_panel" class="down_panel">
-                <div class="body">
-                    <div class="bg">
+                <div class="btn" onclick="web.set_pos_for_bars('down_panel')"></div>
+                <div class="body" onclick="web.set_pos_for_bars('down_panel')">
+                    <div class="bg" onclick="event.stopPropagation()">
                         <input hidden type="radio" checked name="friends" id="f1">
                         <input hidden type="radio" name="friends" id="f2">
                         <label for="f1" class="tabs for1">
@@ -147,7 +153,6 @@
                         <div class="content_for_f2 contents"></div>
                     </div>
                 </div>
-                <div class="btn" onclick="web.set_pos_for_bars('down_panel')"></div>
             </div>
             <div id="start"></div>
         </div>

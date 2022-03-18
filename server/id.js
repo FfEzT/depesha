@@ -12,17 +12,4 @@ const generate_id = async nickname => {
     else return 1
 }
 
-/**
- * @param {string} string
- * @returns {{nickname, id}}
- */
-const name_parse = string => {
-    return {
-        // TODO from _ to :
-        nickname: string.slice(0, string.match('_').index ),
-        // TODO from _ to :
-        id: string.slice( ++string.match('_').index )
-    }
-}
-
-module.exports = {generate_id, name_parse}
+module.exports = {generate_id}

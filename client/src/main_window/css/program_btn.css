@@ -24,7 +24,8 @@
     width: 10vw;
     height: 3vh;
     min-height: 20px;
-    background-color: var(--color_2);
+    background-color: var(--color_1);
+    /* TODO */
     border-radius: 0 0 0 min(3vh, 20px);
 }
 
@@ -37,34 +38,32 @@
 
 .program_btn > .win_btn:hover {
     transition: .1s cubic-bezier(0.42,0,0.58,1);
-    background-color: var(--color_text);
+    background-color: var(--color_btn);
 }
 
 .program_btn > .win_btn:active {
-    transition: .05s cubic-bezier(0.42,0,0.58,1);
-    background-color: var(--color_4);
+    transition: .1s cubic-bezier(0.42,0,0.58,1);
+    background-color: var(--color_2);
 }
 
 .program_btn > .button_close {
     background-image: url(../materials/picture/close_win.svg);
-    background-color: var(--color_2);
     background-repeat: no-repeat;
 }
 
 .program_btn > .button_full {
     background-image: url(../materials/picture/full_win.svg);
-    background-color: var(--color_2);
     background-repeat: no-repeat;
 }
 
 .program_btn > .button_hide {
-    background-color: var(--color_2);
+    /* TODO */
     border-radius: 0 0 0 min(3vh, 20px);
     background-image: url(../materials/picture/roll_down.svg);
     background-repeat: no-repeat;
 }
 
 .program_btn > .line {
-    background-color: var(--color_line);
+    background-color: var(--color_4);
 }
 

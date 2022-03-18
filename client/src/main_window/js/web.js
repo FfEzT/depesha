@@ -253,7 +253,7 @@ const change_status = () => {
             break
 
         case 'offline':
-            object.style.backgroundColor = 'var(--color_text)'
+            object.style.backgroundColor = 'var(--color_2)'
             text_of_object.innerText = 'offline'
             break
 
@@ -479,7 +479,7 @@ const renderMessage = (data, type, without_scroll) => {
 
     if (data.who_send == 'i') {
         setTimeout(
-            () => b.children[1].style.backgroundColor = 'var(--color_text)',
+            () => b.children[1].style.backgroundColor = 'var(--color_2)',
             10
         )
     }

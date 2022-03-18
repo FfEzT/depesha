@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Depesha.  If not, see <https://www.gnu.org/licenses/>.
 */
-/* TODO remake */
+
 .close {
     position: absolute;
     width: 100%;
@@ -29,7 +29,7 @@
     text-transform: uppercase;
     opacity: 0.3;
     font-family: text;
-    color: var(--color_line);
+    color: var(--color_4);
     font-size: min(2.6vw, 5vh);
     user-select: none;
 }

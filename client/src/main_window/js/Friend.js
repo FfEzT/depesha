@@ -30,7 +30,7 @@ class Friend {
     render = () => {
         // type: html element
         this.a = document.createElement('div')
-        this.a.classList.add('el')
+        this.a.classList.add('friend')
 
         this.checking_status()
     }
@@ -40,22 +40,22 @@ class Friend {
     }
     show_friend = () => {
         this.a.innerHTML = `
-                <div class="ell">
-                    <div class="center picture">
+                <div class="el">
+                    <div class="picture">
                         <div class="red_point" style="transform: scale(0)"></div>
                     </div>
                 </div>
-                <div class="ell e">
-                    <div class="center nickname" onclick="web.notice('off_work')">${this.nickname + '#' + this.id}</div>
+                <div class="el" onclick="web.notice('off_work')">
+                    <div class="nickname">${this.nickname + '#' + this.id}</div>
                 </div>
-                <div class="ell e" onclick="web.notice('off_work')">
-                    <div class="button center call"></div>
+                <div class="el" onclick="web.notice('off_work')">
+                    <div class="button call"></div>
                 </div>
-                <div class="ell e" onclick="web.chooseFriend('${this.nickname}', ${this.id}, '${this.key}')">
-                    <div class="button center chat"></div>
+                <div class="el" onclick="web.chooseFriend('${this.nickname}', ${this.id}, '${this.key}')">
+                    <div class="button chat"></div>
                 </div>
-                <div class="ell e" onclick="web.delete_friend('${this.nickname}', ${this.id})">
-                    <div class="button center delete"></div>
+                <div class="el" onclick="web.delete_friend('${this.nickname}', ${this.id})">
+                    <div class="button delete"></div>
                 </div>`
         this.tab1.append(this.a)
         this.has_new_message && this.red_point.set()
@@ -63,34 +63,34 @@ class Friend {
     show_application = () => {
         this.status == 'pending'? this.show_pending() : this.show_waiting()
 
-        this.a.style.gridTemplateColumns = '0.5fr 1fr 4vw 4vw'
+        this.a.style.gridTemplateColumns = 'min(3.375vw, 6vh) auto repeat(2, min(3.375vw, 6vh) )'
         this.tab2.append(this.a)
     }
     show_pending = () => {
         this.a.innerHTML = `
-            <div class="ell">
-                <div class="center picture"></div>
+            <div class="el">
+                <div class="picture"></div>
             </div>
-            <div class="ell e" onclick="web.notice('off_work')">
-                <div class="center nickname u">${this.nickname + '#' + this.id}</div>
+            <div class="el" onclick="web.notice('off_work')">
+                <div class="nickname">${this.nickname + '#' + this.id}</div>
             </div>
-            <div class="ell e" onclick="web.add_friend('${this.nickname}', ${this.id})">
-                <div class="button center add_friend"></div>
+            <div class="el" onclick="web.add_friend('${this.nickname}', ${this.id})">
+                <div class="button add_friend"></div>
             </div>
-            <div class="ell e" onclick="web.delete_friend('${this.nickname}', ${this.id})">
-                <div class="button center delete"></div>
+            <div class="el" onclick="web.delete_friend('${this.nickname}', ${this.id})">
+                <div class="button delete"></div>
             </div>`
     }
     show_waiting = () => {
         this.a.innerHTML = `
-            <div class="ell">
-                <div class="center picture"></div>
+            <div class="el">
+                <div class="picture"></div>
             </div>
-            <div class="ell e" onclick="web.notice('off_work')">
-                <div class="center nickname u">${this.nickname + '#' + this.id}</div>
+            <div class="el" onclick="web.notice('off_work')">
+                <div class="nickname">${this.nickname + '#' + this.id}</div>
             </div>
-            <div class="ell e" onclick="web.delete_friend('${this.nickname}', ${this.id})" style="grid-column: 4/6;">
-                <div class="button center delete"></div>
+            <div class="el" onclick="web.delete_friend('${this.nickname}', ${this.id})" style="grid-column: 3/5;">
+                <div class="button delete"></div>
             </div>`
     }
     red_point = {
