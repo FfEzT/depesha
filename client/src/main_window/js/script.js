@@ -39,7 +39,7 @@ const user = {
         id: undefined,
         key: undefined
     },
-    data: data.get_info()
+    data: data.user.get()
 }
 
 // checking authorization of user

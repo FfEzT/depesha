@@ -74,7 +74,7 @@ const rsa = {
     */
     import_private: () => {
         return cryptico.RSAKey.parse(
-            data.get_key()
+            data.key.get()
         )
     }
 }

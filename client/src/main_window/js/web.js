@@ -334,7 +334,7 @@ const load_friend = () => {
 
     // type: array(list of friends)
     // TODO remake to FOR constuction
-    data.main().forEach(
+    data.friend().forEach(
         value => {
             // TODO delete from list if u delete friend (request or friend)
             // TODO delete friends[nickname + '#' + id]

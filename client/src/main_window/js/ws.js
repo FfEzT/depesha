@@ -52,14 +52,14 @@ const connect = () => {
                                 user.data.nickname = '',
                                 user.data.password = '',
 
-                                data.write_user_data(),
+                                data.user.write(),
 
                                 window.location.reload()
                             }
                             else {
                                 if (user.data.nickname != a.content.nick) {
                                     user.data.nickname = a.content.nick
-                                    data.write_user_data()
+                                    data.user.write()
                                 }
                             }
                             break
@@ -69,7 +69,7 @@ const connect = () => {
                             break
 
                         case 'list_of_friends':
-                            data.main('set_friends', a.content)
+                            data.friend('set_friends', a.content)
                             web.load_friend()
                             break
 

@@ -23,7 +23,7 @@ const fs = require('fs')
  * @param {} b list of friends
  * @returns {[friend]}
  */
-const main = (a, b=[]) => {
+const friend = (a, b=[]) => {
     const data = JSON.parse(
         fs.readFileSync('./src/data/friend.json')
     )
@@ -49,38 +49,42 @@ const main = (a, b=[]) => {
     return data.friends
 }
 
-const get_info = () => {
-    return JSON.parse(
-        fs.readFileSync('./src/data/user.json')
-    )
-}
-
-const write_user_data = () => {
-    fs.writeFileSync(
-        './src/data/user.json',
-        JSON.stringify(user.data)
-    )
-}
-
-const get_key = () => {
-    return fs.readFileSync('./src/data/private.key')
-}
-
-const write_key = key_to_write => {
-    fs.writeFileSync(
-        './src/data/private.key',
-        JSON.stringify(
-            key_to_write
+const user = {
+    get: () => {
+        return JSON.parse(
+            fs.readFileSync('./src/data/user.json')
         )
-    )
+    },
+    
+    write: () => {
+        fs.writeFileSync(
+            './src/data/user.json',
+            JSON.stringify(user.data)
+        )
+    }
 }
 
-const key_to_null = () => {
-    fs.writeFile(
-        './src/data/private.key',
-        '{}',
-        () => {}
-    )
+const key = {
+    get: () => {
+        return fs.readFileSync('./src/data/private.key')
+    },
+
+    write: key_to_write => {
+        fs.writeFileSync(
+            './src/data/private.key',
+            JSON.stringify(
+                key_to_write
+            )
+        )
+    },
+
+    to_null: () => {
+        fs.writeFile(
+            './src/data/private.key',
+            '{}',
+            () => {}
+        )
+    }
 }
 
 const red_point = {
@@ -151,7 +155,7 @@ const message = {
     write: (id, obj) => {
         let data = JSON.parse( fs.readFileSync(message.file) )
 
-        !message.get(id) && (data[id] = [])
+        !message.get(id) && ( data[id] = [] )
 
         data[id].push(obj)
 
@@ -163,12 +167,9 @@ const message = {
 }
 
 module.exports = {
-    main,
-    key_to_null,
+    friend,
+    user,
+    key,
     message,
-    red_point,
-    get_info,
-    write_user_data,
-    get_key,
-    write_key
+    red_point
 }

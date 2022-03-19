@@ -15,13 +15,14 @@
  * along with Depesha.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-// delete old info (list of friends, key, messages)
-data.main('delete_data')
-data.red_point.to_null()
-data.key_to_null()
-data.message.message_to_null()
+delete_old_info: {
+    data.friend('delete_data')
+    data.red_point.to_null()
+    data.key.to_null()
+    data.message.message_to_null()
+}
 
-const main = document.getElementById('background')
+const main = background
 
 document.getElementsByClassName('close')[0].remove()
 document.getElementsByClassName('up_panel')[0].remove()
@@ -185,8 +186,7 @@ const load_form_sign_up = () => {
                 () => {
                     const hash = cipher.hashing(password.value)
                     const key = cipher.rsa.create_private( cipher.hashing(hash) )
-
-                    data.write_key(key)
+                    data.key.write(key)
 
                     ws.onmessage = e => {
                         let a = JSON.parse(e.data)
@@ -268,7 +268,7 @@ const load_form_sign_up = () => {
                                 user.data.id = a.content.id
                                 user.data.nickname = name.value
                                 user.data.password = cipher.hashing(password.value)
-                                data.write_user_data()
+                                data.user.write()
 
                                 info_text.style.fontSize = info_id.style.fontSize = 'min(2.5vw, 4vh)'
 
@@ -333,12 +333,12 @@ const load_form_sign_up = () => {
                                     user.data.id = user_id
                                     user.data.password = hash
 
-                                    data.write_user_data()
-                                    data.write_key(key_to_write)
+                                    data.user.write()
+                                    data.key.write(key_to_write)
 
                                     ws.onmessage = e => {
                                         const a = JSON.parse(e.data)
-                                        data.main('set_friends', a.content)
+                                        data.friend('set_friends', a.content)
 
                                         window.location.reload()
                                     }
