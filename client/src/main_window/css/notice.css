@@ -31,8 +31,8 @@
     width: 14vw;
     height: 7vh;
     min-height: 15px;
-    border-radius: 10px;
-    background-color: var(--color_1);
+    border-radius: min(0.52vw, 0.93vh);
+    background-color: var(--color_tab);
     opacity: 100;
     user-select: none;
     /* TODO position -> transform */
@@ -63,7 +63,7 @@
 
 .notice > .message > .text {
     color: var(--color_2);
-    font-size: min(.75vw, 1.5vh);
+    font-size: min(0.7vw, 1.25vh);
     font-family: text;
     padding: 10px;
     margin: auto;
