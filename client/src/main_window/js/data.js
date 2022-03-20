@@ -49,7 +49,7 @@ const friend = (a, b=[]) => {
     return data.friends
 }
 
-const user = {
+const data_user = {
     get: () => {
         return JSON.parse(
             fs.readFileSync('./src/data/user.json')
@@ -168,7 +168,7 @@ const message = {
 
 module.exports = {
     friend,
-    user,
+    data_user,
     key,
     message,
     red_point

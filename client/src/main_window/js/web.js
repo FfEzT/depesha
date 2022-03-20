@@ -128,76 +128,79 @@ const notice = a => {
     // for editing and resizing text
     switch (a) {
         case 'off_work':
-            text = 'В мире мало фиксиков, поэтому эта кнопка пока не работает'
+            text = 'This button is not working yet'
+            size = 'min(1vw, 1.7vh)'
             break
 
         case 'btn_more':
-            text = 'В будущем эта кнопка спасет ваш компьютер...'
+            text = 'In the future, this button will save the world'
             break
 
         case 'welcome':
-            text = 'Привет ;)'
+            text = 'Hi ;)'
             size = 'min(1.5vw,3vh)'
             break
 
         case 'off_server':
-            text = 'Что-то не так... вы не подключены к серверу('
+            text = 'Hm... You aren\'t connected to the server'
             break
-
         case 'sign_up_err':
-            text = 'Пожалуйста, заполните поля как следует ;)'
+            text = 'Please, fill in the fields correctly'
             size = 'min(1vw, 1.7vh)'
             break
 
         case 'sign_in_name':
-            text = 'Ник должен состоять из 4-15 символов (на английском) и не только из цифр'
+            text = 'Nickname should consist of 4-15 characters (a-z) and a few digits'
             break
 
         case 'sign_in_password':
-            text = 'Пароль должен состоять минимум из 9 символов'
+            text = 'The password must consist of 9 characters'
             break
 
         case 'auth':
-            text = 'Вам нужно авторизоваться'
+            text = 'You need to auth'
             size = 'min(1vw, 1.8vh)'
             break
 
         case 'auth_err':
-            text = 'Хм, я не помню вас, возможно, вы ввели неправильные данные'
+            text = 'Hmm, I don\'t remember You, may be id/password is incorrect'
             break
 
         case 'no_user':
-            text = 'Я не нашел такого пользователя...('
-            size = 'min(0.7vw, 1.3vh)'
+            text = 'I did not find such a user('
+            size = 'min(1vw, 1.7vh)'
             break
 
         case 'wait_for_confirmation':
-            text = 'Я отправил запрос, ждите, пока не примут заявку'
+            text = 'I sent a request, please wait for confirmation'
             break
 
         case 'it_is_u':
-            text = 'Простите не узнал... это же вы...)'
+            text = 'I\'m sorry, it\'s You)'
+            size = 'min(1vw, 1.7vh)'
             break
 
         case 'wait':
-            text = 'Секундочку...'
+            text = 'One moment...'
             size = 'min(1.5vw,3vh)'
             break
 
         case 'empty_message':
-            text = 'Зачем вы хотите отправить воздух?'
+            text = 'Why do You want to send air?'
             break
 
         case 'empty_adress':
-            text = 'Кому выхотите это отправить?'
+            text = 'Who do You want to send it to?'
             break
 
         case 'new_message':
-            text = 'О, у вас новое сообщение!'
+            text = 'Oh, new message!'
+            size = 'min(1vw, 1.7vh)'
             break
 
         case 'id_err':
-            text = 'Пример правильного id: hello#1234'
+            text = 'Example: hello#1234'
+            size = 'min(1vw, 1.7vh)'
             break
     }
 

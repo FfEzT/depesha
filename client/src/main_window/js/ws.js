@@ -48,18 +48,18 @@ const connect = () => {
                     switch (a.type) {
                         case 'auth':
                             if (a.content.result == 0) {
-                                user.data.id = '',
-                                user.data.nickname = '',
-                                user.data.password = '',
+                                user.data.id = ''
+                                user.data.nickname = ''
+                                user.data.password = ''
 
-                                data.user.write(),
+                                data.data_user.write()
 
                                 window.location.reload()
                             }
                             else {
                                 if (user.data.nickname != a.content.nick) {
                                     user.data.nickname = a.content.nick
-                                    data.user.write()
+                                    data.data_user.write()
                                 }
                             }
                             break

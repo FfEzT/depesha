@@ -268,11 +268,11 @@ const load_form_sign_up = () => {
                                 user.data.id = a.content.id
                                 user.data.nickname = name.value
                                 user.data.password = cipher.hashing(password.value)
-                                data.user.write()
+                                data.data_user.write()
 
                                 info_text.style.fontSize = info_id.style.fontSize = 'min(2.5vw, 4vh)'
 
-                                info_text.innerText = 'Ваш id:'
+                                info_text.innerText = 'Your id:'
                                 info_id.innerText = user.data.nickname + '#' + a.content.id
                             }
                             else {
@@ -280,9 +280,8 @@ const load_form_sign_up = () => {
                                 info_id.style.fontSize = 'min(1.3vw, 2.4vh)'
 
                                 info_id.style.userSelect = 'none'
-
-                                info_text.innerText = 'Такой nickname уже заняли'
-                                info_id.innerText = 'Попробуйте другой'
+                                info_text.innerText = 'This nickname has been taken'
+                                info_id.innerText = 'Try another'
                             }
 
                             grid_info_id.append(info_text)
@@ -333,7 +332,7 @@ const load_form_sign_up = () => {
                                     user.data.id = user_id
                                     user.data.password = hash
 
-                                    data.user.write()
+                                    data.data_user.write()
                                     data.key.write(key_to_write)
 
                                     ws.onmessage = e => {
@@ -372,24 +371,22 @@ const load_form_sign_up = () => {
     }
 
     password.type = password_.type = 'password'
-
-    sign_in.innerText = 'Есть аккаунт'
-    back.innerText = 'Назад'
-
+    sign_in.innerText = 'sign in'
+    back.innerText = 'sign in'
     sign_up.innerHTML = '<div\
                         style="margin: auto;\
                             color: var(--color_2);\
                             font-size: min(1.3vw, 2.2vh);\
                             font-family: text;\
                             user-select: none">\
-                        Создать аккаунт</div>'
+                        Sign up</div>'
     sign_in_.innerHTML = '<div\
                         style="margin: auto;\
                             color: var(--color_2);\
                             font-size: min(1.3vw, 2.2vh);\
                             font-family: text;\
                             user-select: none">\
-                        Войти</div>'
+                        Sign in</div>'
 
     main.append(grid, grid_)
     grid.append(name, password, sign_in, sign_up)
