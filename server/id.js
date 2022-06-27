@@ -1,4 +1,3 @@
-
 /**
  * generate future id for new users
  * @returns {string}

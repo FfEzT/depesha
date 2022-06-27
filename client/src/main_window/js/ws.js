@@ -20,12 +20,10 @@ const TIME_FOR_RECONNECT = 10000
 
 const connect = () => {
     /**
-     * if u sign up there is a problem for change status in profile
+     * if u sign up and there is a problem for change status in profile
      */
     const trycatch = () => {
-        try {
-            web.change_status()
-        }
+        try { web.change_status() }
         catch (error) {}
     }
 
@@ -75,6 +73,10 @@ const connect = () => {
 
                         case 'new_message':
                             web.get_message(a.content)
+                            break
+
+                        case 'friendsStatus':
+                            web.updateFriendStatus(a.content.who, a.content.status)
                             break
                     }
                 }

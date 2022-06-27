@@ -35,6 +35,14 @@
     position: relative;
     margin: auto;
     border-radius: 50%;
+    transition: background-color 0.5s cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+.friend > .el > .picture.online {
+    background-color: var(--color_online);
+}
+.friend > .el > .picture.idle {
+    background-color: var(--color_idle);
 }
 
 .friend > .el > .picture > .red_point {

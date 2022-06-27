@@ -24,6 +24,9 @@ const full_window = () => ipcRenderer.send('max_window')
 const minimize_window = () => ipcRenderer.send("minimize_window")
 
 // list of friend in down panel
+/**
+ * @type {{nickname1234: Friend}}
+ */
 const friends = {}
 
 /**
@@ -251,7 +254,7 @@ const change_status = () => {
 
     switch (user.status) {
         case 'online':
-            object.style.backgroundColor = '#32ADD9'
+            object.style.backgroundColor = 'var(--color_online)'
             text_of_object.innerText = 'online'
             break
 
@@ -261,7 +264,7 @@ const change_status = () => {
             break
 
         case 'idle':
-            object.style.backgroundColor = '#D92E9D'
+            object.style.backgroundColor = 'var(--color_idle)'
             text_of_object.innerText = 'idle'
             break
     }
@@ -504,8 +507,8 @@ const renderMessage = (data, type, without_scroll) => {
 
 const send_message = () => {
     if (user.friend.nickname && user.friend.id && user.friend.key) {
-        // TODO delete all   (alt + 255)
-        const input = chat.value.trim()
+        let input = chat.value.trim()
+        input = chat.value.replace(/' '/g, '')
 
         if (input != '') {
             if (user.status != 'offline') {
@@ -573,10 +576,12 @@ const get_message = arr => {
             const time = el.time
             const who_send = 'friend'
 
+            const friend = sender_nickname + '#' + sender_id
+
             setTimeout(
                 () => {
                     data.message.write(
-                        sender_nickname + '#' + sender_id,
+                        friend,
                         {
                             content,
                             time,
@@ -595,12 +600,19 @@ const get_message = arr => {
             }
             else {
                 notice('new_message')
-                friends[sender_nickname + '#' + sender_id].red_point.set()
-                data.red_point.set(sender_nickname + '#' + sender_id)
+                friends[friend].red_point.set()
+                data.red_point.set(friend)
             }
         }
     )
 }
+
+/**
+ * @param {string} who nick#1234
+ * @param {string} status offline/online/idle
+ */
+const updateFriendStatus = (who, status) => friends[who].setStatus(status)
+
 
 module.exports = {
     close_window,
@@ -620,5 +632,6 @@ module.exports = {
     add_friend,
     chooseFriend,
     send_message,
-    get_message
+    get_message,
+    updateFriendStatus
 }

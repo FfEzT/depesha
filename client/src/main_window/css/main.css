@@ -27,6 +27,8 @@
     --color_tab: #64497F;
     --color_important: #260000;
     --color_shadow: #0D0C14;
+    --color_online: #32ADD9;
+    --color_idle: #D92E9D;
     --placeholder_text: #2C2847;
 }
 @font-face {

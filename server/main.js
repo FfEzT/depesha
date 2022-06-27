@@ -26,6 +26,9 @@ const db = require('./data.js')
 const PORT = process.env.PORT || 5480
 
 // list of connected clients
+/**
+ * @type {{nickname#1234: number}}
+ */
 const clients = {}
 
 const server = new ws.Server(
@@ -78,8 +81,8 @@ const connection_to_server = e => {
                     break
 
                 case 'update_status':
-                    // data.content = {id, nickname, password}
-                    db.people.update_status(data.content.nickname, data.content.id, data.content.status)
+                    // data.content = {id, nickname, status}
+                    updateStatus(data.content.nickname, data.content.id, data.content.status)
                     break
 
                 case 'get_friends':
@@ -104,7 +107,7 @@ const connection_to_server = e => {
  */
 const sign_up = async (e, content) => {
     const id = await ididentifier.generate_id(content.nickname)
-    if (id < 1000) {
+    if (id < 9999) {
         db.people.sign_up(content.nickname, id, content.password, content.public_key).then(
             () => {
                 send(
@@ -145,13 +148,16 @@ const auth = async (e, content, f) => {
         )
 
         if (content.connect) {
-            db.people.update_status(content.nickname, content.id, 'online')
+            // update status for friends
+            updateStatus(content.nickname, content.id, 'online')
+
             clients[content.nickname + '#' + content.id] = e
 
             e.on(
                 'close',
                 () => {
-                    db.people.update_status(content.nickname, content.id, 'offline')
+                    // update status for friends
+                    updateStatus(content.nickname, content.id, 'offline')
                     delete clients[content.nickname + '#' + content.id]
                 }
             )
@@ -212,7 +218,8 @@ const do_friend = (e, content, f) => {
 
     switch (content.status) {
         case 'search':
-            db.people.get_user(content.friend_nickname, content.friend_id).then(
+            db.people.get_user(content.friend_nickname, content.friend_id)
+            .then(
                 user => {
                     if (user) {
                         db.friends.write(
@@ -260,12 +267,12 @@ const do_friend = (e, content, f) => {
                         content.sender_nickname,
                         content.sender_id,
                     )
-                    .then(
-                        () => {
-                            send_friends(content.sender_nickname, content.sender_id, e)
-                            update_friend_list_client(content.friend_nickname, content.friend_id)
-                        }
-                    )
+                }
+            )
+            .then(
+                () => {
+                    send_friends(content.sender_nickname, content.sender_id, e)
+                    update_friend_list_client(content.friend_nickname, content.friend_id)
                 }
             )
             break
@@ -330,6 +337,29 @@ const send_message = data => {
             data.time,
             data.content
         )
+    }
+}
+
+/**
+ * update status of user's network and send info his friends
+ * @param {string} nick 
+ * @param {string} id 
+ * @param {string} status online/offline/idle
+ */
+const updateStatus = async (nick, id, status) => {
+    db.people.update_status(nick, id, status)
+
+    const friends = await db.friends.get_friends(nick + '#' + id)
+
+    for (const item of friends) {
+        const temp = item.nickname + '#' + item.id
+
+        if ( clients[temp] && item.status == 'friend' )
+            send(
+                clients[temp],
+                'friendsStatus',
+                {who: data.content.nickname + '#' + data.content.id, status: data.content.status}
+            )
     }
 }
 

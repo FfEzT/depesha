@@ -372,7 +372,7 @@ const load_form_sign_up = () => {
 
     password.type = password_.type = 'password'
     sign_in.innerText = 'sign in'
-    back.innerText = 'sign in'
+    back.innerText = 'back'
     sign_up.innerHTML = '<div\
                         style="margin: auto;\
                             color: var(--color_2);\

@@ -108,6 +108,29 @@ class Friend {
             }
         }
     }
+    setStatus = status => {
+        console.log(status)
+        const element = this.a.querySelector('.el > .picture')
+
+        switch (status) {
+            case 'online':
+                element.classList.remove('online')
+                element.classList.remove('idle')
+                element.classList.add('online')
+                break
+
+            case 'idle':
+                element.classList.remove('online')
+                element.classList.remove('idle')
+                element.classList.add('idle')
+                break
+
+            case 'offline':
+                element.classList.remove('online')
+                element.classList.remove('idle')
+                break
+        }
+    }
 
     // type: HTML element
     tab1 = document.getElementsByClassName('content_for_f1')[0]

@@ -42,7 +42,7 @@ const friend = (a, b=[]) => {
         // write data to friend.json
         fs.writeFileSync(
             './src/data/friend.json',
-            JSON.stringify(data)
+            JSON.stringify(data, null, 4)
         )
     }
 
@@ -59,7 +59,7 @@ const data_user = {
     write: () => {
         fs.writeFileSync(
             './src/data/user.json',
-            JSON.stringify(user.data)
+            JSON.stringify(user.data, null, 4)
         )
     }
 }
@@ -73,7 +73,7 @@ const key = {
         fs.writeFileSync(
             './src/data/private.key',
             JSON.stringify(
-                key_to_write
+                key_to_write, null, 4
             )
         )
     },
@@ -96,7 +96,7 @@ const red_point = {
     write_file: data => {
         fs.writeFileSync(
             './src/data/friend.json',
-            JSON.stringify(data)
+            JSON.stringify(data, null, 4)
         )
     },
     /**
@@ -161,7 +161,7 @@ const message = {
 
         fs.writeFileSync(
             message.file,
-            JSON.stringify(data)
+            JSON.stringify(data, null, 4)
         )
     }
 }
