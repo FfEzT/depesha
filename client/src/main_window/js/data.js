@@ -19,7 +19,7 @@ const fs = require('fs')
 
 /**
  * manage data in the friend.json
- * @param {string} a delete_data || get_friends
+ * @param {string} a delete_data || set_friends
  * @param {} b list of friends
  * @returns {[friend]}
  */

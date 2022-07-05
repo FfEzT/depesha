@@ -109,7 +109,6 @@ class Friend {
         }
     }
     setStatus = status => {
-        console.log(status)
         const element = this.a.querySelector('.el > .picture')
 
         switch (status) {

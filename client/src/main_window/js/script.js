@@ -24,6 +24,7 @@ const web = require('../js/web')
 const cipher = require('../js/cipher')
 const server = require('../js/ws')
 const name_parser = require('../js/name_parser')
+const Friend = require('../js/Friend')
 
 // WebSocket
 let ws = {}

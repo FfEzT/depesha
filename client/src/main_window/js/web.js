@@ -324,35 +324,23 @@ const f_search_friend = () => {
 }
 
 const load_friend = () => {
-    const Friend = require('../js/Friend')
-
     const list = data.red_point.open_file()
 
-    // TODO remake
-    // TODO may be just clear all tabs with innerHTML = '' 
-    // TODO selector '.down_panel > .body > .bg > .contents'
-    const temp = [...document.getElementsByClassName('el')]
-    if (temp) {
-        for (let i = 0; i < temp.length; ++i) {
-            temp[i].remove()
-        }
+    clearTabs: {
+        const tabs = document.querySelectorAll('.down_panel > .body > .bg > .contents')
+        for (const item of tabs) item.innerHTML = ''
     }
 
-    // type: array(list of friends)
-    // TODO remake to FOR constuction
-    data.friend().forEach(
-        value => {
-            // TODO delete from list if u delete friend (request or friend)
-            // TODO delete friends[nickname + '#' + id]
-            friends[value.nickname + '#' + value.id] = new Friend(
-                value.nickname,
-                value.id,
-                value.status,
-                value.key,
-                list[value.nickname + '#' + value.id]
-            )
-        }
-    )
+    for (const value of data.friend() ) {
+        // TODO delete friends[nickname + '#' + id]
+        friends[value.nickname + '#' + value.id] = new Friend(
+            value.nickname,
+            value.id,
+            value.status,
+            value.key,
+            list[value.nickname + '#' + value.id]
+        )
+    }
 }
 
 /**
@@ -564,47 +552,44 @@ const send_message = () => {
  * } arr
  */
 const get_message = arr => {
-    // TODO remake for
-    arr.forEach(
-        el => {
-            const {
-                nickname: sender_nickname,
-                id: sender_id
-            } = name_parser.parse(el.sender)
+    for (const el of arr) {
+        const {
+            nickname: sender_nickname,
+            id: sender_id
+        } = name_parser.parse(el.sender)
 
-            const content = cipher.rsa.decrypt(el.content)
-            const time = el.time
-            const who_send = 'friend'
+        const content = cipher.rsa.decrypt(el.content)
+        const time = el.time
+        const who_send = 'friend'
 
-            const friend = sender_nickname + '#' + sender_id
+        const friend = sender_nickname + '#' + sender_id
 
-            setTimeout(
-                () => {
-                    data.message.write(
-                        friend,
-                        {
-                            content,
-                            time,
-                            who_send
-                        }
-                    )
-                },
-                1
-            )
-
-            if (user.friend.nickname == sender_nickname && user.friend.id == sender_id) {
-                renderMessage(
-                    {content, time, who_send},
-                    'newMessage'
+        setTimeout(
+            () => {
+                data.message.write(
+                    friend,
+                    {
+                        content,
+                        time,
+                        who_send
+                    }
                 )
-            }
-            else {
-                notice('new_message')
-                friends[friend].red_point.set()
-                data.red_point.set(friend)
-            }
+            },
+            1
+        )
+
+        if (user.friend.nickname == sender_nickname && user.friend.id == sender_id) {
+            renderMessage(
+                {content, time, who_send},
+                'newMessage'
+            )
         }
-    )
+        else {
+            notice('new_message')
+            friends[friend].red_point.set()
+            data.red_point.set(friend)
+        }
+    }
 }
 
 /**
@@ -633,5 +618,6 @@ module.exports = {
     chooseFriend,
     send_message,
     get_message,
-    updateFriendStatus
+    updateFriendStatus,
+    friends
 }

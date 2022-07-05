@@ -1,6 +1,5 @@
 {
     "name": "depesha",
-    "description": "This app is for text and voice communication ;) You're OnChat",
     "main": "./src/main.js",
     "scripts": {
         "start": "electron ."

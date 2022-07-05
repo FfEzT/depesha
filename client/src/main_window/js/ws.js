@@ -16,7 +16,7 @@
 */
 
 // time in ms
-const TIME_FOR_RECONNECT = 10000
+const TIME_FOR_RECONNECT = 5000
 
 const connect = () => {
     /**
@@ -37,10 +37,6 @@ const connect = () => {
             // sign in
             if (!user.isNewUser) {
                 ws.onmessage = e => {
-                    /**
-                     * data from server
-                     * @type {{}}
-                     */
                     const a = JSON.parse(e.data)
 
                     switch (a.type) {
@@ -54,11 +50,9 @@ const connect = () => {
 
                                 window.location.reload()
                             }
-                            else {
-                                if (user.data.nickname != a.content.nick) {
+                            else if (user.data.nickname != a.content.nick) {
                                     user.data.nickname = a.content.nick
                                     data.data_user.write()
-                                }
                             }
                             break
 
@@ -69,14 +63,48 @@ const connect = () => {
                         case 'list_of_friends':
                             data.friend('set_friends', a.content)
                             web.load_friend()
+                            server.send_data(
+                                'getFriendsNetStatus',
+                                {
+                                    id: user.data.id,
+                                    nickname: user.data.nickname
+                                }
+                            )
                             break
 
                         case 'new_message':
                             web.get_message(a.content)
                             break
 
-                        case 'friendsStatus':
-                            web.updateFriendStatus(a.content.who, a.content.status)
+                        case 'friendNetStatus':
+                            if ( web.friends[a.content.who] ) web.updateFriendStatus(a.content.who, a.content.status)
+                            break
+
+                        case 'friendsNetStatus':
+                            if (a.content.length == data.friend().length) {
+                                for (const friend of a.content) {
+                                    const nick = friend.nickname + '#' + friend.id
+
+                                    if ( web.friends[nick] ) web.updateFriendStatus(nick, friend.status)
+                                    else {
+                                        server.send_data(
+                                            'get_friends',
+                                            {
+                                                nickname: user.data.nickname,
+                                                id: user.data.id
+                                            }
+                                        )
+                                        break
+                                    }
+                                }
+                            }
+                            else server.send_data(
+                                'get_friends',
+                                {
+                                    nickname: user.data.nickname,
+                                    id: user.data.id
+                                }
+                            )
                             break
                     }
                 }

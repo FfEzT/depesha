@@ -259,6 +259,32 @@ const friends = {
                 )
             }
         )
+    },
+
+    /**
+     * get network status of friends
+     * @param {string} id title of table (nickname#1234)
+     * @returns {Promise<JSON>}
+     */
+    getNetStatusFriends: id => {
+        // TODO add '${id}'.status = friend
+        return new Promise(
+            resolve => {
+                friends.db(
+                    db => {
+                        const str = `SELECT '${id}'.id, '${id}'.nickname, main.status
+                            FROM '${id}'
+                            JOIN main
+                            ON '${id}'.nickname = main.nickname AND '${id}'.id = main.id
+                            ORDER BY main.nickname`
+                        db.all(
+                            str,
+                            (er, data) => resolve(data)
+                        )
+                    }
+                )
+            }
+        )
     }
 }
 

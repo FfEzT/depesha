@@ -96,6 +96,10 @@ const connection_to_server = e => {
                 case 'message_to_friend':
                     send_message(data.content)
                     break
+
+                case 'getFriendsNetStatus':
+                    getFriendsNetStatus(e, data.content.nickname, data.content.id)
+                    break
             }
         }
     )
@@ -213,6 +217,11 @@ const do_friend = (e, content, f) => {
         else db.people.update_friends(nickname, id, 1)
     }
 
+    const sendFriendsForEvery = (content, e) => {
+        send_friends(content.sender_nickname, content.sender_id, e)
+        update_friend_list_client(content.friend_nickname, content.friend_id)
+    }
+
     const sender = content.sender_nickname + '#' + content.sender_id
     const friend = content.friend_nickname + '#' + content.friend_id
 
@@ -237,8 +246,7 @@ const do_friend = (e, content, f) => {
                                     'pending'
                                 )
 
-                                send_friends(content.sender_nickname, content.sender_id, e)
-                                update_friend_list_client(content.friend_nickname, content.friend_id)
+                                sendFriendsForEvery(content, e)
 
                                 send(
                                     e,
@@ -261,19 +269,16 @@ const do_friend = (e, content, f) => {
                 content.friend_id
             )
             .then(
-                () => {
-                    db.friends.add_friend(
+                async () => {
+                    return await db.friends.add_friend(
                         friend,
                         content.sender_nickname,
-                        content.sender_id,
+                        content.sender_id
                     )
                 }
             )
             .then(
-                () => {
-                    send_friends(content.sender_nickname, content.sender_id, e)
-                    update_friend_list_client(content.friend_nickname, content.friend_id)
-                }
+                () => sendFriendsForEvery(content, e)
             )
             break
 
@@ -284,19 +289,16 @@ const do_friend = (e, content, f) => {
                 content.friend_id
             )
             .then(
-                () => {
-                    db.friends.delete_friend(
+                async () => {
+                    return db.friends.delete_friend(
                         friend,
                         content.sender_nickname,
                         content.sender_id
                     )
-                    .then(
-                        () => {
-                            send_friends(content.sender_nickname, content.sender_id, e)
-                            update_friend_list_client(content.friend_nickname, content.friend_id)
-                        }
-                    )
                 }
+            )
+            .then(
+                () => sendFriendsForEvery(content, e)
             )
             break
     }
@@ -357,10 +359,23 @@ const updateStatus = async (nick, id, status) => {
         if ( clients[temp] && item.status == 'friend' )
             send(
                 clients[temp],
-                'friendsStatus',
-                {who: data.content.nickname + '#' + data.content.id, status: data.content.status}
+                'friendNetStatus',
+                {who: nick + '#' + id, status}
             )
     }
+}
+
+/**
+ * @param {WebSocket} e
+ * @param {string} nick
+ * @param {string} id
+ */
+const getFriendsNetStatus = async (e, nick, id) => {
+    send(
+        e,
+        'friendsNetStatus',
+        await db.friends.getNetStatusFriends(nick + '#' + id)
+    )
 }
 
 // add events for server

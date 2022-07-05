@@ -7,8 +7,7 @@ const generate_id = async nickname => {
 
     const id = await get_last_user(nickname)
 
-    if (id) return ++id.id
-    else return 1
+    return id? ++id.id : 1
 }
 
 module.exports = {generate_id}

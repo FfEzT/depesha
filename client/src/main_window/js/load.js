@@ -25,7 +25,16 @@ const main = () => {
             1500
         )
     }
-    else web.load_friend()
+    else {
+        web.load_friend()
+        server.send_data(
+            'getFriendsNetStatus',
+            {
+                id: user.data.id,
+                nickname: user.data.nickname
+            }
+        )
+    }
 
 
     load_animation: {
